@@ -5,14 +5,7 @@ const crypto = require("crypto");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  if(req.cookies){
-    console.log(req.cookies);
-  }
-  if(req.session){
-    res.send("let's go" + req.session.email);
-  }else{
-    res.redirect("/user/register");
-  }
+  res.redirect("/");
 });
 
 router.get('/register', function(req, res, next){
@@ -32,7 +25,7 @@ router.post("/register", function(req, res, next){
         password: key.toString('base64'),
         salt: salt
       }).then( result => {
-        res.redirect("/user/register");
+        res.redirect("/user/login");
       }).catch( err => {
         console.log("============");
         console.log(err);
@@ -47,18 +40,18 @@ router.post("/register", function(req, res, next){
 
 
 router.get('/login', function(req, res, next) {
-    let session = req.session;
-
-    res.render("user/login", {
-      session : session
-    });
+    if(req.session.email != null){
+      res.redirect("/");
+    }else{
+      res.render("user/login");
+    }
 
 });
 
 
 router.post("/login", function(req,res,next){
     let body = req.body;
-    let session = req.session;
+
     models.user.find({
         where: {email : body.userEmail}
     })
@@ -74,14 +67,12 @@ router.post("/login", function(req,res,next){
                   expires: new Date(Date.now() + 900000),
                   httpOnly: true
               });
-              session.email = body.userEmail;
+              req.session.email = body.userEmail;
               console.log(req.session.email);
-              res.render("user/login", {
-                session : session
-              });
+              res.redirect("/");
           }
           else{
-              alert("비밀번호 불일치");
+              console.log("비밀번호 불일치");
               res.redirect("/user/login");
           }
         });

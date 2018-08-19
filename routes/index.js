@@ -2,6 +2,15 @@ const express = require('express');
 const models = require('../models');
 const router = express.Router();
 
+router.get('/', function(req, res, next) {
+  if(req.session.email != null){
+    res.render("index", {
+      session : req.session
+    });
+  }else{
+    res.render("user/login");
+  }
+});
 router.get('/show', function(req, res, next) {
   models.post.findAll().then( result => {
     var loopIndex = 0;
