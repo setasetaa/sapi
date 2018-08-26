@@ -70,10 +70,10 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName : true,
   });
   dti_item.associate = function(models) {
-    // dti_item.belongsTo(models.dti_main, {
-    //   foreignKey : 'conversation_id',
-    //   targetKey : 'conversation_id'
-    // });
+    dti_item.belongsTo(models.dti_main, {
+      foreignKey : 'conversation_id',
+      targetKey : 'conversation_id'
+    });
     // dti_item.belongsTo(models.dti_main, {
     //   foreignKey : 'supbuy_type',
     //   targetKey : 'supbuy_type'

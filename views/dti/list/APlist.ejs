@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SB SA - APlist</title>
+
+  <!-- Bootstrap core CSS-->
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template-->
+  <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css">
+
+  <!-- Custom styles for this template-->
+  <link href="/css/sb-admin.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+    <a class="navbar-brand mr-1" href="/index">Stand Alone</a>
+
+    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+        <i class="fas fa-bars"></i>
+      </button>
+
+    <!-- Navbar Search -->
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Navbar -->
+    <ul class="navbar-nav ml-auto ml-md-0">
+      <li class="nav-item dropdown no-arrow mx-1">
+        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-bell fa-fw"></i>
+            <span class="badge badge-danger">9+</span>
+          </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown no-arrow mx-1">
+        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-envelope fa-fw"></i>
+            <span class="badge badge-danger">7</span>
+          </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user-circle fa-fw"></i>
+          </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+          <a class="dropdown-item" href="#">Settings</a>
+          <a class="dropdown-item" href="#">Activity Log</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+        </div>
+      </li>
+    </ul>
+
+  </nav>
+
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="sidebar navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>DTI</span>
+          </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Form</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <h6 class="dropdown-header">SendForm: Tax invoice</h6>
+          <a class="dropdown-item" href="/">General</a>
+          <a class="dropdown-item" href="/">Tax-free</a>
+          <a class="dropdown-item" href="/">Amend</a>
+          <a class="dropdown-item" href="/">Consignment</a>
+          <div class="dropdown-divider"></div>
+          <h6 class="dropdown-header">RequestForm: Tax invoice</h6>
+          <a class="dropdown-item" href="/">General</a>
+          <a class="dropdown-item" href="/">Tax-free</a>
+          <a class="dropdown-item" href="/">Amend</a>
+          <a class="dropdown-item" href="/">Consignment</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-fw fa-table"></i>
+            <span>List</span>
+          </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <h6 class="dropdown-header">List: Tax invoice</h6>
+          <a class="dropdown-item" href="/">AR List</a>
+          <a class="dropdown-item" href="/dti/list/APlist">AP List</a>
+          <a class="dropdown-item" href="/">Consignment List</a>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span></a>
+      </li>
+
+    </ul>
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-table"></i> AP List</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <div class="form-group">
+                <select id="dateType" name="dateType" class="custom-select custom-select-sm form-control form-control-sm" style="width:100px">
+                    <option value="dti_wdate">WDATE</option>
+                    <option value="dti_Idate">IDATE</option>
+                    <option value="dti_Sdate">SDATE</option>
+                </select>
+
+                <label>Star Date
+                  <input type="date" id="startDate" name="startDate" class="form-control form-control-sm" style="width:145px">
+                </label>
+                <label>End Date
+                  <input type="date" id="endDate" name="endDate" class="form-control form-control-sm" style="width:145px">
+                </label>
+
+                <label>B / N
+                  <input type="text" id="regno" name="regno"class="form-control form-control-sm" style="width:125px">
+                </label>
+                <label>Com Name
+                  <input type="text" id="comName" name="comName"class="form-control form-control-sm" style="width:140px">
+                </label>
+                <label>Sup Amount
+                  <input type="text" id="supAmount" name="supAmount"class="form-control form-control-sm" style="width:120px">
+                </label>
+                <label>Tax Amount
+                  <input type="text" id="taxAmount" name="taxAmount"class="form-control form-control-sm" style="width:110px">
+                </label>
+                <label>Issue ID
+                  <input type="text" id="issueId" name="issueId"class="form-control form-control-sm" style="width:200px">
+                </label>
+              </div>
+              <div class="form-group">
+                <span class="badge badge-secondary">TYPE&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiType" name="dtiType" value="General">
+                  <label class="custom-control-label" for="dtiType">All</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiType1" name="dtiType" value="General">
+                  <label class="custom-control-label" for="dtiType1">General</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiType2" name="dtiType" value="free">
+                  <label class="custom-control-label" for="dtiType2">Tax-free</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiType3" name="dtiType" value="Amend">
+                  <label class="custom-control-label" for="dtiType3">Amend</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiType4" name="dtiType" value="Consignment">
+                  <label class="custom-control-label" for="dtiType4">Consignment</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <span class="badge badge-secondary">STATUS</span>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiStatus" name="dtiStatus" value="all">
+                  <label class="custom-control-label" for="dtiStatus">All</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiStatus1" name="dtiStatus" value="S">
+                  <label class="custom-control-label" for="dtiStatus1">Save</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiStatus2" name="dtiStatus" value="I">
+                  <label class="custom-control-label" for="dtiStatus2">Issue</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiStatus3" name="dtiStatus" value="C">
+                  <label class="custom-control-label" for="dtiStatus3">Approve</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiStatus4" name="dtiStatus" value="R">
+                  <label class="custom-control-label" for="dtiStatus4">Reject</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiStatus5" name="dtiStatus" value="O">
+                  <label class="custom-control-label" for="dtiStatus5">Cancel</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiStatus6" name="dtiStatus" value="V">
+                  <label class="custom-control-label" for="dtiStatus6">Request</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                  <input type="checkbox" class="custom-control-input" id="dtiStatus7" name="dtiStatus" value="W">
+                  <label class="custom-control-label" for="dtiStatus7">Requst cancel</label>
+                </div>
+                <button type="button" id="dataSearch" class="btn btn-outline-primary-sm">Search</button>
+              </div>
+
+              <table class="display" id="t1" width="100%">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>BUSINESS<br>NUMBER</th>
+                    <th>COMPANY<br>NAME</th>
+                    <th>WRITE<br>DATE</th>
+                    <th>ISSUE<br>DATE</th>
+                    <th>SEND<br>DATE</th>
+                    <th>STATUS</th>
+                    <th>SUPPLY<br>AMOUNT</th>
+                    <th>TAX<br>AMOUNT</th>
+                    <th>TOTAL<br>AMOUNT</th>
+                    <th>ISSUE ID</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td>741-85-29630</td>
+                    <td>rice one</td>
+                    <td>2018-08-01</td>
+                    <td>2018-08-01</td>
+                    <td>2018-08-01</td>
+                    <td>APPROVE</td>
+                    <td>4,000,000</td>
+                    <td>400,000</td>
+                    <td>4,400,000</td>
+                    <td>2018082541000008ff</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>741-85-29630</td>
+                    <td>rice one</td>
+                    <td>2018-08-02</td>
+                    <td>2018-08-02</td>
+                    <td>2018-08-02</td>
+                    <td>APPROVE</td>
+                    <td>4,000</td>
+                    <td>400</td>
+                    <td>4,400</td>
+                    <td>2018082541000008f2</td>
+                  </tr>
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+
+      </div>
+      <!-- /.container-fluid -->
+
+      <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Your Website 2018</span>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="login.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+
+
+  <!-- Custom scripts for all pages-->
+  <script src="/js/sb-admin.min.js"></script>
+
+  <!-- Demo scripts for this page-->
+  <script src="/js/demo/datatables-demo.js"></script>
+  <script src="/js/demo/chart-area-demo.js"></script>
+  <script type="text/javascript" class="init">
+    $(document).ready(function() {
+      $('#t1').DataTable({
+        columnDefs: [{
+          orderable: false,
+          className: 'select-checkbox',
+          targets: 0
+        }],
+        select: {
+          style: 'os',
+          selector: 'td:first-child'
+        },
+        order: [
+          [1, 'asc']
+        ],
+        searching: false,
+      });
+
+      var table = $('#t1').DataTable();
+      table
+        .on('select', function(e, dt, type, indexes) {
+          var rowData = table.rows(indexes).data().toArray();
+          alert(JSON.stringify(rowData));
+        });
+
+    });
+  </script>
+</body>
+
+</html>
