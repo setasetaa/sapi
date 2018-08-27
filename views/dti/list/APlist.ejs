@@ -243,16 +243,16 @@
                 <thead>
                   <tr>
                     <th></th>
-                    <th>BUSINESS<br>NUMBER</th>
-                    <th>COMPANY<br>NAME</th>
-                    <th>WRITE<br>DATE</th>
-                    <th>ISSUE<br>DATE</th>
-                    <th>SEND<br>DATE</th>
-                    <th>STATUS</th>
-                    <th>SUPPLY<br>AMOUNT</th>
-                    <th>TAX<br>AMOUNT</th>
-                    <th>TOTAL<br>AMOUNT</th>
-                    <th>ISSUE ID</th>
+                    <th data-field="byr_com_regno">BUSINESS<br>NUMBER</th>
+                    <th data-field="byr_com_name">COMPANY<br>NAME</th>
+                    <th data-field="dti_wdate">WRITE<br>DATE</th>
+                    <th data-field="dti_idate">ISSUE<br>DATE</th>
+                    <th data-field="dti_sdate">SEND<br>DATE</th>
+                    <th data-field="dti_status">STATUS</th>
+                    <th data-field="sup_amount">SUPPLY<br>AMOUNT</th>
+                    <th data-field="tax_amount">TAX<br>AMOUNT</th>
+                    <th data-field="total_amount">TOTAL<br>AMOUNT</th>
+                    <th data-field="issue_id">ISSUE ID</th>
                   </tr>
                 </thead>
 
@@ -333,22 +333,15 @@
     </div>
   </div>
 
-  <!-- Bootstrap core JavaScript-->
   <script src="/vendor/jquery/jquery.min.js"></script>
   <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- Core plugin JavaScript-->
+  <script src="/js/sb-admin.min.js"></script>
+  <script src="/js/function.js"></script>
   <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
   <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
   <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
 
-
-  <!-- Custom scripts for all pages-->
-  <script src="/js/sb-admin.min.js"></script>
-
-  <!-- Demo scripts for this page-->
-  <script src="/js/demo/datatables-demo.js"></script>
-  <script src="/js/demo/chart-area-demo.js"></script>
   <script type="text/javascript" class="init">
     $(document).ready(function() {
       $('#t1').DataTable({
@@ -373,8 +366,35 @@
           var rowData = table.rows(indexes).data().toArray();
           alert(JSON.stringify(rowData));
         });
+      $("#startDate").val(fromDate());
+      $("#endDate").val(nowDate());
+      search();
 
     });
+
+    function search() {
+      //$("#t1").bootstrapTable('destroy');
+      $.ajax({
+        url: '/dti/list/APlist',
+        type: 'POST',
+        //        data: JSON.stringify(formData),
+        dataType: 'json',
+        success: function(ansData, textStatus, jqXHR) {
+          alert("test");
+          const objData = JSON.parse(ansData);
+          $("#t1").bootstrapTable({
+            data: objData
+          });
+        },
+        error: function(jqXHR, textStatus, errorThrow) {
+          alert(textStatus);
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrow);
+        }
+      });
+
+    }
   </script>
 </body>
 

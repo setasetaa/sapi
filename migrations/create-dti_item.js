@@ -3,7 +3,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('dti_item', {
       conversation_id: {
-        type: Sequelize.CHAR(35),
+        type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
       },
@@ -81,15 +81,10 @@ module.exports = {
       name: 'dti_item_pk'
     });
 
-    // queryInterface.addConstraint('dti_item', ['conversation_id', 'supbuy_type', 'direction'], {
-    //   type: 'foreign key',
-    //   name: 'dti_item_fk',
-    //   references: { //Required field
-    //     table: 'dti_main'
-    //   },
-    //   onDelete: 'cascade',
-    //   onUpdate: 'cascade'
-    // });
+    dti_item.belongsTo(models.dti_main, {
+      foreignKey : 'fk_item',
+      targetKey : 'conversation_id'
+    });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('dti_item');

@@ -4,7 +4,7 @@ module.exports = {
     return queryInterface.createTable('dti_status', {
 
       conversation_id: {
-        type: Sequelize.CHAR(35),
+        type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
       },
@@ -54,15 +54,10 @@ module.exports = {
       type: 'primaryKey',
       name: 'dti_status_pk'
     });
-    // queryInterface.addConstraint('dti_status', ['conversation_id', 'supbuy_type', 'direction'], {
-    //   type: 'foreign key',
-    //   name: 'dti_status_fk',
-    //   references: { //Required field
-    //     table: 'dti_main'
-    //   },
-    //   onDelete: 'cascade',
-    //   onUpdate: 'cascade'
-    // });
+    dti_status.belongsTo(models.dti_main, {
+      foreignKey : 'fk_status',
+      targetKey : 'conversation_id'
+    });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('dti_status');
