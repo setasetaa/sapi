@@ -106,16 +106,16 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h6 class="dropdown-header">SendForm: Tax invoice</h6>
-          <a class="dropdown-item" href="/">General</a>
-          <a class="dropdown-item" href="/">Tax-free</a>
-          <a class="dropdown-item" href="/">Amend</a>
-          <a class="dropdown-item" href="/">Consignment</a>
+          <a class="dropdown-item" href="/">세금계산서</a>
+          <a class="dropdown-item" href="/">면세</a>
+          <a class="dropdown-item" href="/">수정</a>
+          <a class="dropdown-item" href="/">위수탁</a>
           <div class="dropdown-divider"></div>
           <h6 class="dropdown-header">RequestForm: Tax invoice</h6>
-          <a class="dropdown-item" href="/">General</a>
-          <a class="dropdown-item" href="/">Tax-free</a>
-          <a class="dropdown-item" href="/">Amend</a>
-          <a class="dropdown-item" href="/">Consignment</a>
+          <a class="dropdown-item" href="/">세금계산서</a>
+          <a class="dropdown-item" href="/">면세</a>
+          <a class="dropdown-item" href="/">수정</a>
+          <a class="dropdown-item" href="/">위수탁</a>
         </div>
       </li>
 
@@ -126,9 +126,9 @@
           </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h6 class="dropdown-header">List: Tax invoice</h6>
-          <a class="dropdown-item" href="/">AR List</a>
-          <a class="dropdown-item" href="/dti/list/APlist">AP List</a>
-          <a class="dropdown-item" href="/">Consignment List</a>
+          <a class="dropdown-item" href="/">매출 관리</a>
+          <a class="dropdown-item" href="/dti/list/APlist">매입 관리</a>
+          <a class="dropdown-item" href="/">위수탁 관리</a>
         </div>
       </li>
 
@@ -156,8 +156,8 @@
                     <option value="dti_Sdate">SDATE</option>
                 </select>
 
-                <label>Star Date
-                  <input type="date" id="startDate" name="startDate" class="form-control form-control-sm" style="width:145px">
+                <label>From Date
+                  <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm" style="width:145px">
                 </label>
                 <label>End Date
                   <input type="date" id="endDate" name="endDate" class="form-control form-control-sm" style="width:145px">
@@ -236,6 +236,8 @@
                   <input type="checkbox" class="custom-control-input" id="dtiStatus7" name="dtiStatus" value="W">
                   <label class="custom-control-label" for="dtiStatus7">Requst cancel</label>
                 </div>
+                <button type="button" id="importData" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">ImportData</button>
+                <button type="button" id="exelDown" class="btn btn-outline-success">ExelDown</button>
                 <button type="button" id="dataSearch" class="btn btn-outline-primary-sm">Search</button>
               </div>
 
@@ -243,8 +245,8 @@
                 <thead>
                   <tr>
                     <th></th>
-                    <th data-field="byr_com_regno">BUSINESS<br>NUMBER</th>
-                    <th data-field="byr_com_name">COMPANY<br>NAME</th>
+                    <th data-field="sup_com_regno">BUSINESS<br>NUMBER</th>
+                    <th data-field="sup_com_name">COMPANY<br>NAME</th>
                     <th data-field="dti_wdate">WRITE<br>DATE</th>
                     <th data-field="dti_idate">ISSUE<br>DATE</th>
                     <th data-field="dti_sdate">SEND<br>DATE</th>
@@ -333,6 +335,71 @@
     </div>
   </div>
 
+  <div class="modal" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">SB List</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="table-responsive">
+            <div class="form-group">
+              <label>From Date
+              <input type="date" id="SBfrom" name="SBfrom" class="form-control form-control-sm" >
+            </label>
+              <label>End Date
+              <input type="date" id="SBend" name="SBend" class="form-control form-control-sm" >
+            </label>
+              <button type="button" id="SBSearch" class="btn btn-outline-primary-sm">Search</button>
+              <button type="button" id="exelDown" class="btn btn-outline-success">Upload</button>
+            </div>
+            <table class="display" id="t2" width="100%">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th data-field="sup_com_regno">BUSINESS<br>NUMBER</th>
+                  <th data-field="sup_com_name">COMPANY<br>NAME</th>
+                  <th data-field="dti_wdate">WRITE<br>DATE</th>
+                  <th data-field="dti_status">STATUS</th>
+                  <th data-field="sup_amount">SUPPLY<br>AMOUNT</th>
+                  <th data-field="tax_amount">TAX<br>AMOUNT</th>
+                </tr>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td>741-85-29630</td>
+                    <td>rice one</td>
+                    <td>2018-08-01</td>
+                    <td>APPROVE</td>
+                    <td>4,000,000</td>
+                    <td>400,000</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>741-85-29630</td>
+                    <td>rice one</td>
+                    <td>2018-08-02</td>
+                    <td>APPROVE</td>
+                    <td>4,000</td>
+                    <td>400</td>
+                  </tr>
+                </tbody>
+              </thead>
+            </table>
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="/vendor/jquery/jquery.min.js"></script>
   <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/js/sb-admin.min.js"></script>
@@ -366,35 +433,63 @@
           var rowData = table.rows(indexes).data().toArray();
           alert(JSON.stringify(rowData));
         });
-      $("#startDate").val(fromDate());
-      $("#endDate").val(nowDate());
-      search();
 
+      $("#fromDate").val(fromDate());
+      $("#endDate").val(nowDate());
+      $("#SBfrom").val(fromDate());
+      $("#SBend").val(nowDate());
+      search('/dti/list/APlist');
+
+      $('#t2').DataTable({
+        columnDefs: [{
+          orderable: false,
+          className: 'select-checkbox',
+          targets: 0
+        }],
+        select: {
+          style: 'os',
+          selector: 'td:first-child'
+        },
+        order: [
+          [1, 'asc']
+        ],
+        searching: false,
+      });
     });
 
-    function search() {
-      //$("#t1").bootstrapTable('destroy');
+    $("#SBSearch").click(function() {
+      //alert("test");
+      var fromDate = $("#SBfrom").val();
+      var endDate = $("#SBend").val();
+      var request = JSON.stringify({
+        'MessageId': '3887cab1-3ea6-4776-b988-7d27d6951489',
+        'Signal': 'ARAP_REPO',
+        'RequestTime': nowDate(),
+        'SendComRegno': '7418529630',
+        'AuthToken': 'QURiYWV1RTZpTkhDcU1lQW5hUGUraUxQaUZGZ0hDclBFOVFCVjZOSFA2TT0K',
+        'ServiceCode': 'DTI',
+        'SearchFromDate': fromDate,
+        'SearchToDate': endDate,
+        'SearchComRegno': '',
+        'RepoTypeCode': 'AP'
+      });
+      $.support.cors = true;
       $.ajax({
-        url: '/dti/list/APlist',
-        type: 'POST',
-        //        data: JSON.stringify(formData),
-        dataType: 'json',
-        success: function(ansData, textStatus, jqXHR) {
-          alert("test");
-          const objData = JSON.parse(ansData);
-          $("#t1").bootstrapTable({
-            data: objData
-          });
+        type: "POST",
+        dataType: "json",
+        crossDomain: true,
+        contentType: "application/json",
+        url: "http://demoapi.smartbill.co.kr/sb-api/request/",
+        data: request,
+        success: function(data) {
+          //SBGetList(data);
+          alert(data.ResultDataSet.Table.length);
         },
-        error: function(jqXHR, textStatus, errorThrow) {
-          alert(textStatus);
-          console.log(jqXHR);
-          console.log(textStatus);
-          console.log(errorThrow);
+        error: function(error) {
+
         }
       });
-
-    }
+    });
   </script>
 </body>
 
