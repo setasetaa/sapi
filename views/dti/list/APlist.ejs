@@ -30,7 +30,7 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="/index">Stand Alone</a>
+    <a class="navbar-brand mr-1" href="/index">SAPI</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
@@ -42,8 +42,8 @@
         <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
         <div class="input-group-append">
           <button class="btn btn-primary" type="button">
-              <i class="fas fa-search"></i>
-            </button>
+            <i class="fas fa-search"></i>
+          </button>
         </div>
       </div>
     </form>
@@ -236,7 +236,7 @@
                   <input type="checkbox" class="custom-control-input" id="dtiStatus7" name="dtiStatus" value="W">
                   <label class="custom-control-label" for="dtiStatus7">Requst cancel</label>
                 </div>
-                <button type="button" id="importData" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">ImportData</button>
+                <button type="button" id="SBData" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">SBData</button>
                 <button type="button" id="exelDown" class="btn btn-outline-success">ExelDown</button>
                 <button type="button" id="dataSearch" class="btn btn-outline-primary-sm">Search</button>
               </div>
@@ -245,7 +245,7 @@
                 <thead>
                   <tr>
                     <th></th>
-                    <th data-field="sup_com_regno">BUSINESS<br>NUMBER</th>
+                    <th data-field="sup_com_regno">B / N</th>
                     <th data-field="sup_com_name">COMPANY<br>NAME</th>
                     <th data-field="dti_wdate">WRITE<br>DATE</th>
                     <th data-field="dti_idate">ISSUE<br>DATE</th>
@@ -358,39 +358,7 @@
               <button type="button" id="SBSearch" class="btn btn-outline-primary-sm">Search</button>
               <button type="button" id="exelDown" class="btn btn-outline-success">Upload</button>
             </div>
-            <table class="display" id="t2" width="100%">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th data-field="sup_com_regno">BUSINESS<br>NUMBER</th>
-                  <th data-field="sup_com_name">COMPANY<br>NAME</th>
-                  <th data-field="dti_wdate">WRITE<br>DATE</th>
-                  <th data-field="dti_status">STATUS</th>
-                  <th data-field="sup_amount">SUPPLY<br>AMOUNT</th>
-                  <th data-field="tax_amount">TAX<br>AMOUNT</th>
-                </tr>
-                <tbody>
-                  <tr>
-                    <td></td>
-                    <td>741-85-29630</td>
-                    <td>rice one</td>
-                    <td>2018-08-01</td>
-                    <td>APPROVE</td>
-                    <td>4,000,000</td>
-                    <td>400,000</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td>741-85-29630</td>
-                    <td>rice one</td>
-                    <td>2018-08-02</td>
-                    <td>APPROVE</td>
-                    <td>4,000</td>
-                    <td>400</td>
-                  </tr>
-                </tbody>
-              </thead>
-            </table>
+            <table class="display" id="t2" width="100%"></table>
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
@@ -439,28 +407,12 @@
       $("#SBfrom").val(fromDate());
       $("#SBend").val(nowDate());
       search('/dti/list/APlist');
-
-      $('#t2').DataTable({
-        columnDefs: [{
-          orderable: false,
-          className: 'select-checkbox',
-          targets: 0
-        }],
-        select: {
-          style: 'os',
-          selector: 'td:first-child'
-        },
-        order: [
-          [1, 'asc']
-        ],
-        searching: false,
-      });
     });
 
     $("#SBSearch").click(function() {
-      //alert("test");
       var fromDate = $("#SBfrom").val();
       var endDate = $("#SBend").val();
+      var supbuyType = "AP";
       var request = JSON.stringify({
         'MessageId': '3887cab1-3ea6-4776-b988-7d27d6951489',
         'Signal': 'ARAP_REPO',
@@ -471,7 +423,7 @@
         'SearchFromDate': fromDate,
         'SearchToDate': endDate,
         'SearchComRegno': '',
-        'RepoTypeCode': 'AP'
+        'RepoTypeCode': supbuyType
       });
       $.support.cors = true;
       $.ajax({
@@ -482,11 +434,10 @@
         url: "http://demoapi.smartbill.co.kr/sb-api/request/",
         data: request,
         success: function(data) {
-          //SBGetList(data);
-          alert(data.ResultDataSet.Table.length);
+          SBGetList(data, supbuyType);
         },
         error: function(error) {
-
+          alert(error.message);
         }
       });
     });
