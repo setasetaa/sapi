@@ -356,9 +356,11 @@
               <input type="date" id="SBend" name="SBend" class="form-control form-control-sm" >
             </label>
               <button type="button" id="SBSearch" class="btn btn-outline-primary-sm">Search</button>
-              <button type="button" id="exelDown" class="btn btn-outline-success">Upload</button>
+              <button type="submit" id="upload" class="btn btn-outline-success">Upload</button>
             </div>
-            <table class="display" id="t2" width="100%"></table>
+            <form id="sbForm">
+              <table class="display" id="t2" width="100%"></table>
+            </form>
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
@@ -441,7 +443,6 @@
         }
       });
     });
-
   </script>
 </body>
 

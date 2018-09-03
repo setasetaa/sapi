@@ -52,8 +52,12 @@ function search( url ) {
 function SBGetList( data, supbuyType ) {
 	if ( "30000" != data.ResultCode ) {
 		alert( data.ResultMessage );
+		if($('#t2').html() != ""){
+			$('#t2').html("");
+			$('#t2').DataTable().destroy();
+		}
 	} else {
-		alert( "정상적으로 처리되었습니다." );
+		//alert( "정상적으로 처리되었습니다." );
 		totalCount = data.ResultDataSet.Table.length;
 		if($('#t2').html() != ""){
 			$('#t2').html("");
@@ -61,7 +65,6 @@ function SBGetList( data, supbuyType ) {
 		}
 		var table = $( "#t2" ).DataTable(
 			{
-				retrieve: true,
 				select: {
 					style: 'os',
 					selector: 'td:first-child'
@@ -71,7 +74,7 @@ function SBGetList( data, supbuyType ) {
 				],
 				searching: false,
 				columns: [
-					{title: "", data: ""},
+					{title: "<input type='checkbox' name='select_all' value='1' id='select_all' style='align:center'>", data: ""},
 					{title: "B / N", data: "regno"},
 					{title: "COMPANY", data: "name"},
 					{title: "STATUS", data: "status"},
@@ -86,9 +89,13 @@ function SBGetList( data, supbuyType ) {
 				],
 				columnDefs: [
 					{
-						orderable: false,
-						className: 'select-checkbox',
-						targets: 0
+						'targets': 0,
+						'searchable': false,
+						'orderable': false,
+						'className': 'dt-body-center',
+						'render': function (data, type, full, meta){
+								return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+						}
 					},
 					{
 						"targets": [ 6, 7, 8, 9, 10, 11 ],
@@ -96,7 +103,48 @@ function SBGetList( data, supbuyType ) {
 					}
 				],
 				"destroy": true
-			} );
+			});
+
+			$('#select_all').on('click', function(){
+      var rows = table.rows({ 'search': 'applied' }).nodes();
+      $('input[type="checkbox"]', rows).prop('checked', this.checked);
+			});
+
+				// Handle click on checkbox to set state of "Select all" control
+	   	$('#t2 tbody').on('change', 'input[type="checkbox"]', function(){
+	      // If checkbox is not checked
+	      if(!this.checked){
+	         var el = $('#select-all').get(0);
+	         // If "Select all" control is checked and has 'indeterminate' property
+	         if(el && el.checked && ('indeterminate' in el)){
+	            // Set visual state of "Select all" control
+	            // as 'indeterminate'
+	            el.indeterminate = true;
+	         }
+	      }
+	   	});
+
+	   	// Handle form submission event
+	   	$('#sbForm').on('submit', function(e){
+	      	var form = this;
+	      // Iterate over all checkboxes in the table
+		      table.$('input[type="checkbox"]').each(function(){
+		         // If checkbox doesn't exist in DOM
+		         if(!$.contains(document, this)){
+		            // If checkbox is checked
+		            if(this.checked){
+		               // Create a hidden element
+		               $(form).append(
+		                  $('<input>')
+		                     .attr('type', 'hidden')
+		                     .attr('name', this.name)
+		                     .val(this.value)
+		               );
+									 alert(this.value);
+		            }
+		         }
+		      });
+		   });
 
 		if ( 0 < totalCount ) {
 			if ( "AR" == supbuyType ) { //매출보관함
