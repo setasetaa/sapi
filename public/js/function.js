@@ -278,3 +278,26 @@ function SBGetList( data, supbuyType ) {
 		}
 	}
 }
+
+function fnGetXML(data){
+	if ("30000" != data.ResultCode) {
+	 alert(data.ResultMessage);
+	}else{
+		alert("정상적으로 처리되었습니다.");
+		totalCount = data.ResultDataSet.Table1.length;
+		if(0 < totalCount){
+		 for(var i = 0 ; i < totalCount ; i++){
+			 data.ResultDataSet.Table1[i].CONVERSATION_ID; //참조번호
+			 data.ResultDataSet.Table1[i].DTI_XML; //세금계산서 원본
+			 data.ResultDataSet.Table1[i].DTT_XML; //거래명세서 원본
+		 }
+		}
+		else{
+		 alert("데이터가 존재하지 않습니다.");
+		}
+	}
+}
+
+function xmlUpload(){
+
+}
