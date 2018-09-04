@@ -49,6 +49,35 @@ function search( url ) {
 	} );
 }
 
+function updateDataTableSelectAllCtrl(table){
+   var $table             = table.table().node();
+   var $chkbox_all        = $('tbody input[type="checkbox"]', $table);
+   var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);
+   var chkbox_select_all  = $('thead input[name="select_all"]', $table).get(0);
+
+   // If none of the checkboxes are checked
+   if($chkbox_checked.length === 0){
+      chkbox_select_all.checked = false;
+      if('indeterminate' in chkbox_select_all){
+         chkbox_select_all.indeterminate = false;
+      }
+
+   // If all of the checkboxes are checked
+   } else if ($chkbox_checked.length === $chkbox_all.length){
+      chkbox_select_all.checked = true;
+      if('indeterminate' in chkbox_select_all){
+         chkbox_select_all.indeterminate = false;
+      }
+
+   // If some of the checkboxes are checked
+   } else {
+      chkbox_select_all.checked = true;
+      if('indeterminate' in chkbox_select_all){
+         chkbox_select_all.indeterminate = true;
+      }
+   }
+}
+
 function SBGetList( data, supbuyType ) {
 	if ( "30000" != data.ResultCode ) {
 		alert( data.ResultMessage );
@@ -63,7 +92,8 @@ function SBGetList( data, supbuyType ) {
 			$('#t2').html("");
 			$('#t2').DataTable().destroy();
 		}
-		var table = $( "#t2" ).DataTable(
+		var rows_selected = [];
+		var table = $('#t2').DataTable(
 			{
 				select: {
 					style: 'os',
@@ -78,7 +108,7 @@ function SBGetList( data, supbuyType ) {
 					{title: "B / N", data: "regno"},
 					{title: "COMPANY", data: "name"},
 					{title: "STATUS", data: "status"},
-					{title: "WDATE", data: "wdate"},
+					{title: "DTI WDATE", data: "wdate"},
 					{title: "SUP AMOUNT", data: "supAmount"},
 					{title: "conversationID", data: "conversationID"},
 					{title: "direction", data: "direction"},
@@ -92,59 +122,118 @@ function SBGetList( data, supbuyType ) {
 						'targets': 0,
 						'searchable': false,
 						'orderable': false,
+						'width': '1%',
 						'className': 'dt-body-center',
 						'render': function (data, type, full, meta){
-								return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+								return '<input type="checkbox">';
 						}
 					},
 					{
-						"targets": [ 6, 7, 8, 9, 10, 11 ],
-						"visible": false
+						'targets': 3,
+						'className': 'dt-body-center',
+						'render': function (data, type, full, meta){
+							var status;
+							switch(data){
+								case 'I' :
+								status = '발행';
+								break;
+								case 'C' :
+								status = '승인';
+								break;
+								case 'O' :
+								status = '취소';
+								break;
+							}
+								return status;
+						}
+					},
+					{
+						'targets': 10,
+						'className': 'dt-body-center',
+						'render': function (data, type, full, meta){
+							var returnMSG;
+							switch(data){
+								case '9' :
+								returnMSG = '미전송';
+								break;
+								case '7' :
+								returnMSG = '전송완료';
+								break;
+							}
+								return returnMSG;
+						}
+					},
+					{
+						'targets': [ 6, 7, 8, 9, 11 ],
+						'visible': false
+					},
+					{
+						'targets': [ 1, 2, 4, 5 ],
+						'className': 'dt-body-center'
 					}
 				],
-				"destroy": true
-			});
+				'rowCallback': function(row, data, dataIndex){
+			   // Get row ID
+			   var rowId = data[0];
+			   // If row ID is in the list of selected row IDs
+				   if($.inArray(rowId, rows_selected) !== -1){
+				      $(row).find('input[type="checkbox"]').prop('checked', true);
+				      $(row).addClass('selected');
+				   }
+				 },
+				'destroy': true
+		});
 
-			$('#select_all').on('click', function(){
-      var rows = table.rows({ 'search': 'applied' }).nodes();
-      $('input[type="checkbox"]', rows).prop('checked', this.checked);
-			});
+		// Handle click on checkbox
+	  $('#t2 tbody').on('click', 'input[type="checkbox"]', function(e){
 
-				// Handle click on checkbox to set state of "Select all" control
-	   	$('#t2 tbody').on('change', 'input[type="checkbox"]', function(){
-	      // If checkbox is not checked
-	      if(!this.checked){
-	         var el = $('#select-all').get(0);
-	         // If "Select all" control is checked and has 'indeterminate' property
-	         if(el && el.checked && ('indeterminate' in el)){
-	            // Set visual state of "Select all" control
-	            // as 'indeterminate'
-	            el.indeterminate = true;
-	         }
+	      var $row = $(this).closest('tr');
+	      // Get row data
+	      var data = table.row($row).data();
+	      // Get row ID
+	      var rowId = data[0];
+	      // Determine whether row ID is in the list of selected row IDs
+	      var index = $.inArray(rowId, rows_selected);
+	      // If checkbox is checked and row ID is not in list of selected row IDs
+	      if(this.checked && index === -1){
+	         rows_selected.push(rowId);
+	      // Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
+	      } else if (!this.checked && index !== -1){
+	         rows_selected.splice(index, 1);
 	      }
-	   	});
 
-	   	// Handle form submission event
-	   	$('#sbForm').on('submit', function(e){
-	      	var form = this;
-	      // Iterate over all checkboxes in the table
-		      table.$('input[type="checkbox"]').each(function(){
-		         // If checkbox doesn't exist in DOM
-		         if(!$.contains(document, this)){
-		            // If checkbox is checked
-		            if(this.checked){
-		               // Create a hidden element
-		               $(form).append(
-		                  $('<input>')
-		                     .attr('type', 'hidden')
-		                     .attr('name', this.name)
-		                     .val(this.value)
-		               );
-									 alert(this.value);
-		            }
-		         }
-		      });
-		   });
+	      if(this.checked){
+	         $row.addClass('selected');
+	      } else {
+	         $row.removeClass('selected');
+	      }
+	      // Update state of "Select all" control
+	      updateDataTableSelectAllCtrl(table);
+	      // Prevent click event from propagating to parent
+	      e.stopPropagation();
+	  });
+
+	  // Handle click on table cells with checkboxes
+	  $('#t2').on('click', 'tbody td, thead th:first-child', function(e){
+	     $(this).parent().find('input[type="checkbox"]').trigger('click');
+	  });
+
+	  // Handle click on "Select all" control
+	  $('thead input[name="select_all"]', table.table().container()).on('click', function(e){
+	      if(this.checked){
+	         $('#t2 tbody input[type="checkbox"]:not(:checked)').trigger('click');
+	      } else {
+	         $('#t2 tbody input[type="checkbox"]:checked').trigger('click');
+	      }
+	      // Prevent click event from propagating to parent
+	      e.stopPropagation();
+	  });
+
+	  // Handle table draw event
+	  table.on('draw', function(){
+	      // Update state of "Select all" control
+	      updateDataTableSelectAllCtrl(table);
+	  });
 
 		if ( 0 < totalCount ) {
 			if ( "AR" == supbuyType ) { //매출보관함
@@ -169,8 +258,8 @@ function SBGetList( data, supbuyType ) {
 				for ( var i = 0; i < totalCount; i++ ) {
 					table.row.add( {
 							"": "",
-							"name": data.ResultDataSet.Table[ i ].SUP_COM_NAME, //공급받는자 회사명
-							"regno": data.ResultDataSet.Table[ i ].SUP_COM_REGNO, //공급받는자 사업자번호
+							"name": data.ResultDataSet.Table[ i ].SUP_COM_NAME, //공급자 회사명
+							"regno": data.ResultDataSet.Table[ i ].SUP_COM_REGNO, //공급자 사업자번호
 							"direction": data.ResultDataSet.Table[ i ].DIRECTION, //세금계산서 정/역 구분
 							"status": data.ResultDataSet.Table[ i ].DTI_STATUS, //세금계산서 상태
 							"dtiType": data.ResultDataSet.Table[ i ].DTI_TYPE, //세금계산서 종류
