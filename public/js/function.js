@@ -279,17 +279,21 @@ function SBGetList( data, supbuyType ) {
 	}
 }
 
-function fnGetXML(data){
+function fnGetXML(data, arrDirection){
 	if ("30000" != data.ResultCode) {
 	 alert(data.ResultMessage);
 	}else{
 		alert("정상적으로 처리되었습니다.");
-		totalCount = data.ResultDataSet.Table1.length;
+		var totalCount = data.ResultDataSet.Table1.length;
 		if(0 < totalCount){
 		 for(var i = 0 ; i < totalCount ; i++){
-			 data.ResultDataSet.Table1[i].CONVERSATION_ID; //참조번호
-			 data.ResultDataSet.Table1[i].DTI_XML; //세금계산서 원본
-			 data.ResultDataSet.Table1[i].DTT_XML; //거래명세서 원본
+			 var conversationID = data.ResultDataSet.Table1[i].CONVERSATION_ID; //참조번호
+			 var direction = arrDirection[i];
+			 var DTI = data.ResultDataSet.Table1[i].DTI_XML; //세금계산서 원본
+			 var DTT = data.ResultDataSet.Table1[i].DTT_XML; //거래명세서 원본
+			 //alert(conversationID);
+			 alert(DTT);
+			 xmlUpload(conversationID, direction, DTI, DTT);
 		 }
 		}
 		else{
@@ -298,6 +302,6 @@ function fnGetXML(data){
 	}
 }
 
-function xmlUpload(){
-
+function xmlUpload(conversationID, direction, DTI, DTT){
+	alert('success~!');
 }

@@ -356,7 +356,7 @@
               <button type="button" id="SBSearch" class="btn btn-outline-primary-sm">Search</button>
               <button type="button" id="upload" class="btn btn-outline-success">Upload</button>
             </div>
-            <table class="display select" id="t2" cellspacing="0" width="100%" ></table>
+            <table class="display select" id="t2" cellspacing="0" width="100%"></table>
           </div>
           <!-- Modal footer -->
           <div class="modal-footer">
@@ -385,16 +385,16 @@
           'orderable': false,
           'width': '1%',
           'className': 'dt-body-center',
-          'render': function (data, type, full, meta){
-             return '<input type="checkbox">';
-           }
+          'render': function(data, type, full, meta) {
+            return '<input type="checkbox">';
+          }
         }],
-        'rowCallback': function(row, data, dataIndex){
-         // Get row ID
+        'rowCallback': function(row, data, dataIndex) {
+          // Get row ID
           var rowId = data[0];
 
-           // If row ID is in the list of selected row IDs
-          if($.inArray(rowId, rows_selected) !== -1){
+          // If row ID is in the list of selected row IDs
+          if ($.inArray(rowId, rows_selected) !== -1) {
             $(row).find('input[type="checkbox"]').prop('checked', true);
             $(row).addClass('selected');
           }
@@ -413,7 +413,7 @@
         $('#myModal').removeData('bs.modal');
       });
 
-      $('#t1 tbody').on('click', 'input[type="checkbox"]', function(e){
+      $('#t1 tbody').on('click', 'input[type="checkbox"]', function(e) {
         var $row = $(this).closest('tr');
         // Get row data
         var data = table.row($row).data();
@@ -422,61 +422,61 @@
         // Determine whether row ID is in the list of selected row IDs
         var index = $.inArray(rowId, rows_selected);
         // If checkbox is checked and row ID is not in list of selected row IDs
-        if(this.checked && index === -1){
-           rows_selected.push(rowId);
-        // Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
-        } else if (!this.checked && index !== -1){
-           rows_selected.splice(index, 1);
+        if (this.checked && index === -1) {
+          rows_selected.push(rowId);
+          // Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
+        } else if (!this.checked && index !== -1) {
+          rows_selected.splice(index, 1);
         }
 
-        if(this.checked){
-           $row.addClass('selected');
+        if (this.checked) {
+          $row.addClass('selected');
         } else {
-           $row.removeClass('selected');
+          $row.removeClass('selected');
         }
         // Update state of "Select all" control
         updateDataTableSelectAllCtrl(table);
         // Prevent click event from propagating to parent
         e.stopPropagation();
-       });
+      });
 
-       // Handle click on table cells with checkboxes
-       $('#t1').on('click', 'tbody td, thead th:first-child', function(e){
-          $(this).parent().find('input[type="checkbox"]').trigger('click');
-       });
+      // Handle click on table cells with checkboxes
+      $('#t1').on('click', 'tbody td, thead th:first-child', function(e) {
+        $(this).parent().find('input[type="checkbox"]').trigger('click');
+      });
 
-       // Handle click on "Select all" control
-       $('thead input[name="select_all"]', table.table().container()).on('click', function(e){
-          if(this.checked){
-             $('#t1 tbody input[type="checkbox"]:not(:checked)').trigger('click');
-          } else {
-             $('#t1 tbody input[type="checkbox"]:checked').trigger('click');
-          }
-          // Prevent click event from propagating to parent
-          e.stopPropagation();
-       });
+      // Handle click on "Select all" control
+      $('thead input[name="select_all"]', table.table().container()).on('click', function(e) {
+        if (this.checked) {
+          $('#t1 tbody input[type="checkbox"]:not(:checked)').trigger('click');
+        } else {
+          $('#t1 tbody input[type="checkbox"]:checked').trigger('click');
+        }
+        // Prevent click event from propagating to parent
+        e.stopPropagation();
+      });
 
-       // Handle table draw event
-       table.on('draw', function(){
-          // Update state of "Select all" control
-          updateDataTableSelectAllCtrl(table);
-       });
+      // Handle table draw event
+      table.on('draw', function() {
+        // Update state of "Select all" control
+        updateDataTableSelectAllCtrl(table);
+      });
 
-       // Handle form submission event
-       $('#listForm').on('submit', function(e){
-          var form = this;
+      // Handle form submission event
+      $('#listForm').on('submit', function(e) {
+        var form = this;
 
-          // Iterate over all selected checkboxes
-          $.each(rows_selected, function(index, rowId){
-             // Create a hidden element
-             $(form).append(
-                 $('<input>')
-                    .attr('type', 'hidden')
-                    .attr('name', 'id[]')
-                    .val(rowId)
-             );
-          });
-       });
+        // Iterate over all selected checkboxes
+        $.each(rows_selected, function(index, rowId) {
+          // Create a hidden element
+          $(form).append(
+            $('<input>')
+            .attr('type', 'hidden')
+            .attr('name', 'id[]')
+            .val(rowId)
+          );
+        });
+      });
 
       $("#fromDate").val(fromDate());
       $("#endDate").val(nowDate());
@@ -518,40 +518,40 @@
       });
     });
 
-    $('#upload').click(function(){
-			var dataset = {};
-			var arrConvId = new Array();
-			dataset = $('#t2').DataTable().rows('.selected').data();
-			for(var i=0; i<dataset.length;i++){
-				arrConvId[i] = dataset[i].conversationID;
-        alert(arrConvId[i]);
-			}
+    $('#upload').click(function() {
+      var dataset = {};
+      var arrConvId = new Array();
+      var arrDirection = new Array();
+      dataset = $('#t2').DataTable().rows('.selected').data();
+      for (var i = 0; i < dataset.length; i++) {
+        arrConvId[i] = dataset[i].conversationID;
+        arrDirection[i] = dataset[i].direction;
+      }
       var request = JSON.stringify({
-         'MessageId': '3887cab1-3ea6-4776-b988-7d2719890403',
-         'Signal': 'VIEW_XML',
-         'RequestTime': nowDate(),
-         'SendComRegno': '7418529630',
-         'AuthToken': 'QURiYWV1RTZpTkhDcU1lQW5hUGUraUxQaUZGZ0hDclBFOVFCVjZOSFA2TT0K',
-         'ServiceCode': 'DTI',
-         'ConversationId': arrConvId
-        });
-        $.support.cors = true;
-        $.ajax({
-         type: "POST",
-         dataType: "json",
-         crossDomain: true,
-         contentType: "application/json",
-         url: "http://demoapi.smartbill.co.kr/sb-api/request/",
-         data: request,
-         success: function (data) {
-         fnGetXML(data); 
-         },
-         error: function (error) {
-           alert("error");
-         }
-        });
-		});
-
+        'MessageId': '3887cab1-3ea6-4776-b988-7d2719890419',
+        'Signal': 'VIEW_XML',
+        'RequestTime': nowDate(),
+        'SendComRegno': '7418529630',
+        'AuthToken': 'QURiYWV1RTZpTkhDcU1lQW5hUGUraUxQaUZGZ0hDclBFOVFCVjZOSFA2TT0K',
+        'ServiceCode': 'DTI',
+        'ConversationId': arrConvId
+      });
+      $.support.cors = true;
+      $.ajax({
+        type: "POST",
+        dataType: "json",
+        crossDomain: true,
+        contentType: "application/json",
+        url: "http://demoapi.smartbill.co.kr/sb-api/request/",
+        data: request,
+        success: function(data) {
+          fnGetXML(data, arrDirection);
+        },
+        error: function(error) {
+          alert("error");
+        }
+      });
+    });
   </script>
 </body>
 
