@@ -279,21 +279,22 @@ function SBGetList( data, supbuyType ) {
 	}
 }
 
-function fnGetXML(data, arrDirection){
+function fnGetXML(data, arrDirection, arrStatus, supbuyType){
 	if ("30000" != data.ResultCode) {
 	 alert(data.ResultMessage);
 	}else{
-		alert("정상적으로 처리되었습니다.");
+		//alert("정상적으로 처리되었습니다.");
 		var totalCount = data.ResultDataSet.Table1.length;
 		if(0 < totalCount){
 		 for(var i = 0 ; i < totalCount ; i++){
 			 var conversationID = data.ResultDataSet.Table1[i].CONVERSATION_ID; //참조번호
 			 var direction = arrDirection[i];
+			 var status = arrStatus[i];
+			 var supbuyType = supbuyType;
 			 var DTI = data.ResultDataSet.Table1[i].DTI_XML; //세금계산서 원본
 			 var DTT = data.ResultDataSet.Table1[i].DTT_XML; //거래명세서 원본
-			 //alert(conversationID);
-			 alert(DTT);
-			 xmlUpload(conversationID, direction, DTI, DTT);
+			 //alert(DTI);
+			 xmlUpload(conversationID, supbuyType, direction, status, DTI, DTT);
 		 }
 		}
 		else{
@@ -302,6 +303,56 @@ function fnGetXML(data, arrDirection){
 	}
 }
 
-function xmlUpload(conversationID, direction, DTI, DTT){
-	alert('success~!');
+function xmlUpload(conversationID, supbuyType, direction, status, DTI, DTT){
+	var text, parser, xmlDoc
+	var objData= {};
+	parser = new DOMParser();
+	xmlDoc = parser.parseFromString(DTI,"text/xml");
+
+	objData.conversationID = conversationID;
+	objData.supbuyType = supbuyType;
+	objData.direction = direction;
+	objData.status = status;
+	objData.issueID = xmlDoc.getElementsByTagName("IssueID")[0].childNodes[0].nodeValue;
+	objData.typeCode = xmlDoc.getElementsByTagName("TypeCode")[0].childNodes[0].nodeValue;
+	objData.IDate = xmlDoc.getElementsByTagName("IssueDateTime")[1].childNodes[0].nodeValue;
+	objData.taxDemand = xmlDoc.getElementsByTagName("PurposeCode")[0].childNodes[0].nodeValue;
+	// 공급자 정보
+	objData.supComRegno = xmlDoc.getElementsByTagName("ID")[0].childNodes[0].nodeValue;
+	objData.supComType = xmlDoc.getElementsByTagName("TypeCode")[1].childNodes[0].nodeValue;
+	objData.supComName = xmlDoc.getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
+	objData.supComClassify = xmlDoc.getElementsByTagName("ClassificationCode")[0].childNodes[0].nodeValue;
+	objData.supBizplaceCode = xmlDoc.getElementsByTagName("TaxRegistrationID")[0].nodeValue;
+	objData.supRepName = xmlDoc.getElementsByTagName("NameText")[1].childNodes[0].nodeValue;
+	objData.supEmpName = xmlDoc.getElementsByTagName("PersonNameText")[0].childNodes[0].nodeValue;
+	objData.supTelNum = xmlDoc.getElementsByTagName("TelephoneCommunication")[0].childNodes[0].nodeValue;
+	objData.supEmail = xmlDoc.getElementsByTagName("URICommunication")[0].childNodes[0].nodeValue;
+	objData.supComAddr = xmlDoc.getElementsByTagName("LineOneText")[0].childNodes[0].nodeValue;
+	// 공급받는자 정보
+	objData.byrComRegno = xmlDoc.getElementsByTagName("ID")[1].childNodes[0].nodeValue;
+	objData.byrComType = xmlDoc.getElementsByTagName("TypeCode")[2].childNodes[0].nodeValue;
+	objData.byrComName = xmlDoc.getElementsByTagName("NameText")[1].childNodes[0].nodeValue;
+	objData.byrComClassify = xmlDoc.getElementsByTagName("ClassificationCode")[1].childNodes[0].nodeValue;
+	objData.byrBizplaceCode = xmlDoc.getElementsByTagName("TaxRegistrationID")[1].childNodes[0].nodeValue;
+	objData.byrRepName = xmlDoc.getElementsByTagName("NameText")[2].childNodes[0].nodeValue;
+	objData.byrEmpName = xmlDoc.getElementsByTagName("PersonNameText")[1].childNodes[0].nodeValue;
+	objData.byrTelNum = xmlDoc.getElementsByTagName("TelephoneCommunication")[1].childNodes[0].nodeValue;
+	objData.byrEmail = xmlDoc.getElementsByTagName("URICommunication")[1].childNodes[0].nodeValue;
+	objData.byrComAddr = xmlDoc.getElementsByTagName("LineOneText")[1].childNodes[0].nodeValue;
+	// 수탁자 정보
+	objData.brkComRegno = xmlDoc.getElementsByTagName("ID")[2].childNodes[0].nodeValue;
+	objData.brkComType = xmlDoc.getElementsByTagName("TypeCode")[3].childNodes[0].nodeValue;
+	objData.brkComName = xmlDoc.getElementsByTagName("NameText")[2].childNodes[0].nodeValue;
+	objData.brkComClassify = xmlDoc.getElementsByTagName("ClassificationCode")[2].childNodes[0].nodeValue;
+	objData.brkBizplaceCode = xmlDoc.getElementsByTagName("TaxRegistrationID")[2].childNodes[0].nodeValue;
+	objData.brkRepName = xmlDoc.getElementsByTagName("NameText")[3].childNodes[0].nodeValue;
+	objData.brkEmpName = xmlDoc.getElementsByTagName("PersonNameText")[2].childNodes[0].nodeValue;
+	objData.brkTelNum = xmlDoc.getElementsByTagName("TelephoneCommunication")[2].childNodes[0].nodeValue;
+	objData.brkEmail = xmlDoc.getElementsByTagName("URICommunication")[2].childNodes[0].nodeValue;
+	objData.brkComAddr = xmlDoc.getElementsByTagName("LineOneText")[2].childNodes[0].nodeValue;
+	//금액
+	
+
+	alert(objData.brkComAddr);
+
 }

@@ -522,13 +522,16 @@
       var dataset = {};
       var arrConvId = new Array();
       var arrDirection = new Array();
+      var arrStatus = new Array();
+      var supbuyType = 'AP';
       dataset = $('#t2').DataTable().rows('.selected').data();
       for (var i = 0; i < dataset.length; i++) {
         arrConvId[i] = dataset[i].conversationID;
         arrDirection[i] = dataset[i].direction;
+        arrStatus[i] = dataset[i].status;
       }
       var request = JSON.stringify({
-        'MessageId': '3887cab1-3ea6-4776-b988-7d2719890419',
+        'MessageId': '3887cab1-3ea6-4776-b988-7d2719890403',
         'Signal': 'VIEW_XML',
         'RequestTime': nowDate(),
         'SendComRegno': '7418529630',
@@ -545,7 +548,7 @@
         url: "http://demoapi.smartbill.co.kr/sb-api/request/",
         data: request,
         success: function(data) {
-          fnGetXML(data, arrDirection);
+          fnGetXML(data, arrDirection, arrStatus, supbuyType);
         },
         error: function(error) {
           alert("error");
