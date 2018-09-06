@@ -365,9 +365,9 @@ function xmlUpload(conversationID, supbuyType, direction, status, DTI, DTT){
 	objData.totalAmount = xmlDoc.getElementsByTagName("GrandTotalAmount")[0].childNodes[0].nodeValue;
 	// 아이템
 	objData.itemCount = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem").length;
-	alert(xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[0].getElementsByTagName("SequenceNumeric")[0].childNodes[0].nodeValue);
+
 	for(var i = 0; i < objData.itemCount; i++){
-		objData.itemLineNum[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("SequenceNumeric")[0].childNodes[0].nodeValue;
+		objData.itemLineNum = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("SequenceNumeric")[0].childNodes[0].nodeValue;
 		objData.itemRemark[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("DescriptionText")[0].childNodes[0].nodeValue;
 		objData.itemSupAmount[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("InvoiceAmount")[0].childNodes[0].nodeValue;
 		objData.itemQTY[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("ChargeableUnitQuantity")[0].childNodes[0].nodeValue;
