@@ -322,7 +322,7 @@ function xmlUpload(conversationID, supbuyType, direction, status, DTI, DTT){
 	objData.supComType = xmlDoc.getElementsByTagName("TypeCode")[1].childNodes[0].nodeValue;
 	objData.supComName = xmlDoc.getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
 	objData.supComClassify = xmlDoc.getElementsByTagName("ClassificationCode")[0].childNodes[0].nodeValue;
-	objData.supBizplaceCode = xmlDoc.getElementsByTagName("TaxRegistrationID")[0].nodeValue;
+	objData.supBizplaceCode = xmlDoc.getElementsByTagName("TaxRegistrationID")[0].childNodes[0].nodeValue;
 	objData.supRepName = xmlDoc.getElementsByTagName("NameText")[1].childNodes[0].nodeValue;
 	objData.supEmpName = xmlDoc.getElementsByTagName("PersonNameText")[0].childNodes[0].nodeValue;
 	objData.supTelNum = xmlDoc.getElementsByTagName("TelephoneCommunication")[0].childNodes[0].nodeValue;
@@ -331,28 +331,52 @@ function xmlUpload(conversationID, supbuyType, direction, status, DTI, DTT){
 	// 공급받는자 정보
 	objData.byrComRegno = xmlDoc.getElementsByTagName("ID")[1].childNodes[0].nodeValue;
 	objData.byrComType = xmlDoc.getElementsByTagName("TypeCode")[2].childNodes[0].nodeValue;
-	objData.byrComName = xmlDoc.getElementsByTagName("NameText")[1].childNodes[0].nodeValue;
+	objData.byrComName = xmlDoc.getElementsByTagName("NameText")[2].childNodes[0].nodeValue;
 	objData.byrComClassify = xmlDoc.getElementsByTagName("ClassificationCode")[1].childNodes[0].nodeValue;
 	objData.byrBizplaceCode = xmlDoc.getElementsByTagName("TaxRegistrationID")[1].childNodes[0].nodeValue;
-	objData.byrRepName = xmlDoc.getElementsByTagName("NameText")[2].childNodes[0].nodeValue;
+	objData.byrRepName = xmlDoc.getElementsByTagName("NameText")[3].childNodes[0].nodeValue;
 	objData.byrEmpName = xmlDoc.getElementsByTagName("PersonNameText")[1].childNodes[0].nodeValue;
 	objData.byrTelNum = xmlDoc.getElementsByTagName("TelephoneCommunication")[1].childNodes[0].nodeValue;
 	objData.byrEmail = xmlDoc.getElementsByTagName("URICommunication")[1].childNodes[0].nodeValue;
 	objData.byrComAddr = xmlDoc.getElementsByTagName("LineOneText")[1].childNodes[0].nodeValue;
 	// 수탁자 정보
-	objData.brkComRegno = xmlDoc.getElementsByTagName("ID")[2].childNodes[0].nodeValue;
-	objData.brkComType = xmlDoc.getElementsByTagName("TypeCode")[3].childNodes[0].nodeValue;
-	objData.brkComName = xmlDoc.getElementsByTagName("NameText")[2].childNodes[0].nodeValue;
-	objData.brkComClassify = xmlDoc.getElementsByTagName("ClassificationCode")[2].childNodes[0].nodeValue;
+	objData.brkComRegno = xmlDoc.getElementsByTagName("BrokerParty")[0].childNodes[0].childNodes[0].nodeValue;
+	objData.brkComType = xmlDoc.getElementsByTagName("BrokerParty")[0].childNodes[1].childNodes[0].nodeValue;
+	objData.brkComName = xmlDoc.getElementsByTagName("BrokerParty")[0].childNodes[2].childNodes[0].nodeValue;
+	objData.brkComClassify = xmlDoc.getElementsByTagName("BrokerParty")[0].childNodes[3].childNodes[0].nodeValue;
 	objData.brkBizplaceCode = xmlDoc.getElementsByTagName("TaxRegistrationID")[2].childNodes[0].nodeValue;
-	objData.brkRepName = xmlDoc.getElementsByTagName("NameText")[3].childNodes[0].nodeValue;
+	objData.brkRepName = xmlDoc.getElementsByTagName("SpecifiedPerson")[2].childNodes[0].nodeValue;
 	objData.brkEmpName = xmlDoc.getElementsByTagName("PersonNameText")[2].childNodes[0].nodeValue;
 	objData.brkTelNum = xmlDoc.getElementsByTagName("TelephoneCommunication")[2].childNodes[0].nodeValue;
 	objData.brkEmail = xmlDoc.getElementsByTagName("URICommunication")[2].childNodes[0].nodeValue;
 	objData.brkComAddr = xmlDoc.getElementsByTagName("LineOneText")[2].childNodes[0].nodeValue;
-	//금액
-	
-
-	alert(objData.brkComAddr);
+	//금액 코드
+	objData.cashCode = xmlDoc.getElementsByTagName("SpecifiedPaymentMeans")[0].childNodes[0].childNodes[0].nodeValue;
+	objData.cashAmount = xmlDoc.getElementsByTagName("SpecifiedPaymentMeans")[0].childNodes[1].childNodes[0].nodeValue;
+	objData.checkCode = xmlDoc.getElementsByTagName("SpecifiedPaymentMeans")[1].childNodes[0].childNodes[0].nodeValue;
+	objData.checkAmount = xmlDoc.getElementsByTagName("SpecifiedPaymentMeans")[1].childNodes[1].childNodes[0].nodeValue;
+	objData.noteCode = xmlDoc.getElementsByTagName("SpecifiedPaymentMeans")[2].childNodes[0].childNodes[0].nodeValue;
+	objData.noteAmount = xmlDoc.getElementsByTagName("SpecifiedPaymentMeans")[2].childNodes[1].childNodes[0].nodeValue;
+	objData.receivableCode = xmlDoc.getElementsByTagName("SpecifiedPaymentMeans")[3].childNodes[0].childNodes[0].nodeValue;
+	objData.receivableAmount = xmlDoc.getElementsByTagName("SpecifiedPaymentMeans")[3].childNodes[1].childNodes[0].nodeValue;
+	//금액정보
+	objData.supAmount = xmlDoc.getElementsByTagName("ChargeTotalAmount")[0].childNodes[0].nodeValue;
+	objData.taxAmount = xmlDoc.getElementsByTagName("TaxTotalAmount")[0].childNodes[0].nodeValue;
+	objData.totalAmount = xmlDoc.getElementsByTagName("GrandTotalAmount")[0].childNodes[0].nodeValue;
+	// 아이템
+	objData.itemCount = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem").length;
+	alert(xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[0].getElementsByTagName("SequenceNumeric")[0].childNodes[0].nodeValue);
+	for(var i = 0; i < objData.itemCount; i++){
+		objData.itemLineNum[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("SequenceNumeric")[0].childNodes[0].nodeValue;
+		objData.itemRemark[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("DescriptionText")[0].childNodes[0].nodeValue;
+		objData.itemSupAmount[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("InvoiceAmount")[0].childNodes[0].nodeValue;
+		objData.itemQTY[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("ChargeableUnitQuantity")[0].childNodes[0].nodeValue;
+		objData.itemSize[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("InformationText")[0].childNodes[0].nodeValue;
+		objData.itemName[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
+		objData.itemMD[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("PurchaseExpiryDateTime")[0].childNodes[0].nodeValue;
+		objData.itemTaxAmount[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("CalculatedAmount")[0].childNodes[0].nodeValue;
+		objData.itemUnitPrice[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("UnitAmount")[0].childNodes[0].nodeValue;
+	}
+	alert(objData.itemSize[2]);
 
 }
