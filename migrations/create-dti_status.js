@@ -54,10 +54,10 @@ module.exports = {
       type: 'primaryKey',
       name: 'dti_status_pk'
     });
-    dti_status.belongsTo(models.dti_main, {
-      foreignKey : 'fk_status',
-      targetKey : 'conversation_id'
-    });
+    // dti_status.belongsTo(models.dti_main, {
+    //   foreignKey : 'fk_status',
+    //   targetKey : 'conversation_id'
+    // });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('dti_status');

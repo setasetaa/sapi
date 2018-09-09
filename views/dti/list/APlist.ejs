@@ -392,7 +392,6 @@
         'rowCallback': function(row, data, dataIndex) {
           // Get row ID
           var rowId = data[0];
-
           // If row ID is in the list of selected row IDs
           if ($.inArray(rowId, rows_selected) !== -1) {
             $(row).find('input[type="checkbox"]').prop('checked', true);
@@ -408,11 +407,9 @@
         ],
         searching: false,
       });
-
       $('#myModal').on('hidden.bs.modal', function() {
         $('#myModal').removeData('bs.modal');
       });
-
       $('#t1 tbody').on('click', 'input[type="checkbox"]', function(e) {
         var $row = $(this).closest('tr');
         // Get row data
@@ -428,7 +425,6 @@
         } else if (!this.checked && index !== -1) {
           rows_selected.splice(index, 1);
         }
-
         if (this.checked) {
           $row.addClass('selected');
         } else {
@@ -439,12 +435,10 @@
         // Prevent click event from propagating to parent
         e.stopPropagation();
       });
-
       // Handle click on table cells with checkboxes
       $('#t1').on('click', 'tbody td, thead th:first-child', function(e) {
         $(this).parent().find('input[type="checkbox"]').trigger('click');
       });
-
       // Handle click on "Select all" control
       $('thead input[name="select_all"]', table.table().container()).on('click', function(e) {
         if (this.checked) {
@@ -455,17 +449,14 @@
         // Prevent click event from propagating to parent
         e.stopPropagation();
       });
-
       // Handle table draw event
       table.on('draw', function() {
         // Update state of "Select all" control
         updateDataTableSelectAllCtrl(table);
       });
-
       // Handle form submission event
       $('#listForm').on('submit', function(e) {
         var form = this;
-
         // Iterate over all selected checkboxes
         $.each(rows_selected, function(index, rowId) {
           // Create a hidden element
@@ -477,14 +468,12 @@
           );
         });
       });
-
       $("#fromDate").val(fromDate());
       $("#endDate").val(nowDate());
       $("#SBfrom").val(fromDate());
       $("#SBend").val(nowDate());
       search('/dti/list/APlist');
     });
-
     $("#SBSearch").click(function() {
       var fromDate = $("#SBfrom").val();
       var endDate = $("#SBend").val();
@@ -517,18 +506,20 @@
         }
       });
     });
-
     $('#upload').click(function() {
       var dataset = {};
       var arrConvId = new Array();
       var arrDirection = new Array();
+      var arrStatus = new Array();
+      var supbuyType = 'AP';
       dataset = $('#t2').DataTable().rows('.selected').data();
       for (var i = 0; i < dataset.length; i++) {
         arrConvId[i] = dataset[i].conversationID;
         arrDirection[i] = dataset[i].direction;
+        arrStatus[i] = dataset[i].status;
       }
       var request = JSON.stringify({
-        'MessageId': '3887cab1-3ea6-4776-b988-7d2719890419',
+        'MessageId': '3887cab1-3ea6-4776-b988-7d2719890403',
         'Signal': 'VIEW_XML',
         'RequestTime': nowDate(),
         'SendComRegno': '7418529630',
@@ -545,7 +536,7 @@
         url: "http://demoapi.smartbill.co.kr/sb-api/request/",
         data: request,
         success: function(data) {
-          fnGetXML(data, arrDirection);
+          fnUploadXML(data, arrDirection, arrStatus, supbuyType);
         },
         error: function(error) {
           alert("error");

@@ -222,8 +222,8 @@ module.exports = {
       type: 'primaryKey',
       name: 'dti_main_pk'
     });
-    dti_main.hasOne(models.dti_status, {foreignKey: 'fk_status', targetKey: 'conversation_id'});
-    dti_main.hasMany(models.dti_item, {foreignKey: 'fk_item', targetKey: 'conversation_id'});
+    // dti_main.hasOne(models.dti_status, {foreignKey: 'fk_status', targetKey: 'conversation_id'});
+    // dti_main.hasMany(models.dti_item, {foreignKey: 'fk_item', targetKey: 'conversation_id'});
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('dti_main');

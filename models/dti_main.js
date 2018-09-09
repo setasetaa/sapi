@@ -101,28 +101,22 @@ module.exports = (sequelize, DataTypes) => {
     },
     broker_com_id: DataTypes.STRING,
     broker_com_regno: {
-      type: DataTypes.CHAR,
-      allowNull: false,
+      type: DataTypes.STRING
     },
     broker_rep_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING
     },
     broker_com_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING
     },
     broker_com_type: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING
     },
     broker_com_classify: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING
     },
     broker_com_addr: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING
     },
     broker_dept_name: DataTypes.STRING,
     broker_emp_name: DataTypes.STRING,
@@ -162,9 +156,9 @@ module.exports = (sequelize, DataTypes) => {
   {
     freezeTableName : true,
   });
-  dti_main.associate = function(models) {
-    dti_main.hasOne(models.dti_status);
-    dti_main.hasMany(models.dti_item);
-  };
+  // dti_main.associate = function(models) {
+  //   dti_main.hasOne(models.dti_status);
+  //   dti_main.hasMany(models.dti_item);
+  // };
   return dti_main;
 };

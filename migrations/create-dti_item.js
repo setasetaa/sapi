@@ -81,10 +81,10 @@ module.exports = {
       name: 'dti_item_pk'
     });
 
-    dti_item.belongsTo(models.dti_main, {
-      foreignKey : 'fk_item',
-      targetKey : 'conversation_id'
-    });
+    // dti_item.belongsTo(models.dti_main, {
+    //   foreignKey : 'fk_item',
+    //   targetKey : 'conversation_id'
+    // });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('dti_item');
