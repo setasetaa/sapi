@@ -7,7 +7,18 @@ router.get('/APlist', function(req, res, next){
   res.render("dti/list/APlist");
 });
 router.post('/APlist', function(req, res, next) {
-
+  let body = req.body;
+  models.main.find({
+    include : [{
+      model : models.dti_status, models.dti_item
+      where : {
+        conversation_id : conversation_id,
+        supbuy_type : supbuy_type,
+        direction : direction
+      }
+    }],
+    where : {}
+  })
 });
 
 router.post('/save', function(req, res, next) {

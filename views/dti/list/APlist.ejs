@@ -187,19 +187,19 @@
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiType1" name="dtiType" value="General">
-                  <label class="custom-control-label" for="dtiType1">General</label>
+                  <label class="custom-control-label" for="dtiType1">세금계산서</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiType2" name="dtiType" value="free">
-                  <label class="custom-control-label" for="dtiType2">Tax-free</label>
+                  <label class="custom-control-label" for="dtiType2">계산서</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiType3" name="dtiType" value="Amend">
-                  <label class="custom-control-label" for="dtiType3">Amend</label>
+                  <label class="custom-control-label" for="dtiType3">수정</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiType4" name="dtiType" value="Consignment">
-                  <label class="custom-control-label" for="dtiType4">Consignment</label>
+                  <label class="custom-control-label" for="dtiType4">위수탁</label>
                 </div>
               </div>
               <div class="form-group">
@@ -210,35 +210,35 @@
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiStatus1" name="dtiStatus" value="S">
-                  <label class="custom-control-label" for="dtiStatus1">Save</label>
+                  <label class="custom-control-label" for="dtiStatus1">저장</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiStatus2" name="dtiStatus" value="I">
-                  <label class="custom-control-label" for="dtiStatus2">Issue</label>
+                  <label class="custom-control-label" for="dtiStatus2">발행</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiStatus3" name="dtiStatus" value="C">
-                  <label class="custom-control-label" for="dtiStatus3">Approve</label>
+                  <label class="custom-control-label" for="dtiStatus3">승인</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiStatus4" name="dtiStatus" value="R">
-                  <label class="custom-control-label" for="dtiStatus4">Reject</label>
+                  <label class="custom-control-label" for="dtiStatus4">거부</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiStatus5" name="dtiStatus" value="O">
-                  <label class="custom-control-label" for="dtiStatus5">Cancel</label>
+                  <label class="custom-control-label" for="dtiStatus5">발행취소</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiStatus6" name="dtiStatus" value="V">
-                  <label class="custom-control-label" for="dtiStatus6">Request</label>
+                  <label class="custom-control-label" for="dtiStatus6">발행요청</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                   <input type="checkbox" class="custom-control-input" id="dtiStatus7" name="dtiStatus" value="W">
-                  <label class="custom-control-label" for="dtiStatus7">Requst cancel</label>
+                  <label class="custom-control-label" for="dtiStatus7">발행요청취소</label>
                 </div>
                 <button type="button" id="SBData" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">SBData</button>
                 <button type="button" id="exelDown" class="btn btn-outline-success">ExelDown</button>
-                <button type="button" id="dataSearch" class="btn btn-outline-primary-sm">Search</button>
+                <button type="button" id="listSearch" class="btn btn-outline-primary-sm">Search</button>
               </div>
               <table id="t1" class="display select" cellspacing="0" width="100%">
                 <thead>
@@ -468,13 +468,36 @@
           );
         });
       });
-      $("#fromDate").val(fromDate());
-      $("#endDate").val(nowDate());
-      $("#SBfrom").val(fromDate());
-      $("#SBend").val(nowDate());
+      $('#fromDate').val(fromDate());
+      $('#endDate').val(nowDate());
+      $('#SBfrom').val(fromDate());
+      $('#SBend').val(nowDate());
       search('/dti/list/APlist');
     });
-    $("#SBSearch").click(function() {
+
+    $('#listSearch').click(function() {
+      var request = JSON.stringify({
+        'fromDate': $('#fromDate').val(),
+        'endDate': $('#endDate').val(),
+      });
+      $.support.cors = true;
+      $.ajax({
+        type: "POST",
+        dataType: "json",
+        crossDomain: true,
+        contentType: "application/json",
+        url: "APlist",
+        data: request,
+        success: function(data) {
+          alert("success~");
+        },
+        error: function(error) {
+          alert("error");
+        }
+      });
+    });
+
+    $('#SBSearch').click(function() {
       var fromDate = $("#SBfrom").val();
       var endDate = $("#SBend").val();
       var supbuyType = "AP";
