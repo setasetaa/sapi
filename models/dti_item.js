@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.CHAR(35),
       allowNull: false,
       primaryKey: true,
+
     },
     supbuy_type: {
       type: DataTypes.CHAR(2),
@@ -70,10 +71,9 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName : true,
   });
   dti_item.associate = function(models) {
-    // dti_item.belongsTo(models.dti_main, {
-    //   foreignKey : ['conversation_id', 'supbuy_type','direction'],
-    //   targetKey : ['conversation_id', 'supbuy_type','direction']
-    // });
+    dti_item.belongsTo(models.dti_main, {
+      foreignKey : ['conversation_id', 'supbuy_type', 'direction'],
+    });
   };
   return dti_item;
 };

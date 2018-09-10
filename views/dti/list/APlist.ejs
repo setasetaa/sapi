@@ -150,112 +150,112 @@
           <div class="card-body">
             <div class="table-responsive">
               <form id="seachForm">
-              <div class="form-group">
-                <select id="dateType" name="dateType" class="custom-select custom-select-sm form-control form-control-sm" style="width:100px">
+                <div class="form-group">
+                  <select id="dateType" name="dateType" class="custom-select custom-select-sm form-control form-control-sm" style="width:100px">
                     <option value="dti_wdate">WDATE</option>
                     <option value="dti_Idate">IDATE</option>
                     <option value="dti_Sdate">SDATE</option>
                 </select>
 
-                <label>From Date
+                  <label>From Date
                   <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm" style="width:145px">
                 </label>
-                <label>End Date
+                  <label>End Date
                   <input type="date" id="endDate" name="endDate" class="form-control form-control-sm" style="width:145px">
                 </label>
 
-                <label>B / N
+                  <label>B / N
                   <input type="text" id="regno" name="regno"class="form-control form-control-sm" style="width:125px">
                 </label>
-                <label>Com Name
+                  <label>Com Name
                   <input type="text" id="comName" name="comName"class="form-control form-control-sm" style="width:140px">
                 </label>
-                <label>Sup Amount
+                  <label>Sup Amount
                   <input type="text" id="supAmount" name="supAmount"class="form-control form-control-sm" style="width:120px">
                 </label>
-                <label>Tax Amount
+                  <label>Tax Amount
                   <input type="text" id="taxAmount" name="taxAmount"class="form-control form-control-sm" style="width:110px">
                 </label>
-                <label>Issue ID
+                  <label>Issue ID
                   <input type="text" id="issueId" name="issueId"class="form-control form-control-sm" style="width:200px">
                 </label>
-              </div>
-              <div class="form-group">
-                <span class="badge badge-secondary">TYPE&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiType" name="dtiType" value="General">
-                  <label class="custom-control-label" for="dtiType">All</label>
                 </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiType1" name="dtiType" value="General">
-                  <label class="custom-control-label" for="dtiType1">세금계산서</label>
+                <div class="form-group">
+                  <span class="badge badge-secondary">TYPE&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiType" name="dtiType" value="General">
+                    <label class="custom-control-label" for="dtiType">All</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiType1" name="dtiType" value="General">
+                    <label class="custom-control-label" for="dtiType1">세금계산서</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiType2" name="dtiType" value="free">
+                    <label class="custom-control-label" for="dtiType2">계산서</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiType3" name="dtiType" value="Amend">
+                    <label class="custom-control-label" for="dtiType3">수정</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiType4" name="dtiType" value="Consignment">
+                    <label class="custom-control-label" for="dtiType4">위수탁</label>
+                  </div>
                 </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiType2" name="dtiType" value="free">
-                  <label class="custom-control-label" for="dtiType2">계산서</label>
+                <div class="form-group">
+                  <span class="badge badge-secondary">STATUS</span>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiStatus" name="dtiStatus" value="all">
+                    <label class="custom-control-label" for="dtiStatus">All</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiStatus1" name="dtiStatus" value="S">
+                    <label class="custom-control-label" for="dtiStatus1">저장</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiStatus2" name="dtiStatus" value="I">
+                    <label class="custom-control-label" for="dtiStatus2">발행</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiStatus3" name="dtiStatus" value="C">
+                    <label class="custom-control-label" for="dtiStatus3">승인</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiStatus4" name="dtiStatus" value="R">
+                    <label class="custom-control-label" for="dtiStatus4">거부</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiStatus5" name="dtiStatus" value="O">
+                    <label class="custom-control-label" for="dtiStatus5">발행취소</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiStatus6" name="dtiStatus" value="V">
+                    <label class="custom-control-label" for="dtiStatus6">발행요청</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="dtiStatus7" name="dtiStatus" value="W">
+                    <label class="custom-control-label" for="dtiStatus7">발행요청취소</label>
+                  </div>
+                  <button type="button" id="SBData" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">SBData</button>
+                  <button type="button" id="exelDown" class="btn btn-outline-success">ExelDown</button>
+                  <button type="button" id="listSearch" class="btn btn-outline-primary-sm">Search</button>
                 </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiType3" name="dtiType" value="Amend">
-                  <label class="custom-control-label" for="dtiType3">수정</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiType4" name="dtiType" value="Consignment">
-                  <label class="custom-control-label" for="dtiType4">위수탁</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <span class="badge badge-secondary">STATUS</span>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiStatus" name="dtiStatus" value="all">
-                  <label class="custom-control-label" for="dtiStatus">All</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiStatus1" name="dtiStatus" value="S">
-                  <label class="custom-control-label" for="dtiStatus1">저장</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiStatus2" name="dtiStatus" value="I">
-                  <label class="custom-control-label" for="dtiStatus2">발행</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiStatus3" name="dtiStatus" value="C">
-                  <label class="custom-control-label" for="dtiStatus3">승인</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiStatus4" name="dtiStatus" value="R">
-                  <label class="custom-control-label" for="dtiStatus4">거부</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiStatus5" name="dtiStatus" value="O">
-                  <label class="custom-control-label" for="dtiStatus5">발행취소</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiStatus6" name="dtiStatus" value="V">
-                  <label class="custom-control-label" for="dtiStatus6">발행요청</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                  <input type="checkbox" class="custom-control-input" id="dtiStatus7" name="dtiStatus" value="W">
-                  <label class="custom-control-label" for="dtiStatus7">발행요청취소</label>
-                </div>
-                <button type="button" id="SBData" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">SBData</button>
-                <button type="button" id="exelDown" class="btn btn-outline-success">ExelDown</button>
-                <button type="button" id="listSearch" class="btn btn-outline-primary-sm">Search</button>
-              </div>
               </form>
               <table id="t1" class="display select" cellspacing="0" width="100%">
                 <thead>
                   <tr>
                     <th><input name="select_all" value="1" type="checkbox"></th>
-                    <th data-field="sup_com_regno">B / N</th>
-                    <th data-field="sup_com_name">COMPANY<br>NAME</th>
-                    <th data-field="dti_wdate">WRITE<br>DATE</th>
-                    <th data-field="dti_idate">ISSUE<br>DATE</th>
-                    <th data-field="dti_sdate">SEND<br>DATE</th>
-                    <th data-field="dti_status">STATUS</th>
-                    <th data-field="sup_amount">SUPPLY<br>AMOUNT</th>
-                    <th data-field="tax_amount">TAX<br>AMOUNT</th>
-                    <th data-field="total_amount">TOTAL<br>AMOUNT</th>
-                    <th data-field="issue_id">ISSUE ID</th>
+                    <th data-field="regno">B / N</th>
+                    <th data-field="name">COMPANY<br>NAME</th>
+                    <th data-field="wdate">WRITE<br>DATE</th>
+                    <th data-field="idate">ISSUE<br>DATE</th>
+                    <th data-field="sdate">SEND<br>DATE</th>
+                    <th data-field="status">STATUS</th>
+                    <th data-field="supAmount">SUPPLY<br>AMOUNT</th>
+                    <th data-field="taxAmount">TAX<br>AMOUNT</th>
+                    <th data-field="totalAmount">TOTAL<br>AMOUNT</th>
+                    <th data-field="issueID">ISSUE ID</th>
                   </tr>
                 </thead>
 
@@ -475,26 +475,11 @@
       $('#endDate').val(nowDate());
       $('#SBfrom').val(fromDate());
       $('#SBend').val(nowDate());
-      search('/dti/list/APlist');
+      search();
     });
 
     $('#listSearch').click(function() {
-      var request = JSON.stringify($('#searchForm').SERIALIZABLE());
-      $.support.cors = true;
-      $.ajax({
-        type: "POST",
-        dataType: "json",
-        crossDomain: true,
-        contentType: "application/json",
-        url: "APlist",
-        data: request,
-        success: function(data) {
-          alert("success~");
-        },
-        error: function(error) {
-          alert("error");
-        }
-      });
+      search();
     });
 
     $('#SBSearch').click(function() {

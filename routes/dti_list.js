@@ -8,23 +8,44 @@ router.get('/APlist', function(req, res, next){
 });
 router.post('/APlist', function(req, res, next) {
   let body = req.body;
-  var dateType = body.dateType;
-  models.dti_main.find({
-    include : [
-      {
-        model : models.dti_status,
+  console.log(body);
+  var search, join, where = {};
 
-      },
-      {
-        model : models.dti_item,
+  if(body.regno != ""){
+    var regno = body.regno;
+    //regno = regno.replace('-','');
+    where['sup_com_regno'] = {$like: body.regno + '%'};
+  }
 
-      }
-    ],
-    where: {
-      [dateType] : {between: [body.fromDate, body.fromDate]},
+  if(Object.keys(where).length > 0){
+    search.where = where;
+  }
+  join['model'] = models.dti_status;
+  search.include = join;
+  models.dti_main.findAll(search).then(function(data){
+      res.json(JSON.stringify(data));
+    });
+  // models.dti_main.findAll({
+  //   include : [
+  //     {
+  //       model : models.dti_status,
+  //
+  //     },
+  //     {
+  //       model : models.dti_item,
+  //
+  //     }
+  //   ],
+  //   where: {
+  //     'body.dateType' : {between: [body.fromDate, body.fromDate]},
+  //
+  //   }
+  // }).then( result => {
+  //   res.json(result);
+  // }).catch( err => {
+  //   console.log(err);
+  // });
 
-    }
-  })
 });
 
 router.post('/save', function(req, res, next) {

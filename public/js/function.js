@@ -28,25 +28,48 @@ function fromDate() {
 	return today
 }
 
-function search( url ) {
-	//$("#t1").bootstrapTable('destroy');
-	$.ajax( {
-		url: url,
-		type: 'POST',
-		//        data: JSON.stringify(formData),
-		dataType: 'json',
-		success: function ( ansData, textStatus, jqXHR ) {
-			//alert("test");
-			const objData = JSON.stringify( ansData );
-			//alert(objData);
+function search() {
+	var request = JSON.stringify($('#searchForm').serializeArray());
+	$.support.cors = true;
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		crossDomain: true,
+		contentType: "application/json",
+		url: "APlist",
+		data: request,
+		success: function(data) {
+			fnListView(data);
 		},
-		error: function ( jqXHR, textStatus, errorThrow ) {
-			alert( textStatus );
-			console.log( jqXHR );
-			console.log( textStatus );
-			console.log( errorThrow );
+		error: function(error) {
+			alert("error");
 		}
-	} );
+	});
+}
+
+function fnListView(data){
+	if($('#t1').html() != ""){
+		$('#t1').html("");
+		$('#t1').DataTable().destroy();
+	}
+	var table = $('#t1').DataTable();
+	for ( var i = 0; i < totalCount; i++ ) {
+		table.row.add( {
+			"": "",
+			"name": data.ResultDataSet.Table[ i ].SUP_COM_NAME, //공급자 회사명
+			"regno": data.ResultDataSet.Table[ i ].SUP_COM_REGNO, //공급자 사업자번호
+			"direction": data.ResultDataSet.Table[ i ].DIRECTION, //세금계산서 정/역 구분
+			"status": data.ResultDataSet.Table[ i ].DTI_STATUS, //세금계산서 상태
+			"dtiType": data.ResultDataSet.Table[ i ].DTI_TYPE, //세금계산서 종류
+			"wdate": data.ResultDataSet.Table[ i ].DTI_WDATE, //세금계산서 작성일자
+			"conversationID": data.ResultDataSet.Table[ i ].CONVERSATION_ID, //세금계산서 참조번호
+			"issueID": data.ResultDataSet.Table[ i ].ISSUE_ID, //세금계산서 승인번호
+			"sendStatus": data.ResultDataSet.Table[ i ].NTS_SEND_STATUS, //세금계산서 국세청 전송상태
+			"supAmount": data.ResultDataSet.Table[ i ].SUP_AMOUNT, //세금계산서 공급가액
+			"email": data.ResultDataSet.Table[ i ].BYR_EMAIL //담당자 이메일
+			} )
+			.draw();
+	}
 }
 
 function updateDataTableSelectAllCtrl(table){

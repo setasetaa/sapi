@@ -157,8 +157,8 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName : true,
   });
   dti_main.associate = function(models) {
-     // dti_main.hasOne(models.dti_status);
-     // dti_main.hasMany(models.dti_item);
+     dti_main.hasOne(models.dti_status);
+     dti_main.hasMany(models.dti_item);
   };
   return dti_main;
 };
