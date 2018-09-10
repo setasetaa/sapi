@@ -8,6 +8,42 @@ sequelize model:create --name dti/status --attributes "conversation_id:CHAR, sup
 
 sequelize db:migrate
 
+ALTER TABLE dti_status ADD CONSTRAINT FK_dti_status FOREIGN KEY(conversation_id, supbuy_type, direction)
+REFERENCES dti_main (conversation_id, supbuy_type, direction);
+
+
+0101 일반 세금계산서
+
+0102 영세율 세금계산서
+
+0103 위수탁 세금계산서
+
+0104 수입 세금계산서
+
+0105 영세율 위수탁 세금계산서
+
+0201 수정 일반 세금계산서
+
+0202 수정 영세율 세금계산서
+
+0203 수정 위수탁 세금계산서
+
+0204 수정 수입 세금계산서
+
+0205 수정 영세율 위수탁 세금계산서
+
+0301 일반 계산서
+
+0303 위수탁 계산서
+
+0304 수입 계산서
+
+0401 수정 일반 계산서
+
+0403 수정 위수탁 계산서
+
+0404 수정 수입 계산서
+
 <?xml version="1.0" encoding="UTF-8"?>
 
 -<TaxInvoice xsi:schemaLocation="urn:kr:or:kec:standard:Tax:ReusableAggregateBusinessInformationEntitySchemaModule:1:0 http://www.kec.or.kr/standard/Tax/TaxInvoiceSchemaModule_1.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:kr:or:kec:standard:Tax:ReusableAggregateBusinessInformationEntitySchemaModule:1:0">

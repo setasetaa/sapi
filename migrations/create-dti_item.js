@@ -1,9 +1,9 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('dti_item', {
       conversation_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.CHAR(35),
         primaryKey: true,
         allowNull: false,
       },
@@ -81,12 +81,18 @@ module.exports = {
       name: 'dti_item_pk'
     });
 
-    dti_item.belongsTo(models.dti_main, {
-      foreignKey : 'fk_item',
-      targetKey : 'conversation_id'
+    var sql = "ALTER TABLE dti_item" +
+       " ADD CONSTRAINT FK_dti_item FOREIGN KEY(conversation_id, supbuy_type, direction) REFERENCES dti_main (conversation_id, supbuy_type, direction)";
+    // 쿼리 실행
+    return queryInterface.sequelize.query(sql, {
+      type: Sequelize.QueryTypes.RAW
     });
+    // dti_item.belongsTo(models.dti_main, {
+    //   foreignKey : 'fk_item',
+    //   targetKey : 'conversation_id'
+    // });
   },
-  down: (queryInterface, Sequelize) => {
+  down: function (queryInterface, Sequelize){
     return queryInterface.dropTable('dti_item');
   }
 };

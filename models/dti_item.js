@@ -70,17 +70,9 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName : true,
   });
   dti_item.associate = function(models) {
-    dti_item.belongsTo(models.dti_main, {
-      foreignKey : 'conversation_id',
-      targetKey : 'conversation_id'
-    });
     // dti_item.belongsTo(models.dti_main, {
-    //   foreignKey : 'supbuy_type',
-    //   targetKey : 'supbuy_type'
-    // });
-    // dti_item.belongsTo(models.dti_main, {
-    //   foreignKey : 'direction',
-    //   targetKey : 'direction'
+    //   foreignKey : ['conversation_id', 'supbuy_type','direction'],
+    //   targetKey : ['conversation_id', 'supbuy_type','direction']
     // });
   };
   return dti_item;

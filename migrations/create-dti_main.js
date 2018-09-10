@@ -1,10 +1,10 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('dti_main', {
 
       conversation_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.CHAR(35),
         allowNull: false,
         primaryKey: true,
       },
@@ -222,10 +222,10 @@ module.exports = {
       type: 'primaryKey',
       name: 'dti_main_pk'
     });
-    dti_main.hasOne(models.dti_status, {foreignKey: 'fk_status', targetKey: 'conversation_id'});
-    dti_main.hasMany(models.dti_item, {foreignKey: 'fk_item', targetKey: 'conversation_id'});
+    // dti_main.hasOne(models.dti_status, {foreignKey: 'fk_status', targetKey: 'conversation_id'});
+    // dti_main.hasMany(models.dti_item, {foreignKey: 'fk_item', targetKey: 'conversation_id'});
   },
-  down: (queryInterface, Sequelize) => {
+  down: function (queryInterface, Sequelize) {
     return queryInterface.dropTable('dti_main');
   }
 };
