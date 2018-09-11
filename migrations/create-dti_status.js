@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('dti_status', {
 
       conversation_id: {

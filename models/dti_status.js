@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     dti_status: {
-      type: DataTypes.CHAR,
+      type: DataTypes.CHAR(1),
       allowNull: false,
     },
     return_code: DataTypes.CHAR,

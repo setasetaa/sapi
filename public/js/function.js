@@ -30,6 +30,7 @@ function fromDate() {
 
 function search() {
 	var request = JSON.stringify($('#searchForm').serializeArray());
+	//alert(request);
 	$.support.cors = true;
 	$.ajax({
 		type: "POST",
@@ -42,7 +43,7 @@ function search() {
 			fnListView(data);
 		},
 		error: function(error) {
-			alert("error");
+			//alert(error);
 		}
 	});
 }
@@ -53,22 +54,26 @@ function fnListView(data){
 		$('#t1').DataTable().destroy();
 	}
 	var table = $('#t1').DataTable();
-	for ( var i = 0; i < totalCount; i++ ) {
-		table.row.add( {
-			"": "",
-			"name": data.ResultDataSet.Table[ i ].SUP_COM_NAME, //공급자 회사명
-			"regno": data.ResultDataSet.Table[ i ].SUP_COM_REGNO, //공급자 사업자번호
-			"direction": data.ResultDataSet.Table[ i ].DIRECTION, //세금계산서 정/역 구분
-			"status": data.ResultDataSet.Table[ i ].DTI_STATUS, //세금계산서 상태
-			"dtiType": data.ResultDataSet.Table[ i ].DTI_TYPE, //세금계산서 종류
-			"wdate": data.ResultDataSet.Table[ i ].DTI_WDATE, //세금계산서 작성일자
-			"conversationID": data.ResultDataSet.Table[ i ].CONVERSATION_ID, //세금계산서 참조번호
-			"issueID": data.ResultDataSet.Table[ i ].ISSUE_ID, //세금계산서 승인번호
-			"sendStatus": data.ResultDataSet.Table[ i ].NTS_SEND_STATUS, //세금계산서 국세청 전송상태
-			"supAmount": data.ResultDataSet.Table[ i ].SUP_AMOUNT, //세금계산서 공급가액
-			"email": data.ResultDataSet.Table[ i ].BYR_EMAIL //담당자 이메일
-			} )
-			.draw();
+	var totalCount = data.length;
+	alert(totalCount);
+	if(totalCount != 0){
+		for ( var i = 0; i < totalCount; i++ ) {
+			table.row.add( {
+				"": "",
+				"name": data[i].SUP_COM_NAME, //공급자 회사명
+				"regno": data[i].SUP_COM_REGNO, //공급자 사업자번호
+				"direction": data[i].DIRECTION, //세금계산서 정/역 구분
+				"status": data[i].DTI_STATUS, //세금계산서 상태
+				"dtiType": data[i].DTI_TYPE, //세금계산서 종류
+				"wdate": data[i].DTI_WDATE, //세금계산서 작성일자
+				"conversationID": data[i].CONVERSATION_ID, //세금계산서 참조번호
+				"issueID": data[i].ISSUE_ID, //세금계산서 승인번호
+				"sendStatus": data[i].NTS_SEND_STATUS, //세금계산서 국세청 전송상태
+				"supAmount": data[i].SUP_AMOUNT, //세금계산서 공급가액
+				"email": data[i].BYR_EMAIL //담당자 이메일
+				} )
+				.draw();
+		}
 	}
 }
 
@@ -130,7 +135,7 @@ function SBGetList( data, supbuyType ) {
 					{title: "<input type='checkbox' name='select_all' value='1' id='select_all' style='align:center'>", data: ""},
 					{title: "B / N", data: "regno"},
 					{title: "COMPANY", data: "name"},
-					{title: "STATUS", data: "status"},
+					{title: "status", data: "status"},
 					{title: "DTI WDATE", data: "wdate"},
 					{title: "SUP AMOUNT", data: "supAmount"},
 					{title: "conversationID", data: "conversationID"},
@@ -332,6 +337,11 @@ function fnGetXML(data, arrDirection, arrStatus, supbuyType){
 function xmlParse(conversationID, supbuyType, direction, status, DTI){
 	var text, parser, xmlDoc
 	var objData= {};
+	if(direction == '정'){
+		direction = 2;
+	}else{
+		direction = 1;
+	}
 	parser = new DOMParser();
 	xmlDoc = parser.parseFromString(DTI,"text/xml");
 	//alert(xmlDoc.getElementsByTagName("IssueDateTime")[1].childNodes[0].nodeValue);

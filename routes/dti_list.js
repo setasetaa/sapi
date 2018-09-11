@@ -1,59 +1,77 @@
 const express = require('express');
 const models = require('../models');
 const router = express.Router();
-const crypto = require("crypto");
-
+const crypto = require('crypto');
+const sequelize = require('sequelize');
 router.get('/APlist', function(req, res, next){
   res.render("dti/list/APlist");
 });
 router.post('/APlist', function(req, res, next) {
   let body = req.body;
   console.log(body);
-  var search, join, where = {};
-
-  if(body.regno != ""){
-    var regno = body.regno;
+  var search = {};
+  var join = {};
+  var where = {};
+  var dateType = body[0].value;
+  var fromDate = body[1].value;
+  var endDate = body[2].value;
+  var regno = body[3].value;
+  var comName = body[4].value;
+  var supAmount = body[5].value;
+  var taxAmount = body[6].value;
+  var issueID = body[7].value;
+  console.log(fromDate);
+  if(dateType != ""){
     //regno = regno.replace('-','');
-    where['sup_com_regno'] = {$like: body.regno + '%'};
+    where[dateType] = {$between: [fromDate, endDate]};
+  }
+
+  if(regno != ""){
+    //regno = regno.replace('-','');
+    where['sup_com_regno'] = {regno};
+  }
+  if(comName != ""){
+    //regno = regno.replace('-','');
+    where['sup_com_name'] = {$like: comName + '%'};
+  }
+  if(supAmount != ""){
+    //regno = regno.replace('-','');
+    where['sup_amount'] = {supAmount};
+  }
+  if(taxAmount != ""){
+    //regno = regno.replace('-','');
+    where['tax_amount'] = {taxAmount};
+  }
+  if(issueID != ""){
+    //regno = regno.replace('-','');
+    where['issue_id'] = {issueID};
   }
 
   if(Object.keys(where).length > 0){
     search.where = where;
   }
   join['model'] = models.dti_status;
+  //join['model'] = models.dti_item;
   search.include = join;
-  models.dti_main.findAll(search).then(function(data){
-      res.json(JSON.stringify(data));
-    });
-  // models.dti_main.findAll({
-  //   include : [
-  //     {
-  //       model : models.dti_status,
-  //
-  //     },
-  //     {
-  //       model : models.dti_item,
-  //
-  //     }
-  //   ],
-  //   where: {
-  //     'body.dateType' : {between: [body.fromDate, body.fromDate]},
-  //
-  //   }
-  // }).then( result => {
-  //   res.json(result);
-  // }).catch( err => {
-  //   console.log(err);
-  // });
+  models.dti_main.findAll(search)
+  .then(function(data){
+    if(data.length != 0){
+      console.log("select data!!!!!!!"+JSON.stringify(data));
+      res.render("dti/list/APlist",{data : JSON.stringify(data)});
+    }else{
+      res.render("dti/list/APlist");
+    }
+  });
 
 });
 
 router.post('/save', function(req, res, next) {
   console.log("data save");
+
   let body = req.body;
-  return sequelize.transaction({
-    isolationLevel: Sequelize.Transaction.SERIALIZABLE
-  }, function(t){
+  var t;
+  models.sequelize.transaction().then(function(transaction){
+    t = transaction;
     models.dti_main.create({
       conversation_id : body.conversationID,
       supbuy_type : body.supbuyType,
@@ -145,6 +163,7 @@ router.post('/save', function(req, res, next) {
   }).then(function(result) {
     t.commit();
   }).catch(function(err){
+    if(t)
     t.rollback();
   });
 

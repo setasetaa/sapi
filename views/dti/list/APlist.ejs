@@ -149,7 +149,7 @@
             <i class="fas fa-table"></i> AP List</div>
           <div class="card-body">
             <div class="table-responsive">
-              <form id="seachForm">
+              <form id="searchForm">
                 <div class="form-group">
                   <select id="dateType" name="dateType" class="custom-select custom-select-sm form-control form-control-sm" style="width:100px">
                     <option value="dti_wdate">WDATE</option>
@@ -246,16 +246,16 @@
                 <thead>
                   <tr>
                     <th><input name="select_all" value="1" type="checkbox"></th>
-                    <th data-field="regno">B / N</th>
-                    <th data-field="name">COMPANY<br>NAME</th>
-                    <th data-field="wdate">WRITE<br>DATE</th>
-                    <th data-field="idate">ISSUE<br>DATE</th>
-                    <th data-field="sdate">SEND<br>DATE</th>
-                    <th data-field="status">STATUS</th>
-                    <th data-field="supAmount">SUPPLY<br>AMOUNT</th>
-                    <th data-field="taxAmount">TAX<br>AMOUNT</th>
-                    <th data-field="totalAmount">TOTAL<br>AMOUNT</th>
-                    <th data-field="issueID">ISSUE ID</th>
+                    <th data-field="sup_com_regno">B / N</th>
+                    <th data-field="sup_com_name">COMPANY<br>NAME</th>
+                    <th data-field="dti_wdate">WRITE<br>DATE</th>
+                    <th data-field="dti_idate">ISSUE<br>DATE</th>
+                    <th data-field="dti_sdate">SEND<br>DATE</th>
+                    <th data-field="dti_status">STATUS</th>
+                    <th data-field="sup_amount">SUPPLY<br>AMOUNT</th>
+                    <th data-field="tax_amount">TAX<br>AMOUNT</th>
+                    <th data-field="total_amount">TOTAL<br>AMOUNT</th>
+                    <th data-field="issue_id">ISSUE ID</th>
                   </tr>
                 </thead>
 
@@ -470,18 +470,15 @@
           );
         });
       });
-
       $('#fromDate').val(fromDate());
       $('#endDate').val(nowDate());
       $('#SBfrom').val(fromDate());
       $('#SBend').val(nowDate());
       search();
     });
-
     $('#listSearch').click(function() {
       search();
     });
-
     $('#SBSearch').click(function() {
       var fromDate = $("#SBfrom").val();
       var endDate = $("#SBend").val();
