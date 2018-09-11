@@ -8,9 +8,10 @@ sequelize model:create --name dti/status --attributes "conversation_id:CHAR, sup
 
 sequelize db:migrate
 
-ALTER TABLE dti_status ADD CONSTRAINT FK_dti_status FOREIGN KEY(conversation_id, supbuy_type, direction)
+ALTER TABLE dti_item ADD CONSTRAINT FK_dti_item FOREIGN KEY(conversation_id, supbuy_type, direction)
 REFERENCES dti_main (conversation_id, supbuy_type, direction);
 
+select * from information_schema.table_constraints where table_name = 'dti_status';
 
 0101 일반 세금계산서
 

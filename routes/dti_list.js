@@ -20,7 +20,7 @@ router.post('/APlist', function(req, res, next) {
   var supAmount = body[5].value;
   var taxAmount = body[6].value;
   var issueID = body[7].value;
-  console.log(fromDate);
+
   if(dateType != ""){
     //regno = regno.replace('-','');
     where[dateType] = {$between: [fromDate, endDate]};
@@ -51,18 +51,19 @@ router.post('/APlist', function(req, res, next) {
     search.where = where;
   }
   join['model'] = models.dti_status;
-  //join['model'] = models.dti_item;
+  //join['model'] = join['model'] + models.dti_item;
   search.include = join;
   models.dti_main.findAll(search)
   .then(function(data){
     if(data.length != 0){
       console.log("select data!!!!!!!"+JSON.stringify(data));
-      res.render("dti/list/APlist",{data : JSON.stringify(data)});
+      res.status(200).send(JSON.stringify(data));
     }else{
-      res.render("dti/list/APlist");
+      res.send(200);
     }
+  }).catch(function(err){
+    res.status(500).send(String("select error"));
   });
-
 });
 
 router.post('/save', function(req, res, next) {
@@ -162,9 +163,11 @@ router.post('/save', function(req, res, next) {
     });
   }).then(function(result) {
     t.commit();
+    res.send(200);
   }).catch(function(err){
     if(t)
     t.rollback();
+    res.send(500);
   });
 
 });

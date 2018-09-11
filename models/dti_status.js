@@ -4,21 +4,21 @@ module.exports = (sequelize, DataTypes) => {
     conversation_id: {
       type: DataTypes.CHAR(35),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     supbuy_type: {
       type: DataTypes.CHAR(2),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     direction: {
       type: DataTypes.CHAR(1),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     dti_status: {
       type: DataTypes.CHAR(1),
-      allowNull: false,
+      allowNull: false
     },
     return_code: DataTypes.CHAR,
     return_description: DataTypes.STRING,
@@ -28,11 +28,12 @@ module.exports = (sequelize, DataTypes) => {
     last_updated_by: DataTypes.STRING
   },
   {
-    freezeTableName : true,
+    freezeTableName : true
   });
   dti_status.associate = function(models) {
     dti_status.belongsTo(models.dti_main, {
-      foreignKey : ['conversation_id', 'supbuy_type', 'direction'],
+      foreignKey : 'conversation_id',
+      targetKey : 'conversation_id'
     });
   };
   return dti_status;

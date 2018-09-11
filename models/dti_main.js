@@ -4,33 +4,33 @@ module.exports = (sequelize, DataTypes) => {
     conversation_id: {
       type: DataTypes.CHAR(35),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     supbuy_type: {
       type: DataTypes.CHAR(2),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     direction: {
       type: DataTypes.CHAR(1),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     dti_wdate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: false
     },
     dti_type: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     tax_demand: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     issue_id: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     seq_id: {
       type: DataTypes.STRING,
@@ -39,31 +39,31 @@ module.exports = (sequelize, DataTypes) => {
     sup_com_id: DataTypes.STRING,
     sup_com_regno: {
       type: DataTypes.CHAR,
-      allowNull: false,
+      allowNull: false
     },
     sup_rep_name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     sup_com_name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     sup_com_type: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     sup_com_classify: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     sup_com_addr: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     sup_dept_name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     sup_emp_name: DataTypes.STRING,
     sup_tel_num: DataTypes.STRING,
@@ -71,33 +71,33 @@ module.exports = (sequelize, DataTypes) => {
     byr_com_id: DataTypes.STRING,
     byr_com_regno: {
       type: DataTypes.CHAR,
-      allowNull: false,
+      allowNull: false
     },
     byr_rep_name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     byr_com_name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     byr_com_type: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     byr_com_classify: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     byr_com_addr: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     byr_dept_name: DataTypes.STRING,
     byr_emp_name: DataTypes.STRING,
     byr_tel_num: DataTypes.STRING,
     byr_email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     broker_com_id: DataTypes.STRING,
     broker_com_regno: {
@@ -122,19 +122,19 @@ module.exports = (sequelize, DataTypes) => {
     broker_emp_name: DataTypes.STRING,
     broker_tel_num: DataTypes.STRING,
     broker_email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     sup_amount: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     tax_amount: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     total_amount: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     dti_msg: DataTypes.BLOB,
     amend_code: DataTypes.STRING,
@@ -157,8 +157,9 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName : true,
   });
   dti_main.associate = function(models) {
-     dti_main.hasOne(models.dti_status);
-     dti_main.hasMany(models.dti_item);
+     dti_main.hasOne(models.dti_status, {foreignKey : 'conversation_id'});
+     dti_main.hasMany(models.dti_item, {foreignKey : 'conversation_id'});
+
   };
   return dti_main;
 };

@@ -28,19 +28,23 @@ function fromDate() {
 	return today
 }
 
-function search() {
+function search(supbuyType) {
 	var request = JSON.stringify($('#searchForm').serializeArray());
-	//alert(request);
+	if(supbuyType == 'AP'){
+		var url = "APlist";
+	}else{
+		var url = "ARlist";
+	}
 	$.support.cors = true;
 	$.ajax({
 		type: "POST",
 		dataType: "json",
 		crossDomain: true,
 		contentType: "application/json",
-		url: "APlist",
+		url: url,
 		data: request,
 		success: function(data) {
-			fnListView(data);
+			if(data != null) fnListView(data, supbuyType);
 		},
 		error: function(error) {
 			//alert(error);
@@ -48,31 +52,29 @@ function search() {
 	});
 }
 
-function fnListView(data){
+function fnListView(data, supbuyType){
 	if($('#t1').html() != ""){
-		$('#t1').html("");
 		$('#t1').DataTable().destroy();
 	}
 	var table = $('#t1').DataTable();
 	var totalCount = data.length;
-	alert(totalCount);
+
 	if(totalCount != 0){
 		for ( var i = 0; i < totalCount; i++ ) {
-			table.row.add( {
-				"": "",
-				"name": data[i].SUP_COM_NAME, //공급자 회사명
-				"regno": data[i].SUP_COM_REGNO, //공급자 사업자번호
-				"direction": data[i].DIRECTION, //세금계산서 정/역 구분
-				"status": data[i].DTI_STATUS, //세금계산서 상태
-				"dtiType": data[i].DTI_TYPE, //세금계산서 종류
-				"wdate": data[i].DTI_WDATE, //세금계산서 작성일자
-				"conversationID": data[i].CONVERSATION_ID, //세금계산서 참조번호
-				"issueID": data[i].ISSUE_ID, //세금계산서 승인번호
-				"sendStatus": data[i].NTS_SEND_STATUS, //세금계산서 국세청 전송상태
-				"supAmount": data[i].SUP_AMOUNT, //세금계산서 공급가액
-				"email": data[i].BYR_EMAIL //담당자 이메일
-				} )
-				.draw();
+			if(supbuyType == 'AP'){
+				table.row.add({
+					"": "",
+					"sup_com_name": data[i].sup_com_name, //공급자 회사명
+					"sup_com_regno": data[i].sup_com_regno, //공급자 사업자번호
+					"dti_status": data[i].dti_status, //세금계산서 상태
+					"dti_wdate": data[i].dti_wdate, //세금계산서 작성일자
+					"dti_idate": data[i].dti_idate, //세금계산서 작성일자
+					"issue_id": data[i].issue_id, //세금계산서 승인번호
+					"sup_amount": data[i].sup_amount, //세금계산서 공급가액
+					}).draw();
+			}else{
+
+			}
 		}
 	}
 }
@@ -504,10 +506,10 @@ function dataSave(objData){
     url: "save",
     data: request,
     success: function(data) {
-      alert("success~");
+      alert("저장성공");
     },
     error: function(error) {
-      alert("error");
+      alert("저장 오류");
     }
   });
 }

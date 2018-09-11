@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('dti_status', {
 
       conversation_id: {
@@ -55,15 +55,12 @@ module.exports = {
       name: 'dti_status_pk'
     });
 
-    var sql = "ALTER TABLE dti_status" +
-       " ADD CONSTRAINT FK_dti_status FOREIGN KEY(conversation_id, supbuy_type, direction) REFERENCES dti_main (conversation_id, supbuy_type, direction)";
-    // 쿼리 실행
-    return queryInterface.sequelize.query(sql, {
-      type: Sequelize.QueryTypes.RAW
-    });
+    return queryInterface.sequelize.query("ALTER TABLE dti_status ADD CONSTRAINT FK_dti_status FOREIGN KEY(conversation_id, supbuy_type, direction)
+    REFERENCES dti_main (conversation_id, supbuy_type, direction);");
 
     },
     down: function (queryInterface, Sequelize) {
       return queryInterface.dropTable('dti_status');
+      return queryInterface.sequelize.query("ALTER TABLE dti_status DROP CONSTRAINT FK_dti_status;");
     }
  };

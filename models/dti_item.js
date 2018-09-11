@@ -4,76 +4,76 @@ module.exports = (sequelize, DataTypes) => {
     conversation_id: {
       type: DataTypes.CHAR(35),
       allowNull: false,
-      primaryKey: true,
-
+      primaryKey: true
     },
     supbuy_type: {
       type: DataTypes.CHAR(2),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     direction: {
       type: DataTypes.CHAR(1),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     dti_line_num: {
       type: DataTypes.INTEGER(4),
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     item_code: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     item_name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     item_size: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     item_md: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATE
     },
     unit_price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER
     },
     item_qty: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER
     },
     sup_amount: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     tax_amount: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     foreign_amount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER
     },
     currency_code: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     item_gubun: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     remark: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     created_by: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     last_updated_by: {
       type: DataTypes.STRING
     }
   },
   {
-    freezeTableName : true,
+    freezeTableName : true
   }
 );
   dti_item.associate = function(models) {
     dti_item.belongsTo(models.dti_main, {
-      foreignKey : ['conversation_id', 'supbuy_type', 'direction'],
+      foreignKey : 'conversation_id',
+      targetKey : 'conversation_id'
     });
   };
   return dti_item;

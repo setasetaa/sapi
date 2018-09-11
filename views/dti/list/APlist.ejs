@@ -250,43 +250,11 @@
                     <th data-field="sup_com_name">COMPANY<br>NAME</th>
                     <th data-field="dti_wdate">WRITE<br>DATE</th>
                     <th data-field="dti_idate">ISSUE<br>DATE</th>
-                    <th data-field="dti_sdate">SEND<br>DATE</th>
                     <th data-field="dti_status">STATUS</th>
                     <th data-field="sup_amount">SUPPLY<br>AMOUNT</th>
-                    <th data-field="tax_amount">TAX<br>AMOUNT</th>
-                    <th data-field="total_amount">TOTAL<br>AMOUNT</th>
                     <th data-field="issue_id">ISSUE ID</th>
                   </tr>
                 </thead>
-
-                <tbody>
-                  <tr>
-                    <td></td>
-                    <td>741-85-29630</td>
-                    <td>rice one</td>
-                    <td>2018-08-01</td>
-                    <td>2018-08-01</td>
-                    <td>2018-08-01</td>
-                    <td>APPROVE</td>
-                    <td>4,000,000</td>
-                    <td>400,000</td>
-                    <td>4,400,000</td>
-                    <td>2018082541000008ff</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td>741-85-29630</td>
-                    <td>rice one</td>
-                    <td>2018-08-02</td>
-                    <td>2018-08-02</td>
-                    <td>2018-08-02</td>
-                    <td>APPROVE</td>
-                    <td>4,000</td>
-                    <td>400</td>
-                    <td>4,400</td>
-                    <td>2018082541000008f2</td>
-                  </tr>
-                </tbody>
               </table>
             </div>
           </div>
@@ -474,10 +442,10 @@
       $('#endDate').val(nowDate());
       $('#SBfrom').val(fromDate());
       $('#SBend').val(nowDate());
-      search();
+      search('AP');
     });
     $('#listSearch').click(function() {
-      search();
+      search('AP');
     });
     $('#SBSearch').click(function() {
       var fromDate = $("#SBfrom").val();
