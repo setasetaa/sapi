@@ -101,7 +101,7 @@ function fnListView(data, supbuyType){
 						var type;
 						switch(data){
 							case '0101' :
-							type = '과세';
+							type = '일반과세';
 							break;
 							case '0102' :
 							type = '과세영세율';
@@ -128,7 +128,7 @@ function fnListView(data, supbuyType){
 							type = '수정영세율위수탁';
 							break;
 							case '0301' :
-							type = '면세';
+							type = '일반면세';
 							break;
 							case '0303' :
 							type = '면세위수탁';
