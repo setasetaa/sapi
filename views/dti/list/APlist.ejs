@@ -155,51 +155,51 @@
                     <option value="dti_wdate">WDATE</option>
                     <option value="dti_Idate">IDATE</option>
                     <option value="dti_Sdate">SDATE</option>
-                </select>
+                  </select>
 
                   <label>From Date
-                  <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm" style="width:145px">
-                </label>
+                    <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm" style="width:145px">
+                  </label>
                   <label>End Date
-                  <input type="date" id="endDate" name="endDate" class="form-control form-control-sm" style="width:145px">
-                </label>
+                    <input type="date" id="endDate" name="endDate" class="form-control form-control-sm" style="width:145px">
+                  </label>
 
                   <label>B / N
-                  <input type="text" id="regno" name="regno"class="form-control form-control-sm" style="width:125px">
-                </label>
+                    <input type="text" id="regno" name="regno"class="form-control form-control-sm" style="width:125px">
+                  </label>
                   <label>Com Name
-                  <input type="text" id="comName" name="comName"class="form-control form-control-sm" style="width:140px">
-                </label>
+                    <input type="text" id="comName" name="comName"class="form-control form-control-sm" style="width:140px">
+                  </label>
                   <label>Sup Amount
-                  <input type="text" id="supAmount" name="supAmount"class="form-control form-control-sm" style="width:120px">
-                </label>
+                    <input type="text" id="supAmount" name="supAmount"class="form-control form-control-sm" style="width:120px">
+                  </label>
                   <label>Tax Amount
-                  <input type="text" id="taxAmount" name="taxAmount"class="form-control form-control-sm" style="width:110px">
-                </label>
+                    <input type="text" id="taxAmount" name="taxAmount"class="form-control form-control-sm" style="width:110px">
+                  </label>
                   <label>Issue ID
-                  <input type="text" id="issueId" name="issueId"class="form-control form-control-sm" style="width:200px">
-                </label>
+                    <input type="text" id="issueId" name="issueId"class="form-control form-control-sm" style="width:200px">
+                  </label>
                 </div>
                 <div class="form-group">
                   <span class="badge badge-secondary">TYPE&nbsp;&nbsp;&nbsp;&nbsp;</span>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType" name="dtiType" value="General">
+                    <input type="checkbox" class="custom-control-input" id="dtiType" name="dtiType" value="ALL">
                     <label class="custom-control-label" for="dtiType">All</label>
                   </div>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType1" name="dtiType" value="General">
+                    <input type="checkbox" class="custom-control-input" id="dtiType1" name="dtiType" value="0102">
                     <label class="custom-control-label" for="dtiType1">세금계산서</label>
                   </div>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType2" name="dtiType" value="free">
+                    <input type="checkbox" class="custom-control-input" id="dtiType2" name="dtiType" value="0304">
                     <label class="custom-control-label" for="dtiType2">계산서</label>
                   </div>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType3" name="dtiType" value="Amend">
+                    <input type="checkbox" class="custom-control-input" id="dtiType3" name="dtiType" value="0204">
                     <label class="custom-control-label" for="dtiType3">수정</label>
                   </div>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType4" name="dtiType" value="Consignment">
+                    <input type="checkbox" class="custom-control-input" id="dtiType4" name="dtiType" value="0305">
                     <label class="custom-control-label" for="dtiType4">위수탁</label>
                   </div>
                 </div>
@@ -334,16 +334,41 @@
 
   <script type="text/javascript" class="init">
     $(document).ready(function() {
-
-    	$('#myModal').on('hidden.bs.modal', function() {
-    		$('#myModal').removeData('bs.modal');
-    	});
+      $("input[name=dtiType]").prop("checked", true);
+      $("input[name=dtiStatus]").prop("checked", true);
+      $('#myModal').on('hidden.bs.modal', function() {
+        $('#myModal').removeData('bs.modal');
+      });
       $('#fromDate').val(fromDate());
       $('#endDate').val(nowDate());
       $('#SBfrom').val(fromDate());
       $('#SBend').val(nowDate());
       search('AP');
     });
+    $("#dtiType").click(function() {
+      //클릭되었으면
+      if ($("#dtiType").prop("checked")) {
+        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
+        $("input[name=dtiType]").prop("checked", true);
+        //클릭이 안되있으면
+      } else {
+        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
+        $("input[name=dtiType]").prop("checked", false);
+      }
+    });
+
+    $("#dtiStatus").click(function() {
+      //클릭되었으면
+      if ($("#dtiStatus").prop("checked")) {
+        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
+        $("input[name=dtiStatus]").prop("checked", true);
+        //클릭이 안되있으면
+      } else {
+        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
+        $("input[name=dtiStatus]").prop("checked", false);
+      }
+    });
+
     $('#listSearch').click(function() {
       search('AP');
     });

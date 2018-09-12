@@ -97,6 +97,7 @@ function fnListView(data, supbuyType){
 			{
 				'targets': 1,
 				'className': 'dt-body-center',
+				'width': '10%',
 				'render': function (data, type, full, meta){
 						var type;
 						switch(data){
@@ -104,13 +105,13 @@ function fnListView(data, supbuyType){
 							type = '일반과세';
 							break;
 							case '0102' :
-							type = '과세영세율';
+							type = '영세율';
 							break;
 							case '0103' :
-							type = '과세위수탁';
+							type = '위수탁과세';
 							break;
 							case '0104' :
-							type = '과세수입';
+							type = '수입과세';
 							break;
 							case '0201' :
 							type = '수정과세';
@@ -119,31 +120,31 @@ function fnListView(data, supbuyType){
 							type = '수정영세';
 							break;
 							case '0203' :
-							type = '수정과세위수탁';
+							type = '수정위수탁<br>과세';
 							break;
 							case '0204' :
 							type = '수정수입과세';
 							break;
 							case '0205' :
-							type = '수정영세율위수탁';
+							type = '수정영세율<br>위수탁';
 							break;
 							case '0301' :
 							type = '일반면세';
 							break;
 							case '0303' :
-							type = '면세위수탁';
+							type = '위수탁면세';
 							break;
 							case '0304' :
-							type = '면세수입';
+							type = '수입면세';
 							break;
 							case '0401' :
-							type = '면세수정';
+							type = '수정면세';
 							break;
 							case '0403' :
-							type = '면세수정위수탁';
+							type = '수정위수탁<br>면세';
 							break;
 							case '0404' :
-							type = '면세수입';
+							type = '수입면세';
 							break;
 						}
 						return type;
@@ -152,6 +153,7 @@ function fnListView(data, supbuyType){
 			{
 				'targets': 2,
 				'className': 'dt-body-center',
+				'width': '15%',
 				'render': function (data, type, full, meta){
 						data = data.substring(0,3) + '-' + data.substring(3,5) + '-' + data.substring(5,10)
 						return data;
