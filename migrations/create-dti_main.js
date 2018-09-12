@@ -22,6 +22,12 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+      dti_idate: {
+        type: Sequelize.DATE
+      },
+      dti_sdate: {
+        type: Sequelize.DATE
+      },
       dti_type: {
         type: Sequelize.STRING(4),
         allowNull: false,

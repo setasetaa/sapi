@@ -20,6 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false
     },
+    dti_idate: {
+      type: DataTypes.DATE
+    },
+    dti_sdate: {
+      type: DataTypes.DATE
+    },
     dti_type: {
       type: DataTypes.STRING,
       allowNull: false

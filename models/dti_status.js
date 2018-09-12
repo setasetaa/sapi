@@ -25,7 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     sbdescription: DataTypes.STRING,
     dept_name: DataTypes.STRING,
     created_by: DataTypes.STRING,
-    last_updated_by: DataTypes.STRING
+    last_updated_by: DataTypes.STRING,
+    send_request : DataTypes.STRING,
+    send_request_desc : DataTypes.STRING,
+    result_request : DataTypes.STRING,
+    error_msg : DataTypes.STRING
   },
   {
     freezeTableName : true

@@ -56,13 +56,13 @@ router.post('/APlist', function(req, res, next) {
   models.dti_main.findAll(search)
   .then(function(data){
     if(data.length != 0){
-      console.log("select data!!!!!!!"+JSON.stringify(data));
-      res.status(200).send(JSON.stringify(data));
+      console.log("select data!!!!!!!"+data);
+      res.send({result:true, data:data});
     }else{
-      res.send(200);
+      res.send({result:true, msg:"no data"});
     }
   }).catch(function(err){
-    res.status(500).send(String("select error"));
+    res.send({result:false, msg:"fail"});
   });
 });
 
@@ -78,6 +78,7 @@ router.post('/save', function(req, res, next) {
       supbuy_type : body.supbuyType,
       direction : body.direction,
       dti_wdate : body.WDate,
+      dti_idate : body.IDate,
       dti_type : body.typeCode,
       tax_demand : body.taxDemand,
       issue_id : body.issueID,
@@ -163,11 +164,11 @@ router.post('/save', function(req, res, next) {
     });
   }).then(function(result) {
     t.commit();
-    res.send(200);
+    res.send({result:true, msg:"suc"});
   }).catch(function(err){
     if(t)
     t.rollback();
-    res.send(500);
+    res.send({result:false, msg:"fail"});
   });
 
 });

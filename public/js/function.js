@@ -44,7 +44,8 @@ function search(supbuyType) {
 		url: url,
 		data: request,
 		success: function(data) {
-			if(data != null) fnListView(data, supbuyType);
+			//alert(data['data'][0].sup_com_name);
+			fnListView(data['data'], supbuyType);
 		},
 		error: function(error) {
 			//alert(error);
@@ -53,27 +54,246 @@ function search(supbuyType) {
 }
 
 function fnListView(data, supbuyType){
+	var rows_selected = [];
 	if($('#t1').html() != ""){
+		$('#t1').html("");
 		$('#t1').DataTable().destroy();
 	}
-	var table = $('#t1').DataTable();
+	var table = $('#t1').DataTable({
+		select: {
+			style: 'os',
+			selector: 'td:first-child'
+		},
+		order: [
+						[ 1, 'asc' ]
+		],
+		searching: false,
+		columns: [
+			{title: "<input type='checkbox' name='select_all' value='1' id='select_all' style='align:center'>", data: ""},
+			{title: "TYPE", data: "dtiType"},
+			{title: "B / N", data: "regno"},
+			{title: "COMPANY", data: "name"},
+			{title: "WDATE", data: "wdate"},
+			{title: "STATUS", data: "status"},
+			{title: "SUPPLY<br>AMOUNT", data: "supAmount"},
+			{title: "TAX<br>AMOUNT", data: "taxAmount"},
+			{title: "TOTAL<br>AMOUNT", data: "totalAmount"},
+			{title: "ISSUE ID", data: "issueID"},
+			{title: "CONVERSATIONID", data: "conversationID"},
+			{title: "DIRECTION", data: "direction"},
+			{title: "email", data: "email"}
+		],
+		columnDefs: [
+			{
+				'targets': 0,
+				'searchable': false,
+				'orderable': false,
+				'width': '1%',
+				'className': 'dt-body-center',
+				'render': function (data, type, full, meta){
+						return '<input type="checkbox">';
+				}
+			},
+			{
+				'targets': 1,
+				'className': 'dt-body-center',
+				'render': function (data, type, full, meta){
+						var type;
+						switch(data){
+							case '0101' :
+							type = '과세';
+							break;
+							case '0102' :
+							type = '과세영세율';
+							break;
+							case '0103' :
+							type = '과세위수탁';
+							break;
+							case '0104' :
+							type = '과세수입';
+							break;
+							case '0201' :
+							type = '수정과세';
+							break;
+							case '0202' :
+							type = '수정영세';
+							break;
+							case '0203' :
+							type = '수정과세위수탁';
+							break;
+							case '0204' :
+							type = '수정수입과세';
+							break;
+							case '0205' :
+							type = '수정영세율위수탁';
+							break;
+							case '0301' :
+							type = '면세';
+							break;
+							case '0303' :
+							type = '면세위수탁';
+							break;
+							case '0304' :
+							type = '면세수입';
+							break;
+							case '0401' :
+							type = '면세수정';
+							break;
+							case '0403' :
+							type = '면세수정위수탁';
+							break;
+							case '0404' :
+							type = '면세수입';
+							break;
+						}
+						return type;
+				}
+			},
+			{
+				'targets': 2,
+				'className': 'dt-body-center',
+				'render': function (data, type, full, meta){
+						data = data.substring(0,3) + '-' + data.substring(3,5) + '-' + data.substring(5,10)
+						return data;
+				}
+			},
+			{
+				'targets': 4,
+				'className': 'dt-body-center',
+				'render': function (data, type, full, meta){
+					data = data.substring(0,10);
+					return data;
+				}
+			},
+			{
+				'targets': 5,
+				'className': 'dt-body-center',
+				'render': function (data, type, full, meta){
+					var status;
+					switch(data){
+						case 'I' :
+						status = '발행';
+						break;
+						case 'C' :
+						status = '승인';
+						break;
+						case 'O' :
+						status = '취소';
+						break;
+						case 'V' :
+						status = '발행요청';
+						break;
+						case 'T' :
+						status = '발행요청거부';
+						break;
+						case 'W' :
+						status = '발행요청취소';
+						break;
+					}
+					return status;
+				}
+			},
+			{
+				'targets': [10, 11, 12 ],
+				'visible': false
+			},
+			{
+				'targets': [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+				'className': 'dt-body-center'
+			}
+		],
+		'rowCallback': function(row, data, dataIndex){
+		 // Get row ID
+		 var rowId = data[0];
+		 // If row ID is in the list of selected row IDs
+			 if($.inArray(rowId, rows_selected) !== -1){
+					$(row).find('input[type="checkbox"]').prop('checked', true);
+					$(row).addClass('selected');
+			 }
+		 },
+		'destroy': true
+	});
+
+	$('#t1 tbody').on('click', 'input[type="checkbox"]', function(e) {
+		var $row = $(this).closest('tr');
+		// Get row data
+		var data = table.row($row).data();
+		// Get row ID
+		var rowId = data[0];
+		// Determine whether row ID is in the list of selected row IDs
+		var index = $.inArray(rowId, rows_selected);
+		// If checkbox is checked and row ID is not in list of selected row IDs
+		if (this.checked && index === -1) {
+			rows_selected.push(rowId);
+			// Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
+		} else if (!this.checked && index !== -1) {
+			rows_selected.splice(index, 1);
+		}
+		if (this.checked) {
+			$row.addClass('selected');
+		} else {
+			$row.removeClass('selected');
+		}
+		// Update state of "Select all" control
+		updateDataTableSelectAllCtrl(table);
+		// Prevent click event from propagating to parent
+		e.stopPropagation();
+	});
+	// Handle click on table cells with checkboxes
+	$('#t1').on('click', 'tbody td, thead th:first-child', function(e) {
+		$(this).parent().find('input[type="checkbox"]').trigger('click');
+	});
+	// Handle click on "Select all" control
+	$('thead input[name="select_all"]', table.table().container()).on('click', function(e) {
+		if (this.checked) {
+			$('#t1 tbody input[type="checkbox"]:not(:checked)').trigger('click');
+		} else {
+			$('#t1 tbody input[type="checkbox"]:checked').trigger('click');
+		}
+		// Prevent click event from propagating to parent
+		e.stopPropagation();
+	});
+	// Handle table draw event
+	table.on('draw', function() {
+		// Update state of "Select all" control
+		updateDataTableSelectAllCtrl(table);
+	});
 	var totalCount = data.length;
 
 	if(totalCount != 0){
 		for ( var i = 0; i < totalCount; i++ ) {
-			if(supbuyType == 'AP'){
+			if( "AP" == supbuyType){
 				table.row.add({
 					"": "",
-					"sup_com_name": data[i].sup_com_name, //공급자 회사명
-					"sup_com_regno": data[i].sup_com_regno, //공급자 사업자번호
-					"dti_status": data[i].dti_status, //세금계산서 상태
-					"dti_wdate": data[i].dti_wdate, //세금계산서 작성일자
-					"dti_idate": data[i].dti_idate, //세금계산서 작성일자
-					"issue_id": data[i].issue_id, //세금계산서 승인번호
-					"sup_amount": data[i].sup_amount, //세금계산서 공급가액
-					}).draw();
+					"regno": data[i].sup_com_regno, //공급자 사업자번호
+					"name": data[i].sup_com_name, //공급자 회사명
+					"status": data[i].dti_status.dti_status, //세금계산서 상태
+					"wdate": data[i].dti_wdate, //세금계산서 작성일자
+					"supAmount": data[i].sup_amount, //세금계산서 공급가액
+					"taxAmount": data[i].tax_amount, //세금계산서 공급가액
+					"totalAmount": data[i].total_amount, //세금계산서 공급가액
+					"issueID": data[i].issue_id, //세금계산서 승인번호
+					"conversationID": data[i].conversation_id, //세금계산서 참조번호
+					"direction": data[i].direction, //세금계산서 정/역 구분
+					"dtiType": data[i].dti_type, //세금계산서 종류
+					"email": data[i].byr_email //담당자 이메일
+				}).draw();
 			}else{
-
+				table.row.add({
+					"": "",
+					"regno": data[i].byr_com_regno, //공급자 사업자번호
+					"name": data[i].byr_com_name, //공급자 회사명
+					"status": data[i].dti_status.dti_status, //세금계산서 상태
+					"wdate": data[i].dti_wdate, //세금계산서 작성일자
+					"supAmount": data[i].sup_amount, //세금계산서 공급가액
+					"taxAmount": data[i].tax_amount, //세금계산서 공급가액
+					"totalAmount": data[i].total_amount, //세금계산서 공급가액
+					"issueID": data[i].issue_id, //세금계산서 승인번호
+					"conversationID": data[i].conversation_id, //세금계산서 참조번호
+					"direction": data[i].direction, //세금계산서 정/역 구분
+					"dtiType": data[i].dti_type, //세금계산서 종류
+					"email": data[i].sup_email //담당자 이메일
+				}).draw();
 			}
 		}
 	}
@@ -137,8 +357,8 @@ function SBGetList( data, supbuyType ) {
 					{title: "<input type='checkbox' name='select_all' value='1' id='select_all' style='align:center'>", data: ""},
 					{title: "B / N", data: "regno"},
 					{title: "COMPANY", data: "name"},
-					{title: "status", data: "status"},
 					{title: "DTI WDATE", data: "wdate"},
+					{title: "status", data: "status"},
 					{title: "SUP AMOUNT", data: "supAmount"},
 					{title: "conversationID", data: "conversationID"},
 					{title: "direction", data: "direction"},
@@ -159,7 +379,7 @@ function SBGetList( data, supbuyType ) {
 						}
 					},
 					{
-						'targets': 3,
+						'targets': 4,
 						'className': 'dt-body-center',
 						'render': function (data, type, full, meta){
 							var status;
@@ -268,7 +488,7 @@ function SBGetList( data, supbuyType ) {
 		if ( 0 < totalCount ) {
 			if ( "AR" == supbuyType ) { //매출보관함
 				for ( var i = 0; i < totalCount; i++ ) {
-					table.row.add( {
+					table.row.add({
 							"": "",
 							"name": data.ResultDataSet.Table[ i ].BYR_COM_NAME, //공급받는자 회사명
 							"regno": data.ResultDataSet.Table[ i ].BYR_COM_REGNO, //공급받는자 사업자번호
@@ -281,12 +501,11 @@ function SBGetList( data, supbuyType ) {
 							"sendStatus": data.ResultDataSet.Table[ i ].NTS_SEND_STATUS, //세금계산서 국세청 전송상태
 							"supAmount": data.ResultDataSet.Table[ i ].SUP_AMT, //세금계산서 공급가액
 							"email": data.ResultDataSet.Table[ i ].SUP_EMAIL //담당자 이메일
-						} )
-						.draw();
+						}).draw();
 				}
 			} else if ( "AP" == supbuyType ) { //매입보관함
 				for ( var i = 0; i < totalCount; i++ ) {
-					table.row.add( {
+					table.row.add({
 							"": "",
 							"name": data.ResultDataSet.Table[ i ].SUP_COM_NAME, //공급자 회사명
 							"regno": data.ResultDataSet.Table[ i ].SUP_COM_REGNO, //공급자 사업자번호
@@ -299,8 +518,7 @@ function SBGetList( data, supbuyType ) {
 							"sendStatus": data.ResultDataSet.Table[ i ].NTS_SEND_STATUS, //세금계산서 국세청 전송상태
 							"supAmount": data.ResultDataSet.Table[ i ].SUP_AMT, //세금계산서 공급가액
 							"email": data.ResultDataSet.Table[ i ].BYR_EMAIL //담당자 이메일
-						} )
-						.draw();
+						}).draw();
 				}
 			}
 		} else {
@@ -313,8 +531,9 @@ function fnGetXML(data, arrDirection, arrStatus, supbuyType){
 	if ("30000" != data.ResultCode) {
 	 alert(data.ResultMessage);
 	}else{
-		//alert("정상적으로 처리되었습니다.");
 		var totalCount = data.ResultDataSet.Table1.length;
+		var suc = 0;
+		var err = 0;
 		if(0 < totalCount){
 		 for(var i = 0 ; i < totalCount ; i++){
 			 var conversationID = data.ResultDataSet.Table1[i].CONVERSATION_ID; //참조번호
@@ -327,8 +546,15 @@ function fnGetXML(data, arrDirection, arrStatus, supbuyType){
 			 if(DTT.legnth != 0){
          //var dttData = xmlParse(conversationID, supbuyType, direction, status, DTT);
        }
-			 dataSave(xmlParse(conversationID, supbuyType, direction, status, DTI));
+			 var returnMSG = dataSave(xmlParse(conversationID, supbuyType, direction, status, DTI));
+			 if(returnMSG){
+				 suc = suc + 1;
+			 }else{
+				 err = err + 1;
+			 }
 		 }
+		 alert('성공 : '+ suc + ' 실패 : '+ err);
+		 search(supbuyType);
 		}
 		else{
 		 alert("데이터가 존재하지 않습니다.");
@@ -351,7 +577,9 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 	objData.supbuyType = supbuyType;
 	objData.direction = direction;
 	objData.status = status;
-	objData.IDate = dateFormat(xmlDoc.getElementsByTagName("IssueDateTime")[0].childNodes[0].nodeValue);
+	if(xmlDoc.getElementsByTagName("IssueDateTime")[0] != null){
+		objData.IDate = dateFormat(xmlDoc.getElementsByTagName("IssueDateTime")[0].childNodes[0].nodeValue);
+	}
 	objData.issueID = xmlDoc.getElementsByTagName("IssueID")[0].childNodes[0].nodeValue;
 	objData.typeCode = xmlDoc.getElementsByTagName("TypeCode")[0].childNodes[0].nodeValue;
 	objData.WDate = dateFormat(xmlDoc.getElementsByTagName("IssueDateTime")[1].childNodes[0].nodeValue);
@@ -497,6 +725,7 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 
 function dataSave(objData){
   var request = JSON.stringify(objData);
+	var returnMSG;
   $.support.cors = true;
   $.ajax({
     type: "POST",
@@ -504,14 +733,16 @@ function dataSave(objData){
     crossDomain: true,
     contentType: "application/json",
     url: "save",
+		async: false,
     data: request,
     success: function(data) {
-      alert("저장성공");
+      returnMSG = true;
     },
     error: function(error) {
-      alert("저장 오류");
+      returnMSG = false;
     }
   });
+	return returnMSG;
 }
 
 function dateFormat(str){
