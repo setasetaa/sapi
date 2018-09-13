@@ -9,7 +9,6 @@ router.get('/APlist', function(req, res, next){
 router.post('/APlist', function(req, res, next) {
   let body = req.body;
   console.log(body);
-  console.log(body.length);
   var search = {};
   var join = {};
   var where = {};
@@ -72,12 +71,12 @@ router.post('/APlist', function(req, res, next) {
       break;
     }
   }
-  console.log(dtiType);
+
   if(dateType != "" && dateType != null){
     where[dateType] = {$between: [fromDate, endDate]};
   }
   if(regno != "" && regno != null){
-    //regno = regno.replaceall('-','');
+    regno = regno.replace('-','');
     where['sup_com_regno'] = regno;
   }
   if(comName != "" && comName != null){
@@ -93,45 +92,100 @@ router.post('/APlist', function(req, res, next) {
     where['issue_id'] = issueID;
   }
   if(dtiType != "" && dtiType != null){
-    var typeValue = "";
+    var temp = [];
     if(dtiType.indexOf('All') != -1){
     }else {
       if(dtiType.indexOf('과세') != -1){
-        typeValue = ['0101', '0102', '0103', '0104', '0105', '0201', '0202', '0203', '0204', '0205'];
+        temp = temp.concat('0101', '0102', '0103', '0104', '0105', '0201', '0202', '0203', '0204', '0205');
       }
       if(dtiType.indexOf('면세') != -1){
-        typeValue = typeValue +  ['0301', '0303', '0304', '0401', '0403', '0404'];
+        temp = temp.concat('0301', '0303', '0304', '0401', '0403', '0404');
       }
       if(dtiType.indexOf('수정') != -1){
-        typeValue = typeValue +  ['0201', '0202', '0203', '0204', '0205', '0401', '0403', '0404'];
+        temp = temp.concat('0201', '0202', '0203', '0204', '0205', '0401', '0403', '0404');
       }
       if(dtiType.indexOf('위수탁') != -1){
-        typeValue = typeValue + ['0103', '0105', '0203', '0205', '0303', '0403'];
+        temp = temp.concat('0103', '0105', '0203', '0205', '0303', '0403');
       }
+      var value = temp.toString().split(',');
+      var uniqArray = Array.from(new Set(value));
+      //console.log(uniqArray);
+      where['dti_type'] = [uniqArray];
     }
-    console.log(typeValue);
-    where['dti_type'] = [typeValue];
-  }
-  if(taxDemand != "" && taxDemand != null){
-
   }
   if(direction != "" && direction != null){
-
+    var temp = [];
+    if(direction.indexOf('All') != -1){
+    }else{
+      if(direction.indexOf('1') != -1){
+        temp = temp.concat('1');
+      }
+      if(direction.indexOf('2') != -1){
+        temp = temp.concat('2');
+      }
+      var value = temp.toString().split(',');
+      where['direction'] = [value];
+    }
   }
   if(dtiStatus != "" && dtiStatus != null){
-
+    var temp = [];
+    if(dtiStatus.indexOf('All') != -1){
+    }else{
+      if(dtiStatus.indexOf('S') != -1){
+        temp = temp.concat('S');
+      }
+      if(dtiStatus.indexOf('I') != -1){
+        temp = temp.concat('I');
+      }
+      if(dtiStatus.indexOf('C') != -1){
+        temp = temp.concat('C');
+      }
+      if(dtiStatus.indexOf('R') != -1){
+        temp = temp.concat('R');
+      }
+      if(dtiStatus.indexOf('O') != -1){
+        temp = temp.concat('O');
+      }
+      if(dtiStatus.indexOf('V') != -1){
+        temp = temp.concat('V');
+      }
+      if(dtiStatus.indexOf('W') != -1){
+        temp = temp.concat('W');
+      }
+      var value = temp.toString().split(',');
+      //where['dti_status'] = [value];
+      join['where'] = {'dti_status': [value] };
+      //console.log(value);
+    }
+  }
+  if(taxDemand != "" && taxDemand != null){
+    var temp = [];
+    if(taxDemand.indexOf('All') != -1){
+    }else{
+      if(taxDemand.indexOf('01') != -1){
+        temp = temp.concat('01');
+      }
+      if(taxDemand.indexOf('02') != -1){
+        temp = temp.concat('02');
+      }
+      var value = temp.toString().split(',');
+      where['tax_demand'] = [value];
+    }
   }
 
   if(Object.keys(where).length > 0){
     search.where = where;
   }
   join['model'] = models.dti_status;
-  //join['model'] = join['model'] + models.dti_item;
-  search.include = join;
+  search.include = [];
+  search.include[0] = join;
+  join = {};
+  join['model'] = models.dti_item;
+  search.include[1] = join;
   models.dti_main.findAll(search)
   .then(function(data){
     if(data.length != 0){
-      console.log("select data!!!!!!!" + data);
+      //console.log("select data!!!!!!!" + data);
       res.send({result:true, data:data});
     }else{
       res.send({result:true, msg:"no data"});
