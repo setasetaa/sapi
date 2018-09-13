@@ -163,48 +163,73 @@
                   <label>End Date
                     <input type="date" id="endDate" name="endDate" class="form-control form-control-sm" style="width:145px">
                   </label>
-
                   <label>B / N
                     <input type="text" id="regno" name="regno"class="form-control form-control-sm" style="width:125px">
                   </label>
-                  <label>Com Name
+                  <label>Comany Name
                     <input type="text" id="comName" name="comName"class="form-control form-control-sm" style="width:140px">
                   </label>
-                  <label>Sup Amount
+                  <label>Supply Amount
                     <input type="text" id="supAmount" name="supAmount"class="form-control form-control-sm" style="width:120px">
                   </label>
                   <label>Tax Amount
                     <input type="text" id="taxAmount" name="taxAmount"class="form-control form-control-sm" style="width:110px">
                   </label>
                   <label>Issue ID
-                    <input type="text" id="issueId" name="issueId"class="form-control form-control-sm" style="width:200px">
+                    <input type="text" id="issueID" name="issueID"class="form-control form-control-sm" style="width:200px">
                   </label>
                 </div>
                 <div class="form-group">
-                  <span class="badge badge-secondary">TYPE&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <span class="badge badge-secondary">&nbsp;&nbsp;종류&nbsp;&nbsp;</span>
                   <div class="custom-control custom-checkbox custom-control-inline">
                     <input type="checkbox" class="custom-control-input" id="dtiType" name="dtiType" value="ALL">
                     <label class="custom-control-label" for="dtiType">All</label>
                   </div>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType1" name="dtiType" value="0102">
+                    <input type="checkbox" class="custom-control-input" id="dtiType1" name="dtiType" value="과세">
                     <label class="custom-control-label" for="dtiType1">세금계산서</label>
                   </div>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType2" name="dtiType" value="0304">
+                    <input type="checkbox" class="custom-control-input" id="dtiType2" name="dtiType" value="면세">
                     <label class="custom-control-label" for="dtiType2">계산서</label>
                   </div>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType3" name="dtiType" value="0204">
+                    <input type="checkbox" class="custom-control-input" id="dtiType3" name="dtiType" value="수정">
                     <label class="custom-control-label" for="dtiType3">수정</label>
                   </div>
                   <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" id="dtiType4" name="dtiType" value="0305">
+                    <input type="checkbox" class="custom-control-input" id="dtiType4" name="dtiType" value="위수탁">
                     <label class="custom-control-label" for="dtiType4">위수탁</label>
+                  </div>
+                  <span class="badge badge-secondary">영수 / 청구</span>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="taxDemand" name="taxDemand" value="ALL">
+                    <label class="custom-control-label" for="taxDemand">All</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="taxDemand1" name="taxDemand" value="01">
+                    <label class="custom-control-label" for="taxDemand1">영수</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="taxDemand2" name="taxDemand" value="02">
+                    <label class="custom-control-label" for="taxDemand2">청구</label>
+                  </div>
+                  <span class="badge badge-secondary">&nbsp;&nbsp;정 / 역&nbsp;&nbsp;</span>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="direction" name="direction" value="ALL">
+                    <label class="custom-control-label" for="direction">All</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="direction1" name="direction" value="1">
+                    <label class="custom-control-label" for="direction1">역발행</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" id="direction2" name="direction" value="2">
+                    <label class="custom-control-label" for="direction2">정발행</label>
                   </div>
                 </div>
                 <div class="form-group">
-                  <span class="badge badge-secondary">STATUS</span>
+                  <span class="badge badge-secondary">&nbsp;&nbsp;상태&nbsp;&nbsp;</span>
                   <div class="custom-control custom-checkbox custom-control-inline">
                     <input type="checkbox" class="custom-control-input" id="dtiStatus" name="dtiStatus" value="all">
                     <label class="custom-control-label" for="dtiStatus">All</label>
@@ -237,9 +262,11 @@
                     <input type="checkbox" class="custom-control-input" id="dtiStatus7" name="dtiStatus" value="W">
                     <label class="custom-control-label" for="dtiStatus7">발행요청취소</label>
                   </div>
-                  <button type="button" id="SBData" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">SBData</button>
-                  <button type="button" id="exelDown" class="btn btn-outline-success">ExelDown</button>
-                  <button type="button" id="listSearch" class="btn btn-outline-primary-sm">Search</button>
+                  <div class="d-inline float-right" >
+                    <button type="button" id="SBData" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">SBData</button>
+                    <button type="button" id="exelDown" class="btn btn-outline-success">ExelDown</button>
+                    <button type="button" id="listSearch" class="btn btn-outline-primary-sm">Search</button>
+                  </div>
                 </div>
               </form>
               <table id="t1" class="display select" cellspacing="0" width="100%"></table>
@@ -336,6 +363,8 @@
     $(document).ready(function() {
       $("input[name=dtiType]").prop("checked", true);
       $("input[name=dtiStatus]").prop("checked", true);
+      $("input[name=taxDemand]").prop("checked", true);
+      $("input[name=direction]").prop("checked", true);
       $('#myModal').on('hidden.bs.modal', function() {
         $('#myModal').removeData('bs.modal');
       });
@@ -346,26 +375,34 @@
       search('AP');
     });
     $("#dtiType").click(function() {
-      //클릭되었으면
       if ($("#dtiType").prop("checked")) {
-        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
         $("input[name=dtiType]").prop("checked", true);
-        //클릭이 안되있으면
       } else {
-        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
         $("input[name=dtiType]").prop("checked", false);
       }
     });
 
     $("#dtiStatus").click(function() {
-      //클릭되었으면
       if ($("#dtiStatus").prop("checked")) {
-        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
         $("input[name=dtiStatus]").prop("checked", true);
-        //클릭이 안되있으면
       } else {
-        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
         $("input[name=dtiStatus]").prop("checked", false);
+      }
+    });
+
+    $("#taxDemand").click(function() {
+      if ($("#taxDemand").prop("checked")) {
+        $("input[name=taxDemand]").prop("checked", true);
+      } else {
+        $("input[name=taxDemand]").prop("checked", false);
+      }
+    });
+
+    $("#direction").click(function() {
+      if ($("#direction").prop("checked")) {
+        $("input[name=direction]").prop("checked", true);
+      } else {
+        $("input[name=direction]").prop("checked", false);
       }
     });
 

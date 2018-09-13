@@ -30,7 +30,7 @@ function fromDate() {
 
 function search(supbuyType) {
 	var request = JSON.stringify($('#searchForm').serializeArray());
-	if(supbuyType == 'AP'){
+	if('AP' == supbuyType){
 		var url = "APlist";
 	}else{
 		var url = "ARlist";

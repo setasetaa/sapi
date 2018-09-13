@@ -9,42 +9,117 @@ router.get('/APlist', function(req, res, next){
 router.post('/APlist', function(req, res, next) {
   let body = req.body;
   console.log(body);
+  console.log(body.length);
   var search = {};
   var join = {};
   var where = {};
-  var dateType = body[0].value;
-  var fromDate = body[1].value;
-  var endDate = body[2].value;
-  var regno = body[3].value;
-  var comName = body[4].value;
-  var supAmount = body[5].value;
-  var taxAmount = body[6].value;
-  var issueID = body[7].value;
+  var dateType, fromDate, endDate, regno, comName, supAmount, taxAmount, issueID, dtiType, direction, dtiStatus, taxDemand;
 
-  if(dateType != ""){
-    //regno = regno.replace('-','');
+  for(var i = 0; i < body.length; i++){
+    var searchType = body[i].name;
+    switch(searchType){
+      case 'dateType' :
+      dateType = body[i].value;
+      break;
+      case 'fromDate' :
+      fromDate = body[i].value;
+      break;
+      case 'endDate' :
+      endDate = body[i].value;
+      break;
+      case 'regno' :
+      regno = body[i].value;
+      break;
+      case 'conName' :
+      conName = body[i].value;
+      break;
+      case 'supAmount' :
+      supAmount = body[i].value;
+      break;
+      case 'taxAmount' :
+      taxAmount = body[i].value;
+      break;
+      case 'issueID' :
+      issueID = body[i].value;
+      break;
+      case 'dtiType' :
+      if(dtiType != undefined){
+        dtiType = dtiType + body[i].value;
+      }else{
+        dtiType = body[i].value;
+      }
+      break;
+      case 'direction' :
+      if(direction != undefined){
+        direction = direction + body[i].value;
+      }else{
+        direction = body[i].value;
+      }
+      break;
+      case 'dtiStatus' :
+      if(dtiStatus != undefined){
+        dtiStatus = dtiStatus + body[i].value;
+      }else{
+        dtiStatus = body[i].value;
+      }
+      break;
+      case 'taxDemand' :
+      if(taxDemand != undefined){
+        taxDemand = taxDemand + body[i].value;
+      }else{
+        taxDemand = body[i].value;
+      }
+      break;
+    }
+  }
+  console.log(dtiType);
+  if(dateType != "" && dateType != null){
     where[dateType] = {$between: [fromDate, endDate]};
   }
-
-  if(regno != ""){
-    //regno = regno.replace('-','');
-    where['sup_com_regno'] = {regno};
+  if(regno != "" && regno != null){
+    //regno = regno.replaceall('-','');
+    where['sup_com_regno'] = regno;
   }
-  if(comName != ""){
-    //regno = regno.replace('-','');
+  if(comName != "" && comName != null){
     where['sup_com_name'] = {$like: comName + '%'};
   }
-  if(supAmount != ""){
-    //regno = regno.replace('-','');
-    where['sup_amount'] = {supAmount};
+  if(supAmount != "" && supAmount != null){
+    where['sup_amount'] = supAmount;
   }
-  if(taxAmount != ""){
-    //regno = regno.replace('-','');
-    where['tax_amount'] = {taxAmount};
+  if(taxAmount != "" && taxAmount != null){
+    where['tax_amount'] = taxAmount;
   }
-  if(issueID != ""){
-    //regno = regno.replace('-','');
-    where['issue_id'] = {issueID};
+  if(issueID != "" && issueID != null){
+    where['issue_id'] = issueID;
+  }
+  if(dtiType != "" && dtiType != null){
+    var typeValue = "";
+    if(dtiType.indexOf('All') != -1){
+    }else {
+      if(dtiType.indexOf('과세') != -1){
+        typeValue = ['0101', '0102', '0103', '0104', '0105', '0201', '0202', '0203', '0204', '0205'];
+      }
+      if(dtiType.indexOf('면세') != -1){
+        typeValue = typeValue +  ['0301', '0303', '0304', '0401', '0403', '0404'];
+      }
+      if(dtiType.indexOf('수정') != -1){
+        typeValue = typeValue +  ['0201', '0202', '0203', '0204', '0205', '0401', '0403', '0404'];
+      }
+      if(dtiType.indexOf('위수탁') != -1){
+        typeValue = typeValue + ['0103', '0105', '0203', '0205', '0303', '0403'];
+      }
+    }
+    console.log(typeValue);
+    where['dti_type'] = [typeValue];
+  }
+  if(taxDemand != "" && taxDemand != null){
+
+  }
+  if(direction != "" && direction != null){
+
+  }
+  if(dtiStatus != "" && dtiStatus != null){
+
   }
 
   if(Object.keys(where).length > 0){
@@ -56,7 +131,7 @@ router.post('/APlist', function(req, res, next) {
   models.dti_main.findAll(search)
   .then(function(data){
     if(data.length != 0){
-      console.log("select data!!!!!!!"+data);
+      console.log("select data!!!!!!!" + data);
       res.send({result:true, data:data});
     }else{
       res.send({result:true, msg:"no data"});
