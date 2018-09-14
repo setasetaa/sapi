@@ -109,7 +109,6 @@ router.post('/APlist', function(req, res, next) {
       }
       var value = temp.toString().split(',');
       var uniqArray = Array.from(new Set(value));
-      //console.log(uniqArray);
       where['dti_type'] = [uniqArray];
     }
   }
@@ -155,7 +154,6 @@ router.post('/APlist', function(req, res, next) {
       var value = temp.toString().split(',');
       //where['dti_status'] = [value];
       join['where'] = {'dti_status': [value] };
-      //console.log(value);
     }
   }
   if(taxDemand != "" && taxDemand != null){

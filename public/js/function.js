@@ -243,7 +243,7 @@ function fnListView(data, supbuyType){
 	});
 	// Handle click on table cells with checkboxes
 	$('#t1').on('click', 'tbody td, thead th:first-child', function(e) {
-		$(this).parent().find('input[type="checkbox"]').trigger('click');
+		//$(this).parent().find('input[type="checkbox"]').trigger('click');
 	});
 	// Handle click on "Select all" control
 	$('thead input[name="select_all"]', table.table().container()).on('click', function(e) {
