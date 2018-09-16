@@ -13,6 +13,8 @@ REFERENCES dti_main (conversation_id, supbuy_type, direction);
 
 select * from information_schema.table_constraints where table_name = 'dti_status';
 
+SELECT CAST(dti_msg AS CHAR(10000) CHARACTER SET utf8) FROM dti_main;
+
 0101 일반 세금계산서
 
 0102 영세율 세금계산서

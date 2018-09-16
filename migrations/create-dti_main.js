@@ -168,7 +168,7 @@ module.exports = {
         allowNull: false,
       },
       dti_msg: {
-        type: Sequelize.BLOB
+        type: Sequelize.TEXT,
       },
       amend_code: {
         type: Sequelize.STRING(2),

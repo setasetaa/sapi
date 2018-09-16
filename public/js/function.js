@@ -81,7 +81,8 @@ function fnListView(data, supbuyType){
 			{title: "ISSUE ID", data: "issueID"},
 			{title: "CONVERSATIONID", data: "conversationID"},
 			{title: "DIRECTION", data: "direction"},
-			{title: "email", data: "email"}
+			{title: "email", data: "email"},
+			{title: "supbuyType", data: "supbuyType"},
 		],
 		columnDefs: [
 			{
@@ -196,7 +197,7 @@ function fnListView(data, supbuyType){
 				}
 			},
 			{
-				'targets': [10, 11, 12 ],
+				'targets': [10, 11, 12, 13],
 				'visible': false
 			},
 			{
@@ -216,12 +217,56 @@ function fnListView(data, supbuyType){
 		'destroy': true
 	});
 
+	var totalCount;
+	if(data.length != undefined){
+		totalCount = data.length;
+	}
+	if(totalCount != 0){
+		for ( var i = 0; i < totalCount; i++ ) {
+			if( "AP" == supbuyType){
+				table.row.add({
+					"": "",
+					"regno": data[i].sup_com_regno, //공급자 사업자번호
+					"name": data[i].sup_com_name, //공급자 회사명
+					"status": data[i].dti_status.dti_status, //세금계산서 상태
+					"wdate": data[i].dti_wdate, //세금계산서 작성일자
+					"supAmount": data[i].sup_amount, //세금계산서 공급가액
+					"taxAmount": data[i].tax_amount, //세금계산서 공급가액
+					"totalAmount": data[i].total_amount, //세금계산서 공급가액
+					"issueID": data[i].issue_id, //세금계산서 승인번호
+					"conversationID": data[i].conversation_id, //세금계산서 참조번호
+					"supbuyType": data[i].supbuy_type,
+					"direction": data[i].direction, //세금계산서 정/역 구분
+					"dtiType": data[i].dti_type, //세금계산서 종류
+					"email": data[i].byr_email //담당자 이메일
+				}).draw();
+			}else{
+				table.row.add({
+					"": "",
+					"regno": data[i].byr_com_regno, //공급자 사업자번호
+					"name": data[i].byr_com_name, //공급자 회사명
+					"status": data[i].dti_status.dti_status, //세금계산서 상태
+					"wdate": data[i].dti_wdate, //세금계산서 작성일자
+					"supAmount": data[i].sup_amount, //세금계산서 공급가액
+					"taxAmount": data[i].tax_amount, //세금계산서 공급가액
+					"totalAmount": data[i].total_amount, //세금계산서 공급가액
+					"issueID": data[i].issue_id, //세금계산서 승인번호
+					"conversationID": data[i].conversation_id, //세금계산서 참조번호
+					"supbuyType": data[i].supbuy_type,
+					"direction": data[i].direction, //세금계산서 정/역 구분
+					"dtiType": data[i].dti_type, //세금계산서 종류
+					"email": data[i].sup_email //담당자 이메일
+				}).draw();
+			}
+		}
+	}
+
 	$('#t1 tbody').on('click', 'input[type="checkbox"]', function(e) {
 		var $row = $(this).closest('tr');
 		// Get row data
-		var data = table.row($row).data();
+		var tdata = table.row($row).data();
 		// Get row ID
-		var rowId = data[0];
+		var rowId = tdata[0];
 		// Determine whether row ID is in the list of selected row IDs
 		var index = $.inArray(rowId, rows_selected);
 		// If checkbox is checked and row ID is not in list of selected row IDs
@@ -242,9 +287,32 @@ function fnListView(data, supbuyType){
 		e.stopPropagation();
 	});
 	// Handle click on table cells with checkboxes
-	$('#t1').on('click', 'tbody td, thead th:first-child', function(e) {
-		//$(this).parent().find('input[type="checkbox"]').trigger('click');
-	});
+	$('#t1 tbody').on('click', 'tr', function () {
+		//var table = $('#example').DataTable();
+    var rdata = table.row(this).data();
+		$.support.cors = true;
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			crossDomain: true,
+			contentType: "application/json",
+			url: 'getXML',
+			data: {conversationID : rdata.conversationID, dtiType : rdata.dtiType, supbuyType : rdata.supbuyType},
+			success: function(data) {
+				var xml = data['xml']
+				var xsl = parser.parseFromString(data['html'], "text/xml");
+				var xsltProcessor = new XSLTProcessor();
+				xsltProcessor.importStylesheet(xsl);
+				var res = xsltProcessor.transformToFragment(xml, document);
+				document.getElementById("viewForm").appendChild(res);
+				$('#viewModal').modal();
+			},
+			error: function(error) {
+				alert(error);
+			}
+		});
+
+  });
 	// Handle click on "Select all" control
 	$('thead input[name="select_all"]', table.table().container()).on('click', function(e) {
 		if (this.checked) {
@@ -260,45 +328,6 @@ function fnListView(data, supbuyType){
 		// Update state of "Select all" control
 		updateDataTableSelectAllCtrl(table);
 	});
-	var totalCount = data.length;
-
-	if(totalCount != 0){
-		for ( var i = 0; i < totalCount; i++ ) {
-			if( "AP" == supbuyType){
-				table.row.add({
-					"": "",
-					"regno": data[i].sup_com_regno, //공급자 사업자번호
-					"name": data[i].sup_com_name, //공급자 회사명
-					"status": data[i].dti_status.dti_status, //세금계산서 상태
-					"wdate": data[i].dti_wdate, //세금계산서 작성일자
-					"supAmount": data[i].sup_amount, //세금계산서 공급가액
-					"taxAmount": data[i].tax_amount, //세금계산서 공급가액
-					"totalAmount": data[i].total_amount, //세금계산서 공급가액
-					"issueID": data[i].issue_id, //세금계산서 승인번호
-					"conversationID": data[i].conversation_id, //세금계산서 참조번호
-					"direction": data[i].direction, //세금계산서 정/역 구분
-					"dtiType": data[i].dti_type, //세금계산서 종류
-					"email": data[i].byr_email //담당자 이메일
-				}).draw();
-			}else{
-				table.row.add({
-					"": "",
-					"regno": data[i].byr_com_regno, //공급자 사업자번호
-					"name": data[i].byr_com_name, //공급자 회사명
-					"status": data[i].dti_status.dti_status, //세금계산서 상태
-					"wdate": data[i].dti_wdate, //세금계산서 작성일자
-					"supAmount": data[i].sup_amount, //세금계산서 공급가액
-					"taxAmount": data[i].tax_amount, //세금계산서 공급가액
-					"totalAmount": data[i].total_amount, //세금계산서 공급가액
-					"issueID": data[i].issue_id, //세금계산서 승인번호
-					"conversationID": data[i].conversation_id, //세금계산서 참조번호
-					"direction": data[i].direction, //세금계산서 정/역 구분
-					"dtiType": data[i].dti_type, //세금계산서 종류
-					"email": data[i].sup_email //담당자 이메일
-				}).draw();
-			}
-		}
-	}
 }
 
 function updateDataTableSelectAllCtrl(table){
@@ -574,7 +603,8 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 	}
 	parser = new DOMParser();
 	xmlDoc = parser.parseFromString(DTI,"text/xml");
-	//alert(xmlDoc.getElementsByTagName("IssueDateTime")[1].childNodes[0].nodeValue);
+  objData.dtiMSG = DTI;
+	//console.log(objData.dtiMSG);
 	objData.conversationID = conversationID;
 	objData.supbuyType = supbuyType;
 	objData.direction = direction;

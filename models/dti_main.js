@@ -142,7 +142,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    dti_msg: DataTypes.BLOB,
+    dti_msg: DataTypes.TEXT,
     amend_code: DataTypes.STRING,
     ori_issue_id: DataTypes.STRING,
     remark: DataTypes.STRING,

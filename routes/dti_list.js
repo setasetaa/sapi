@@ -3,6 +3,51 @@ const models = require('../models');
 const router = express.Router();
 const crypto = require('crypto');
 const sequelize = require('sequelize');
+const fs = require('fs');
+
+router.post('/getXML', function(req, res, next) {
+  var viewData;
+  var supbuyType = req.body.supbuyType;
+  var dtiType = req.body.dtiType;
+  models.dti_main.findAll({
+    attribute : ['dti_msg'],
+    where : {conversation_id : req.body.conversationID}}
+  ).then(function(data){
+    if(data.length != 0){
+      if(dtiType == '0101' || dtiType == '0102' || dtiType == '0102' || dtiType == '0201' || dtiType == '0202' || dtiType == '0104' || dtiType == '0204'){
+        if(supbuyType == 'AR'){
+          viewData = fs.readFileSync('/AR01.xml', 'utf-8');
+        }else{
+          viewData = fs.readFileSync('/AP01.xml', 'utf-8');
+        }
+      }else if(dtiType == '0301' || dtiType == '0304' || dtiType == '0401' || dtiType == '0404'){
+        if(supbuyType == 'AR'){
+          viewData = fs.readFileSync('/AR02.xml', 'utf-8');
+        }else{
+          viewData = fs.readFileSync('/AP02.xml', 'utf-8');
+        }
+      }else if(dtiType == '0103' || dtiType == '0105' || dtiType == '0203' || dtiType == '0205'){
+        if(supbuyType == 'AR'){
+          viewData = fs.readFileSync('/AR03.xml', 'utf-8');
+        }else{
+          viewData = fs.readFileSync('/AP03.xml', 'utf-8');
+        }
+      }else if(dtiType == '0303' || dtiType == '0403'){
+        if(supbuyType == 'AR'){
+          viewData = fs.readFileSync('/AR04.xml', 'utf-8');
+        }else{
+          viewData = fs.readFileSync('/AP04.xml', 'utf-8');
+        }
+      }
+      console.log(viewData);
+      res.send({result:true, xml:data, html:viewData});
+      }else{
+        res.send({result:true, msg:"no data"});
+      }
+    }).catch(function(err){
+      res.send({result:false, msg:"fail"});
+    });
+});
 router.get('/APlist', function(req, res, next){
   res.render("dti/list/APlist");
 });
@@ -201,6 +246,7 @@ router.post('/save', function(req, res, next) {
   models.sequelize.transaction().then(function(transaction){
     t = transaction;
     models.dti_main.create({
+      dti_msg : body.dtiMSG,
       conversation_id : body.conversationID,
       supbuy_type : body.supbuyType,
       direction : body.direction,
