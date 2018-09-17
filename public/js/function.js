@@ -293,22 +293,23 @@ function fnListView(data, supbuyType){
 		$.support.cors = true;
 		$.ajax({
 			type: "POST",
-			dataType: "json",
 			crossDomain: true,
-			contentType: "application/json",
 			url: 'getXML',
 			data: {conversationID : rdata.conversationID, dtiType : rdata.dtiType, supbuyType : rdata.supbuyType},
 			success: function(data) {
-				var xml = data['xml']
+				var parser = new DOMParser();
+				var xml = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
 				var xsl = parser.parseFromString(data['html'], "text/xml");
 				var xsltProcessor = new XSLTProcessor();
 				xsltProcessor.importStylesheet(xsl);
+				console.log(xsltProcessor);
 				var res = xsltProcessor.transformToFragment(xml, document);
+
 				document.getElementById("viewForm").appendChild(res);
-				$('#viewModal').modal();
+
 			},
 			error: function(error) {
-				alert(error);
+				alert(error['msg']);
 			}
 		});
 

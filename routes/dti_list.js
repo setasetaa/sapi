@@ -9,42 +9,45 @@ router.post('/getXML', function(req, res, next) {
   var viewData;
   var supbuyType = req.body.supbuyType;
   var dtiType = req.body.dtiType;
+  //console.log(supbuyType+'~~~'+dtiType);
   models.dti_main.findAll({
-    attribute : ['dti_msg'],
+    attributes : ['dti_msg'],
     where : {conversation_id : req.body.conversationID}}
   ).then(function(data){
+    //console.log("======length"+data.length);
     if(data.length != 0){
       if(dtiType == '0101' || dtiType == '0102' || dtiType == '0102' || dtiType == '0201' || dtiType == '0202' || dtiType == '0104' || dtiType == '0204'){
         if(supbuyType == 'AR'){
-          viewData = fs.readFileSync('/AR01.xml', 'utf-8');
+          viewData = fs.readFileSync('views/dti/list/viewForm/AR01.xsl', 'utf-8');
         }else{
-          viewData = fs.readFileSync('/AP01.xml', 'utf-8');
+          viewData = fs.readFileSync('views/dti/list/viewForm/AP01.xsl', 'utf-8');
         }
       }else if(dtiType == '0301' || dtiType == '0304' || dtiType == '0401' || dtiType == '0404'){
         if(supbuyType == 'AR'){
-          viewData = fs.readFileSync('/AR02.xml', 'utf-8');
+          viewData = fs.readFileSync('views/dti/list/viewForm/AR02.xsl', 'utf-8');
         }else{
-          viewData = fs.readFileSync('/AP02.xml', 'utf-8');
+          viewData = fs.readFileSync('views/dti/list/viewForm/AP02.xsl', 'utf-8');
         }
       }else if(dtiType == '0103' || dtiType == '0105' || dtiType == '0203' || dtiType == '0205'){
         if(supbuyType == 'AR'){
-          viewData = fs.readFileSync('/AR03.xml', 'utf-8');
+          viewData = fs.readFileSync('views/dti/list/viewForm/AR03.xsl', 'utf-8');
         }else{
-          viewData = fs.readFileSync('/AP03.xml', 'utf-8');
+          viewData = fs.readFileSync('views/dti/list/viewForm/AP03.xsl', 'utf-8');
         }
       }else if(dtiType == '0303' || dtiType == '0403'){
         if(supbuyType == 'AR'){
-          viewData = fs.readFileSync('/AR04.xml', 'utf-8');
+          viewData = fs.readFileSync('views/dti/list/viewForm/AR04.xsl', 'utf-8');
         }else{
-          viewData = fs.readFileSync('/AP04.xml', 'utf-8');
+          viewData = fs.readFileSync('views/dti/list/viewForm/AP04.xsl', 'utf-8');
         }
       }
-      console.log(viewData);
+      //console.log(viewData);
       res.send({result:true, xml:data, html:viewData});
       }else{
         res.send({result:true, msg:"no data"});
       }
     }).catch(function(err){
+      console.log(err);
       res.send({result:false, msg:"fail"});
     });
 });
