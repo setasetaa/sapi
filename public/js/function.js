@@ -300,13 +300,17 @@ function fnListView(data, supbuyType){
 				var parser = new DOMParser();
 				var xml = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
 				var xsl = parser.parseFromString(data['html'], "text/xml");
-				var xsltProcessor = new XSLTProcessor();
-				xsltProcessor.importStylesheet(xsl);
-				console.log(xsltProcessor);
-				var res = xsltProcessor.transformToFragment(xml, document);
-
-				document.getElementById("viewForm").appendChild(res);
-
+				if(window.ActiveXObject || xhttp.resposneType == 'msxml-document'){
+					ex = xml.transformNode(xsl);
+					document.getElementById("viewForm").innerHTML = ex;
+				}else if(document.implementation && document.implementation.createDocument){
+					xsltProcessor = new XSLTProcessor();
+					xsltProcessor.importStylesheet(xsl);
+					console.log(xsl.document);
+					var res = xsltProcessor.transformToFragment(xml, document);
+					console.log(res);
+					document.getElementById("viewForm").appendChild(res);
+				}
 			},
 			error: function(error) {
 				alert(error['msg']);
