@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (인쇄용, 공급받는자용) 매입 세금계산서 -->
-<xsl:stylesheet version="2.0"
-                xmlns:xhtml="http://www.w3.org/1999/xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
+<xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dti="http://www.kiec.or.kr/kis"
                 xmlns:ds="http://www.w3.org/2000/09/xmldsig#"

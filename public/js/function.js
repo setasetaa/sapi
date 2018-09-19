@@ -298,18 +298,23 @@ function fnListView(data, supbuyType){
 			data: {conversationID : rdata.conversationID, dtiType : rdata.dtiType, supbuyType : rdata.supbuyType},
 			success: function(data) {
 				var parser = new DOMParser();
-				var xml = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
-				var xsl = parser.parseFromString(data['html'], "text/xml");
-				if(window.ActiveXObject || xhttp.resposneType == 'msxml-document'){
-					ex = xml.transformNode(xsl);
+				var xml = data['xml'][0].dti_msg.replace( /\n/gi, '').replace( /\r/gi, '');
+				var xsl = data['html'].replace( /\n/gi, '').replace( /\r/gi, '');
+				xml = $.parseXML(data['xml'][0].dti_msg);
+				xsl = $.parseXML(data['html'], "text/xml");
+
+				if(window.ActiveXObject){
+					var ex = xml.transformNode(xsl);
 					document.getElementById("viewForm").innerHTML = ex;
 				}else if(document.implementation && document.implementation.createDocument){
 					xsltProcessor = new XSLTProcessor();
 					xsltProcessor.importStylesheet(xsl);
-					console.log(xsl.document);
-					var res = xsltProcessor.transformToFragment(xml, document);
+					console.log(xml);
+					console.log(xsl);
+					var res = xsltProcessor.transformToDocument(xml);
+					var contentNode = document.getElementById("viewForm");
 					console.log(res);
-					document.getElementById("viewForm").appendChild(res);
+					contentNode.appendChild(res);
 				}
 			},
 			error: function(error) {

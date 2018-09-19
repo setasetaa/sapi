@@ -41,7 +41,7 @@ router.post('/getXML', function(req, res, next) {
           viewData = fs.readFileSync('views/dti/list/viewForm/AP04.xsl', 'utf-8');
         }
       }
-      //console.log(viewData);
+      //console.log(data);
       res.send({result:true, xml:data, html:viewData});
       }else{
         res.send({result:true, msg:"no data"});
