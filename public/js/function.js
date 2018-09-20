@@ -298,23 +298,38 @@ function fnListView(data, supbuyType){
 			data: {conversationID : rdata.conversationID, dtiType : rdata.dtiType, supbuyType : rdata.supbuyType},
 			success: function(data) {
 				var parser = new DOMParser();
-				var xml = data['xml'][0].dti_msg.replace( /\n/gi, '').replace( /\r/gi, '');
-				var xsl = data['html'].replace( /\n/gi, '').replace( /\r/gi, '');
-				xml = $.parseXML(data['xml'][0].dti_msg);
-				xsl = $.parseXML(data['html'], "text/xml");
+				// var xml = data['xml'][0].dti_msg.replace( /\n/gi, '').replace( /\r/gi, '');
+				// var xsl = data['html'].replace( /\n/gi, '').replace( /\r/gi, '');
+				var xml = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
+				var xsl = parser.parseFromString(data['html'], "text/xml");
 
-				if(window.ActiveXObject){
-					var ex = xml.transformNode(xsl);
-					document.getElementById("viewForm").innerHTML = ex;
-				}else if(document.implementation && document.implementation.createDocument){
-					xsltProcessor = new XSLTProcessor();
-					xsltProcessor.importStylesheet(xsl);
-					console.log(xml);
-					console.log(xsl);
-					var res = xsltProcessor.transformToDocument(xml);
-					var contentNode = document.getElementById("viewForm");
-					console.log(res);
-					contentNode.appendChild(res);
+				//console.log(xsl);
+				//console.log(data['html']);
+				if (typeof (XSLTProcessor) != "undefined"){
+	         var xsltProcessor = new XSLTProcessor();
+	         xsltProcessor.importStylesheet(xsl);
+	         var xmlFragment = xsltProcessor.transformToFragment(xml, document);
+					 console.log(xmlFragment);
+	         if (typeof(GetXmlStringFromXmlDoc)!= "undefined"){
+	             return GetXmlStringFromXmlDoc(xmlFragment);
+	         }
+	         else{
+						 alert('gg');
+						 document.getElementById("viewForm").appendChild(xmlFragment);
+						 $('#viewModal').modal('show');
+	         }
+	      }else{
+					if (typeof (xml.transformNode) != "undefined"){
+						document.getElementById("viewForm").appendChild(xml.transformNode(xsl));
+					}else {
+						 var XMLDOM = new ActiveXObject("Microsoft.XMLDOM");
+						 var XSLDOM = new ActiveXObject("Microsoft.XMLDOM");
+						 XMLDOM.async = false;
+						 XMLDOM.loadXML(xml);
+						 XSLDOM.async = false;
+						 XSLDOM.loadXML(xsl);
+						 document.getElementById("viewForm").innerHTML = XMLDOM.transformNode(XSLDOM);
+					}
 				}
 			},
 			error: function(error) {

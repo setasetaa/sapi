@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- (인쇄용, 공급받는자용) 위수탁 매입 세금계산서 -->
-<xsl:stylesheet version="2.0"
-                xmlns:xhtml="http://www.w3.org/1999/xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:dti="http://www.kiec.or.kr/kis"
-                xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-                xmlns:sb="urn:kr:or:kec:standard:Tax:ReusableAggregateBusinessInformationEntitySchemaModule:1:0">
-  <!-- <xsl:output method="html"/> -->
+<!-- (공급받는자용) 위수탁 매입 세금계산서 -->
+<xsl:stylesheet version="1.0"
+		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		xmlns:dti="http://www.kiec.or.kr/kis"
+		xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:sb="urn:kr:or:kec:standard:Tax:ReusableAggregateBusinessInformationEntitySchemaModule:1:0">
+  <xsl:output method="html"/>
 
-  <xsl:output method="xml" version="1.0" encoding="UTF-8" doctype-public="-//W3C//DTD XHTML 1.1//EN" doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" indent="yes"/>
 
   <xsl:template match="/">
 
-    <html xmlns="http://www.w3.org/1999/xhtml">
+    <html>
       <head>
         <!-- 헤더 정보 보이기 호출 -->
         <xsl:call-template name="DTIHeader"/>
-        <!--<link rel="stylesheet" type="text/css" href="css/smart_print3.css" media="print,screen" />-->
-        <style type="text/css">
+         <style type="text/css">
           @charset "utf-8";
           /* CSS Document */
 
@@ -284,21 +280,63 @@
           .tax_invoice02_Gray .li0201{color:black;}
           .tax_invoice02_Gray .li0202{color:black;}
           }
-        </style>
+         </style>
       </head>
 
       <body>
-        <div class="taxBillDivision" style="padding: 0px 0px 0px 12px">
 
+        <table width="100%" height="35" cellpadding="0" cellspacing="1"  border="0" bgcolor="#F0F0F0">
+          <tr>
+            <td bgcolor="#F9F9F9" style="padding:10px 10px 10px 10px" class="red">
+              <xsl:variable name="DtiStatus" select="/sb:TaxInvoice/dti:SmartBillArea/dti:Status"/>
+              <xsl:choose>
+                <xsl:when test="$DtiStatus = 'B'">
+                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
+                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
+                </xsl:when>
+                <xsl:when test="$DtiStatus = 'H'">
+                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
+                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
+                </xsl:when>
+                <xsl:when test="$DtiStatus = 'K'">
+                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
+                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
+                </xsl:when>
+                <xsl:when test="$DtiStatus = 'L'">
+                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
+                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
+                </xsl:when>
+                <xsl:otherwise>
+                  <img src="/image/center/ic_point.gif" border="0"/> 국세청에서 발표된 전자세금계산서 표준 Ver 3.0에 따라 스마트빌 세금계산서 양식이 변경되어
+                  적용되었습니다.
+                </xsl:otherwise>
+              </xsl:choose>
+
+            </td>
+          </tr>
+        </table>
+        <div class="taxBillDivision">
+          <p class="taxBillFormDescription">
+            &#160;&#13;&#13;&#13;<b style="color:Red">
+              <xsl:value-of select="/sb:TaxInvoice/sb:SmartBillArea/sb:Reprint"/>
+            </b>
+          </p>
+          <!-- DTI Data Area 정보 보이기 호출 -->
           <xsl:call-template name="DataArea"/>
-          <div align="left">
-
-            <br/>
-            <!-- 세금계산서/계산서 주의 보이기 Start -->
-            <p class="taxBillFormAttention" id="taxBillFormAttention01">
-              주의 : 본 세금계산서는 국세청고시 기준에 따라 발행된 전자세금계산서 입니다.
-            </p>
-          </div>
+          <p>
+            &#160;
+          </p>
+          <br/>
+          <!-- 세금계산서/계산서 주의 보이기 Start -->
+          <p class="taxBillFormAttention" id="taxBillFormAttention01">
+            주의 : 본 세금계산서는 국세청고시 기준에 따라
+            <em>
+              스마트빌(www.smartbill.co.kr)에서 발행된 전자세금계산서
+            </em>로 <br/>공인인증기관의 공인인증서를 사용하여 전자서명되어 인감날인이 없어도 법적 효력을 갖습니다.
+          </p>
+          <p class="taxBillFormAttention" id="taxBillFormAttention02" style="display:none">
+            주의: 본 전자세금계산서는 국세청 미전송건으로 국세청 전송이 완료된 이후에 법적 효력을 갖습니다. (국세청고시 제 2013-17호, 2013.4.1)
+          </p>
           <!-- 세금계산서/계산서 주의 보이기 End -->
         </div>
       </body>
@@ -336,14 +374,15 @@
     <xsl:variable name="DescriptionTextDirPath" select="/sb:TaxInvoice/sb:TaxInvoiceDocument/sb:DescriptionText"/>
     <!-- 변수 선언 종료 -->
 
+    <!--전자세금계산서 START -->
     <div class="tax_invoice">
+      <div class="tax_table_Blue">
 
-      <div class="tax_table_Blue" id="dtiTable" >
-
-
-        <!--테이블헤더 start -->
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" id="dti_table01" class="tax_invoice01_Blue" summary="위수탁 전자세금계산서 승인번호, 관리번호">
-          <caption>위수탁 전자세금계산서 승인번호, 관리번호</caption>
+        <!-- 헤더 start -->
+        <table class="tax_invoice01_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="전자세금계산서 승인번호, 관리번호">
+          <caption>
+            전자세금계산서 승인번호, 관리번호
+          </caption>
           <colgroup>
             <col width="41%"/>
             <col width="15%"/>
@@ -353,41 +392,36 @@
           </colgroup>
           <tr>
             <th rowspan="2">
-              <!--2013.11.27 : 수정세금계산서 당초승인번호 추가로 rowspan=2에서3으로 변경-->
               <xsl:if test="$HeaderDirPath/sb:OriginalIssueID">
                 <xsl:attribute name="rowspan">
                   3
                 </xsl:attribute>
               </xsl:if>
-
-              <h1 id="dti_h1" class="title_long_Blue">
+              <h1 class="title_Blue">
                 <xsl:choose>
                   <xsl:when test="string-length($HeaderDirPath/sb:AmendmentStatusCode) > 0">
                     수정
                   </xsl:when>
                 </xsl:choose>
-
+                <!--2012.11.07 영세율 표기 적용 by 장병동 -->
                 <xsl:choose>
-                  <xsl:when test="substring($HeaderDirPath/sb:TypeCode,3,2) = '02'">
+                  <xsl:when test="substring($HeaderDirPath/sb:TypeCode,3,2) = '05'">
                     영세율
                   </xsl:when>
                 </xsl:choose>
-
                 위수탁 전자세금계산서
               </h1>
             </th>
-            <th rowspan="2" class="td2">
-              <!--2013.11.27 : 수정세금계산서 당초승인번호 추가로 rowspan=2에서3으로 변경-->
+            <th rowspan="2"  class="td2">
               <xsl:if test="$HeaderDirPath/sb:OriginalIssueID">
                 <xsl:attribute name="rowspan">
                   3
                 </xsl:attribute>
               </xsl:if>
-
-              <span id="dtiTableTitle">공급받는자</span><br />(보관용)
+              공급받는자<br />
+              (보관용)
             </th>
-            <td rowspan="2" id="dti_td" class="td4_Blue">
-              <!--2013.11.27 : 수정세금계산서 당초승인번호 추가로 rowspan=2에서3으로 변경-->
+            <td rowspan="2" class="td4_Blue">
               <xsl:if test="$HeaderDirPath/sb:OriginalIssueID">
                 <xsl:attribute name="rowspan">
                   3
@@ -395,7 +429,7 @@
               </xsl:if>
             </td>
             <th>승인번호</th>
-            <td class="td3">
+            <td class="td3_Blue">
               <xsl:choose>
                 <xsl:when test="string-length($HeaderDirPath/sb:IssueID)=24">
                   <xsl:value-of select="$HeaderDirPath/sb:IssueID"/>
@@ -403,27 +437,23 @@
               </xsl:choose>
             </td>
           </tr>
-
-          <!--당초승인번호 포함 start -->
           <xsl:if test="$HeaderDirPath/sb:OriginalIssueID">
             <tr>
               <th>당초승인번호</th>
-              <td class="td3">
+              <td class="td3_Blue">
                 <xsl:value-of select="$HeaderDirPath/sb:OriginalIssueID"/>
               </td>
             </tr>
           </xsl:if>
-          <!--당초승인번호 포함 end -->
-
           <tr>
             <th>관리번호</th>
-            <td class="td3">
+            <td class="td3_Blue">
               <xsl:value-of select="/sb:TaxInvoice/sb:ExchangedDocument/sb:ReferencedDocument/sb:ID"/>
             </td>
           </tr>
         </table>
 
-        <table id="dti_table02" class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="공급자, 공급받는자 정보">
+        <table class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="공급자, 공급받는자 정보">
           <caption>
             공급자, 공급받는자 정보
           </caption>
@@ -442,7 +472,7 @@
             <col width=""/>
           </colgroup>
           <tr>
-            <th class="title02-1 fontB" rowspan="4">공<br />급<br />자<br /></th>
+            <th class="title02-1 fontB_Blue" rowspan="4">공급자</th>
             <th>등록번호</th>
             <td class="tax_bold01" colspan="4">
               <xsl:value-of select="substring($SupplierPartyDirPath/sb:ID,1,3)"/>
@@ -451,7 +481,7 @@
               <xsl:value-of select="'-'"/>
               <xsl:value-of select="substring($SupplierPartyDirPath/sb:ID,6,5)"/>
             </td>
-            <th class="title02-1 fontB" rowspan="4">공<br />급<br />받<br />는<br />자<br /></th>
+            <th class="title02-1 fontB_Blue" rowspan="4">공급받는자</th>
             <th>등록번호</th>
             <td class="tax_bold01" colspan="4">
               <xsl:variable name="BuyerPartyID" select="$BuyerPartyDirPath/sb:ID"/>
@@ -503,7 +533,10 @@
             <td colspan="2">
               <xsl:value-of select="$SupplierPartyDirPath/sb:SpecifiedAddress/sb:LineOneText"/>
             </td>
-            <th>종사업장<br />번호</th>
+            <th>
+              종사업<br />
+              장번호
+            </th>
             <td>
               <xsl:value-of select="$SupplierPartyDirPath/sb:SpecifiedOrganization/sb:TaxRegistrationID"/>
             </td>
@@ -514,7 +547,10 @@
             <td colspan="2">
               <xsl:value-of select="$BuyerPartyDirPath/sb:SpecifiedAddress/sb:LineOneText"/>
             </td>
-            <th>종사업장<br />번호</th>
+            <th>
+              종사업<br />
+              장번호
+            </th>
             <td>
               <xsl:value-of select="$BuyerPartyDirPath/sb:SpecifiedOrganization/sb:TaxRegistrationID"/>
             </td>
@@ -541,8 +577,10 @@
         <!--//테이블헤더 end -->
 
         <!--공급가액 및 세액 start -->
-        <table id="dti_table03" class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="작성일자, 공급가액, 세액, 수정사유, 비고">
-          <caption>작성일자, 공급가액, 세액, 수정사유, 비고</caption>
+        <table class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="작성일자, 공급가액, 세액">
+          <caption>
+            작성일자, 공급가액, 세액, 수정사유, 비고
+          </caption>
           <colgroup>
             <col width="11%" />
             <col width="18%" />
@@ -551,13 +589,13 @@
             <col width="8%" />
             <col width="18%" />
             <col width="7%" />
-            <col width="14%" />
+            <col width="%" />
           </colgroup>
           <tr>
-            <th rowspan="2" class="fontB">작성일자</th>
-            <th rowspan="2" class="fontB">공 급 가 액</th>
-            <th rowspan="2" class="fontB">세 액</th>
-            <th class="BDouble fontB" rowspan="4" >수<br />탁<br />자<br /></th>
+            <th rowspan="2" class="fontB_Blue">작성일자</th>
+            <th rowspan="2" class="fontB_Blue">공급가액</th>
+            <th rowspan="2" class="fontB_Blue">세 액</th>
+            <th class="BDouble fontB_Blue" rowspan="4" >수탁자</th>
             <th>등록번호</th>
             <td class="tax_bold01" colspan="3">
               <xsl:value-of select="substring($BrokerPartyDirPath/sb:ID,1,3)"/>
@@ -592,12 +630,16 @@
               <xsl:value-of select="format-number($SummaryDirPath/sb:TaxTotalAmount,'#,##0.####')"/>
             </td>
             <th>
-              사업장<br />주소
+              사업장<br />
+              주소
             </th>
             <td>
               <xsl:value-of select="$BrokerPartyDirPath/sb:SpecifiedAddress/sb:LineOneText"/>
             </td>
-            <th>종사업장<br />번호</th>
+            <th>
+              종사업<br />
+              장번호
+            </th>
             <td>
               <xsl:value-of select="$BrokerPartyDirPath/sb:SpecifiedOrganization/sb:TaxRegistrationID"/>
             </td>
@@ -616,7 +658,7 @@
         <!--//공급가액 및 세액 end -->
 
         <!-- 수정사유, 비고 start -->
-        <table  id="dti_table06" class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="수정사유, 비고 항목">
+        <table class="tax_invoice02_Blue"  border="0" cellspacing="0" cellpadding="0" width="100%" summary="수정사유, 비고 항목">
           <caption>
             수정사유, 비고 항목
           </caption>
@@ -625,7 +667,7 @@
             <col width="89%"/>
           </colgroup>
           <tr>
-            <th class="fontB">수정사유</th>
+            <th class="fontB_Blue">수정사유</th>
             <td>
               <xsl:variable name="AmendCode" select="$HeaderDirPath/sb:AmendmentStatusCode"/>
               <xsl:choose>
@@ -658,9 +700,8 @@
           </tr>
           <xsl:for-each select="$DescriptionTextDirPath">
             <xsl:variable name="curRow" select="position()"/>
-            <xsl:variable name="lastRow" select="last()"/>
             <tr>
-              <th class="fontB">
+              <th class="fontB_Blue">
                 비고 <xsl:value-of select="$curRow"/>
               </th>
               <td>
@@ -672,36 +713,41 @@
         <!--// 수정사유, 비고 end -->
 
         <!--품목별 단가 start -->
-        <table id="dti_table04" class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="월, 일, 품목, 규격, 수량, 단가, 공급가액, 세액, 비고">
-          <caption>월, 일, 품목, 규격, 수량, 단가, 공급가액, 세액, 비고</caption>
+        <table class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="월, 일, 품목, 규격, 수량, 단가, 공급가액, 세액, 비고">
+          <caption>
+            월, 일, 품목, 규격, 수량, 단가, 공급가액, 세액, 비고
+          </caption>
           <colgroup>
             <col width="3%"/>
             <col width="3%"/>
-            <col width="17%"/>
-            <col width="8%"/>
-            <col width="8%"/>
-            <col width="18%"/>
-            <col width="18%"/>
-            <col width="16%"/>
+            <col width="21%"/>
             <col width="9%"/>
+            <col width="9%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="13%"/>
+            <col width="12%"/>
           </colgroup>
           <thead>
             <tr>
-              <th class="fontB">월</th>
-              <th class="fontB">일</th>
-              <th class="fontB">품 목</th>
-              <th class="fontB">규 격</th>
-              <th class="fontB">수 량</th>
-              <th class="fontB">단가</th>
-              <th class="fontB">공 급 가 액</th>
-              <th class="fontB">세 액</th>
-              <th class="fontB">비고</th>
+              <th class="fontB_Blue">월</th>
+              <th class="fontB_Blue">일</th>
+              <th class="fontB_Blue">품 목</th>
+              <th class="fontB_Blue">규 격</th>
+              <th class="fontB_Blue">수 량</th>
+              <th class="fontB_Blue">단 가</th>
+              <th class="fontB_Blue">공 급 가 액</th>
+              <th class="fontB_Blue">세 액</th>
+              <th class="fontB_Blue">비 고</th>
             </tr>
           </thead>
           <tbody>
+
             <!-- 품목 리스트 정보 보이기 Start -->
             <xsl:for-each select="$LineDirPath">
+              <xsl:variable name="baseRow" select="position()"/>
               <tr>
+
                 <!-- 품목월 00이거나 null 보이지 않는다 -->
                 <xsl:choose>
                   <xsl:when test="substring(sb:PurchaseExpiryDateTime,5,2)='00'">
@@ -726,12 +772,12 @@
                   </xsl:otherwise>
                 </xsl:choose>
 
-                <!--  ###품목### -->
+                <!-- 품목 -->
                 <td>
                   <xsl:value-of select="sb:NameText"/>
                 </td>
 
-                <!--  ###규격### -->
+                <!-- 규격 -->
                 <td class="center">
                   <xsl:value-of select="sb:InformationText"/>
                 </td>
@@ -795,9 +841,14 @@
                   <xsl:when test="string-length(sb:TotalTax/sb:CalculatedAmount)=0">
                     <td class="cell_right01"></td>
                   </xsl:when>
+                  <xsl:when test="sb:TotalTax/sb:CalculatedAmount=0">
+                    <td class="cell_right01">
+                      <xsl:value-of select="'0'"/>
+                    </td>
+                  </xsl:when>
                   <xsl:otherwise>
                     <xsl:choose>
-                      <xsl:when test="$LineDirPath/TotalTax/CalculatedAmount > 0">
+                      <xsl:when test="sb:TotalTax/sb:CalculatedAmount > 0">
                         <td class="cell_right01">
                           <xsl:value-of select="format-number(sb:TotalTax/sb:CalculatedAmount,'#,##0')"/>
                         </td>
@@ -811,35 +862,40 @@
                   </xsl:otherwise>
                 </xsl:choose>
 
-                <!-- ###비고### -->
+                <!-- 비고 -->
                 <td>
-                  <xsl:value-of select="sb:DescriptionText"/>
+                  <xsl:value-of select="sb:DescriptionText"/>&#160;
                 </td>
+
               </tr>
             </xsl:for-each>
+            <!-- 품목 리스트 정보 보이기 End -->
+
           </tbody>
         </table>
         <!--//품목별 단가 end -->
 
         <!--합계 start -->
-        <table id="dti_table05" class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%"  summary="합계금액, 현금, 수표, 어음, 외상미수금">
-          <caption>합계금액, 현금, 수표, 어음, 외상미수금</caption>
+        <table class="tax_invoice02_Blue" border="0" cellspacing="0" cellpadding="0" width="100%" summary="합계금액, 현금, 수표, 어음, 외상미수금">
+          <caption>
+            합계금액, 현금, 수표, 어음, 외상미수금
+          </caption>
           <colgroup>
-            <col width="16%"/>
-            <col width="16%"/>
-            <col width="16%"/>
-            <col width="16%"/>
-            <col width="16%"/>
-            <col width="9%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="15%"/>
+            <col width="10%"/>
             <col width=""/>
-            <col width="3%"/>
+            <col width="6%"/>
           </colgroup>
           <tr>
-            <th class="fontB">합계금액</th>
-            <th class="fontB">현금</th>
-            <th class="fontB">수표</th>
-            <th class="fontB">어음</th>
-            <th class="fontB">외상미수금</th>
+            <th class="fontB_Blue">합계금액</th>
+            <th class="fontB_Blue">현 금</th>
+            <th class="fontB_Blue">수 표</th>
+            <th class="fontB_Blue">어 음</th>
+            <th class="fontB_Blue">외상미수금</th>
             <td class="td_chargeR" rowspan="2">이 금액을</td>
             <td class="td_chargeC" rowspan="2">
               <!-- 영수/청구 정보 보이기 Start -->
@@ -853,14 +909,14 @@
                 <xsl:when test="$demand='01'">
                   <span class="li0202">[영수]</span>
                   <br />
-                  <span class="li0201">청구</span>
+                  <span class="li0201"> 청구</span>
                 </xsl:when>
-                <xsl:when  test="$demand='18'">
+                <xsl:when  test="$demand='02'">
                   <span class="li0201">영수</span>
                   <br />
                   <span class="li0202">[청구]</span>
                 </xsl:when>
-                <xsl:when test="$demand='02'">
+                <xsl:when  test="$demand='18'">
                   <span class="li0201">영수</span>
                   <br />
                   <span class="li0202">[청구]</span>
@@ -871,7 +927,7 @@
             <td class="td_chargeL" rowspan="2">함</td>
           </tr>
           <tr>
-            <td class="cell_right01 font11">
+            <td class="cell_right01">
               <xsl:value-of select="format-number($SummaryDirPath/sb:GrandTotalAmount,'#,##0')"/>
             </td>
             <!-- 현금/수표/어음/외상미수금 정보 보이기 Start -->
@@ -880,15 +936,34 @@
               <xsl:when test="$PaymentCount = '4'">
                 <xsl:for-each select="$PaymentMeansDirPath">
                   <xsl:sort select="."/>
-                  <td class="cell_right01 font11">
-                    <xsl:choose>
-                      <xsl:when test="string-length(sb:PaidAmount)=0">
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="format-number(sb:PaidAmount,'#,##0')"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
+                  <xsl:variable name="baseRow" select="position()"/>
+
+                  <xsl:choose>
+                    <xsl:when test="$baseRow='4'">
+                      <td class="cell_right01">
+                        <xsl:choose>
+                          <xsl:when test="string-length(sb:PaidAmount)=0">
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="format-number(sb:PaidAmount,'#,##0')"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </td>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <td class="cell_right01">
+                        <xsl:choose>
+                          <xsl:when test="string-length(sb:PaidAmount)=0">
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="format-number(sb:PaidAmount,'#,##0')"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </td>
+                    </xsl:otherwise>
+                  </xsl:choose>
+
+
                 </xsl:for-each>
               </xsl:when>
               <xsl:otherwise>
@@ -902,14 +977,65 @@
                 </td>
               </xsl:otherwise>
             </xsl:choose>
+            <!-- 현금/수표/어음/외상미수금 정보 보이기 End -->
           </tr>
         </table>
         <!--//합계 end -->
+
       </div>
     </div>
+    <!--//전자세금계산서 END -->
+
+    <!-- 직인 이미지 보여주기 Start -->
+    <xsl:variable name="SealDisplay" select="$SmartBillPath/dti:Seal"/>
+    <xsl:choose>
+      <xsl:when test="$SealDisplay=''">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="$HeaderDirPath/sb:OriginalIssueID">
+            <div style="position:absolute; left:700px; top:335px; width:50; height:50; z-index:-1;">
+              <img name="img02" width="50" height="50" id="img02">
+                <xsl:attribute name="src">
+                  http://file.smartbill.co.kr/main/memmgt/comseal/<xsl:value-of select="$SmartBillPath/dti:Seal"/>
+                </xsl:attribute>
+              </img>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <div style="position:absolute; left:700px; top:310px; width:50; height:50; z-index:-1;">
+              <img name="img02" width="50" height="50" id="img02">
+                <xsl:attribute name="src">
+                  http://file.smartbill.co.kr/main/memmgt/comseal/<xsl:value-of select="$SmartBillPath/dti:Seal"/>
+                </xsl:attribute>
+              </img>
+            </div>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+    <!-- 직인 이미지 보여주기 End   -->
+
+    <!-- 스템프 이미지 보여주기 Start -->
+    <xsl:variable name="StampDisplay" select="$SmartBillPath/dti:Stamp"/>
+    <xsl:if test="$StampDisplay='Y'">
+      <div style="position:absolute; left:400px; top:290px; width:100; height:100; z-index:-1;">
+        <img name="img03" id="img03">
+          <xsl:attribute name="src">
+            http://www.smartbill.co.kr/image/stamp/stamp_<xsl:value-of select="$SmartBillPath/dti:Status"/>.gif</xsl:attribute>
+        </img>
+      </div>
+    </xsl:if>
+
+    <div style="position:absolute; left:400px; top:240px; width:100; height:100; z-index:-1;">
+      <img name="img03" id="img03">
+	<xsl:attribute name="src">
+	  http://www.smartbill.co.kr/image/stamp/stamp_demo.gif</xsl:attribute>
+      </img>
+    </div>
+    <!-- 스템프 이미지 보여주기 End -->
 
   </xsl:template>
   <!--  위수탁 세금계산서 DTI Data Header 정보 보이기 End -->
-  <!--  DTI Data Header 정보 보이기 Start -->
-  <br/><br/>
+
 </xsl:stylesheet>
