@@ -37,46 +37,6 @@
 
             #print_wrap{width:650px; /*margin:0 4px;*/}
 
-            /* 인쇄 옵션 START*/
-            #print_option{width:100%; padding-bottom:10px;}
-            #print_option_con{background:url(../image/center/print_bg.gif) repeat-y; padding:13px 0 9px 0;}
-            #pOption{width:620px; margin:0 auto; overflow:hidden}
-            /* 인쇄옵션 테이블 */
-            .pOption_table{width:520px; float:left; border-top:#a6c2de solid 1px; border-left:#a6c2de solid 1px; border-right:#a6c2de solid 1px; line-height:24px;}
-            .pOption_table th,.pOption_table th td{height:24px; background:#FFF; padding-top:3px; border-bottom:#a6c2de solid 1px;}
-            .pOption_table th{font-weight:normal; border-bottom:#a6c2de solid 1px; border-right:#a6c2de solid 1px; text-align:left; padding-left:20px; background:url(../image/common/bul_blue.gif) 10px 12px no-repeat; background-color:#FFF; color:#000;}
-            .pOption_table td{font-weight:normal; padding-left:8px; border-bottom:#a6c2de solid 1px;}
-            #pOption_btnPrint{float:left; margin-left:9px; padding-top:4px; height:53px;}
-            /* 인쇄옵션 안내 */
-            #pOption_info{clear:both; padding:15px 0 0 11px;}
-            .pOption_txt01{height:22px; line-height:22px;}
-            .pOption_txt01 txt,img{vertical-align:middle;}
-            .pOption_txt02{padding:15px 0 10px 0; color:#D93300;}
-            .print_blueB{font-weight:bold; color:#2f488a;}
-
-            #print_bottom{height:2px; background:url(../image/center/print_bottom.gif) no-repeat;}
-            /*// 인쇄 옵션 END*/
-
-            /* 담당자 정보 START */
-            .manager{margin-bottom:20px; }
-            .table_manager{border-top:#c8dbef solid 1px; border-bottom:#c8dbef solid 1px; border-collapse:collapse; width:100%;}
-            .table_manager th,.table_manager td{padding:3px 0 0 8px; border:none; text-align:left; }
-            .table_manager th{color:#3f7dc5; font-weight:normal; padding-left:29px; background:url(../image/common/bul_blue.gif) 18px 12px no-repeat; vertical-align:top; padding-top:7px; }
-            .table_manager .manager_cell{background:url(../image/common/cell_line.gif) 0 8px no-repeat;}
-            .table_manager .th_line{border-bottom:#e9eaea solid 1px;}
-            .table_manager .td_line{border-bottom:#e9eaea solid 1px;}
-            .table_manager .cell_line{border-bottom:#e9eaea solid 1px; background:url(../image/common/cell_line.gif) 0 8px no-repeat;}
-            /*// 담당자 정보 END */
-
-            /* 파일첨부 START */
-            .add_file{margin-bottom:30px;}
-            .table_AddFile{border-top:#a6c2de solid 1px; border-bottom:#a6c2de solid 1px; border-collapse:collapse; width:100%;}
-            .table_AddFile th,.table_AddFile td{border:none; text-align:left; padding-top:3px;}
-            .table_AddFile th{background:#f1f6fa; padding-left:25px; font-weight:normal;}
-            .table_AddFile .FileName{font-weight:bold; text-align:center;}
-            /*// 파일첨부 END */
-
-
             /* 전자세금계산서 보기 START */
             .tax_invoice{width:646px; padding:0 2px; margin-top:20px; color: #666;}
 
@@ -285,36 +245,6 @@
 
       <body>
 
-        <table width="100%" height="35" cellpadding="0" cellspacing="1"  border="0" bgcolor="#F0F0F0">
-          <tr>
-            <td bgcolor="#F9F9F9" style="padding:10px 10px 10px 10px" class="red">
-              <xsl:variable name="DtiStatus" select="/sb:TaxInvoice/dti:SmartBillArea/dti:Status"/>
-              <xsl:choose>
-                <xsl:when test="$DtiStatus = 'B'">
-                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-                </xsl:when>
-                <xsl:when test="$DtiStatus = 'H'">
-                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-                </xsl:when>
-                <xsl:when test="$DtiStatus = 'K'">
-                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-                </xsl:when>
-                <xsl:when test="$DtiStatus = 'L'">
-                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-                </xsl:when>
-                <xsl:otherwise>
-                  <img src="/image/center/ic_point.gif" border="0"/> 국세청에서 발표된 전자세금계산서 표준 Ver 3.0에 따라 스마트빌 세금계산서 양식이 변경되어
-                  적용되었습니다.
-                </xsl:otherwise>
-              </xsl:choose>
-
-            </td>
-          </tr>
-        </table>
         <div class="taxBillDivision">
           <p class="taxBillFormDescription">
             &#160;&#13;&#13;&#13;<b style="color:Red">

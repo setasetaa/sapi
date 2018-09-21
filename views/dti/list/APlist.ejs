@@ -263,7 +263,7 @@
                     <label class="custom-control-label" for="dtiStatus7">발행요청취소</label>
                   </div>
                   <div class="d-inline float-right">
-                    <button type="button" id="SBData" class="btn btn-outline-primary" data-toggle="modal" data-target="#SBModal">SBData</button>
+                    <button type="button" id="SBData" class="btn btn-outline-primary">SBData</button>
                     <button type="button" id="exelDown" class="btn btn-outline-success">ExelDown</button>
                     <button type="button" id="listSearch" class="btn btn-outline-primary-sm">Search</button>
                   </div>
@@ -319,13 +319,12 @@
 
   <!-- SBData Modal-->
   <div class="modal" id="SBModal">
-    <div class="modal-dialog modal-lg">
       <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">SB List</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button type="button" id="SBClose" class="close" data-dismiss="modal">&times;</button>
         </div>
 
         <!-- Modal body -->
@@ -343,33 +342,16 @@
             </div>
             <table class="display select" id="t2" cellspacing="0" width="100%"></table>
           </div>
-          <!-- Modal footer -->
-          <div class="modal-footer">
-          </div>
         </div>
       </div>
-    </div>
   </div>
 
   <!-- View Modal-->
-  <div class="modal fade" id="viewModal" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>
-        <div class="modal-body">
-          <div id="viewForm"></div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-
-    </div>
+  <div class="modal" id="viewModal" >
+    <div class="modal-content">
+        <span id="viewClose" class="close">&times;</span>
+        <table id="viewForm"> </table>
+        <button type="button" id="print" class="btn btn-outline-success">print</button>
   </div>
 
   <script src="/vendor/jquery/jquery.min.js"></script>
@@ -499,6 +481,30 @@
           alert("error");
         }
       });
+    });
+
+    $('#SBData').click(function(){
+      var modal = document.getElementById("SBModal");
+      modal.style.display = "block";
+    });
+
+    $('#viewClose').click(function(){
+      var modal = document.getElementById("viewModal");
+      modal.style.display = "none";
+      $('#viewForm').html("");
+    });
+
+    $('#SBClose').click(function(){
+      var modal = document.getElementById("SBModal");
+      modal.style.display = "none";
+      if($('#t2').html() != ""){
+        $('#t2').DataTable().destroy();
+        $('#t2').html("");
+      }
+    });
+
+    $('#print').click(function(){
+      onPrint();
     });
   </script>
 </body>

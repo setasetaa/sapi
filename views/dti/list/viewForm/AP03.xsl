@@ -284,37 +284,6 @@
       </head>
 
       <body>
-
-        <table width="100%" height="35" cellpadding="0" cellspacing="1"  border="0" bgcolor="#F0F0F0">
-          <tr>
-            <td bgcolor="#F9F9F9" style="padding:10px 10px 10px 10px" class="red">
-              <xsl:variable name="DtiStatus" select="/sb:TaxInvoice/dti:SmartBillArea/dti:Status"/>
-              <xsl:choose>
-                <xsl:when test="$DtiStatus = 'B'">
-                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-                </xsl:when>
-                <xsl:when test="$DtiStatus = 'H'">
-                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-                </xsl:when>
-                <xsl:when test="$DtiStatus = 'K'">
-                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-                </xsl:when>
-                <xsl:when test="$DtiStatus = 'L'">
-                  <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                  합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-                </xsl:when>
-                <xsl:otherwise>
-                  <img src="/image/center/ic_point.gif" border="0"/> 국세청에서 발표된 전자세금계산서 표준 Ver 3.0에 따라 스마트빌 세금계산서 양식이 변경되어
-                  적용되었습니다.
-                </xsl:otherwise>
-              </xsl:choose>
-
-            </td>
-          </tr>
-        </table>
         <div class="taxBillDivision">
           <p class="taxBillFormDescription">
             &#160;&#13;&#13;&#13;<b style="color:Red">
@@ -985,55 +954,6 @@
       </div>
     </div>
     <!--//전자세금계산서 END -->
-
-    <!-- 직인 이미지 보여주기 Start -->
-    <xsl:variable name="SealDisplay" select="$SmartBillPath/dti:Seal"/>
-    <xsl:choose>
-      <xsl:when test="$SealDisplay=''">
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="$HeaderDirPath/sb:OriginalIssueID">
-            <div style="position:absolute; left:700px; top:335px; width:50; height:50; z-index:-1;">
-              <img name="img02" width="50" height="50" id="img02">
-                <xsl:attribute name="src">
-                  http://file.smartbill.co.kr/main/memmgt/comseal/<xsl:value-of select="$SmartBillPath/dti:Seal"/>
-                </xsl:attribute>
-              </img>
-            </div>
-          </xsl:when>
-          <xsl:otherwise>
-            <div style="position:absolute; left:700px; top:310px; width:50; height:50; z-index:-1;">
-              <img name="img02" width="50" height="50" id="img02">
-                <xsl:attribute name="src">
-                  http://file.smartbill.co.kr/main/memmgt/comseal/<xsl:value-of select="$SmartBillPath/dti:Seal"/>
-                </xsl:attribute>
-              </img>
-            </div>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-    <!-- 직인 이미지 보여주기 End   -->
-
-    <!-- 스템프 이미지 보여주기 Start -->
-    <xsl:variable name="StampDisplay" select="$SmartBillPath/dti:Stamp"/>
-    <xsl:if test="$StampDisplay='Y'">
-      <div style="position:absolute; left:400px; top:290px; width:100; height:100; z-index:-1;">
-        <img name="img03" id="img03">
-          <xsl:attribute name="src">
-            http://www.smartbill.co.kr/image/stamp/stamp_<xsl:value-of select="$SmartBillPath/dti:Status"/>.gif</xsl:attribute>
-        </img>
-      </div>
-    </xsl:if>
-
-    <div style="position:absolute; left:400px; top:240px; width:100; height:100; z-index:-1;">
-      <img name="img03" id="img03">
-	<xsl:attribute name="src">
-	  http://www.smartbill.co.kr/image/stamp/stamp_demo.gif</xsl:attribute>
-      </img>
-    </div>
-    <!-- 스템프 이미지 보여주기 End -->
 
   </xsl:template>
   <!--  위수탁 세금계산서 DTI Data Header 정보 보이기 End -->

@@ -82,7 +82,7 @@ function fnListView(data, supbuyType){
 			{title: "CONVERSATIONID", data: "conversationID"},
 			{title: "DIRECTION", data: "direction"},
 			{title: "email", data: "email"},
-			{title: "supbuyType", data: "supbuyType"},
+			{title: "supbuyType", data: "supbuyType"}
 		],
 		columnDefs: [
 			{
@@ -238,7 +238,7 @@ function fnListView(data, supbuyType){
 					"supbuyType": data[i].supbuy_type,
 					"direction": data[i].direction, //세금계산서 정/역 구분
 					"dtiType": data[i].dti_type, //세금계산서 종류
-					"email": data[i].byr_email //담당자 이메일
+					"email": data[i].byr_email, //담당자 이메일
 				}).draw();
 			}else{
 				table.row.add({
@@ -255,7 +255,7 @@ function fnListView(data, supbuyType){
 					"supbuyType": data[i].supbuy_type,
 					"direction": data[i].direction, //세금계산서 정/역 구분
 					"dtiType": data[i].dti_type, //세금계산서 종류
-					"email": data[i].sup_email //담당자 이메일
+					"email": data[i].sup_email, //담당자 이메일
 				}).draw();
 			}
 		}
@@ -303,21 +303,14 @@ function fnListView(data, supbuyType){
 				var xml = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
 				var xsl = parser.parseFromString(data['html'], "text/xml");
 
-				//console.log(xsl);
-				//console.log(data['html']);
 				if (typeof (XSLTProcessor) != "undefined"){
 	         var xsltProcessor = new XSLTProcessor();
 	         xsltProcessor.importStylesheet(xsl);
 	         var xmlFragment = xsltProcessor.transformToFragment(xml, document);
 					 console.log(xmlFragment);
-	         if (typeof(GetXmlStringFromXmlDoc)!= "undefined"){
-	             return GetXmlStringFromXmlDoc(xmlFragment);
-	         }
-	         else{
-						 alert('gg');
-						 document.getElementById("viewForm").appendChild(xmlFragment);
-						 $('#viewModal').modal('show');
-	         }
+					 document.getElementById("viewForm").appendChild(xmlFragment);
+					 var modal = document.getElementById("viewModal");
+					 modal.style.display = "block";
 	      }else{
 					if (typeof (xml.transformNode) != "undefined"){
 						document.getElementById("viewForm").appendChild(xml.transformNode(xsl));
@@ -387,17 +380,9 @@ function updateDataTableSelectAllCtrl(table){
 function SBGetList( data, supbuyType ) {
 	if ( "30000" != data.ResultCode ) {
 		alert( data.ResultMessage );
-		if($('#t2').html() != ""){
-			$('#t2').html("");
-			$('#t2').DataTable().destroy();
-		}
 	} else {
 		//alert( "정상적으로 처리되었습니다." );
 		totalCount = data.ResultDataSet.Table.length;
-		if($('#t2').html() != ""){
-			$('#t2').html("");
-			$('#t2').DataTable().destroy();
-		}
 		var rows_selected = [];
 		var table = $('#t2').DataTable(
 			{
@@ -808,4 +793,18 @@ function dateFormat(str){
   var d = str.substr(6, 2);
 	var date = y + '-' + m + '-' + d
   return date;
+}
+
+function onPrint() {
+	const html = document.querySelector('html');
+	const printContents = document.querySelector('.modal-body').innerHTML;
+	const printDiv = document.createElement('&quot;DIV&quot;');
+	printDiv.className = '&quot;print-div&quot;';
+
+	html.appendChild(printDiv);
+	printDiv.innerHTML = printContents;
+	document.body.style.display = 'none';
+	window.print();
+	document.body.style.display = 'block';
+	printDiv.style.display = 'none';
 }
