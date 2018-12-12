@@ -1,12 +1,22 @@
 http://demoapi.smartbill.co.kr/referenceguide.html
 
-sequelize model:create --name dti/main --attributes "conversation_id:CHAR, supbuy_type:CHAR, direction:CHAR, dti_wdate:date, dti_type:string, tax_demand:string, issue_id:string, seq_id:string, invoice_num:string, sup_com_id:string, sup_com_regno:CHAR, sup_rep_name:string, sup_com_name:string, sup_com_type:string, sup_com_classify:string, sup_com_addr:string, sup_dept_name:string, sup_emp_name:string, sup_tel_num:string, sup_email:string, byr_com_id:string, byr_com_regno:CHAR, byr_rep_name:string, byr_com_name:string, byr_com_type:string, byr_com_classify:string, byr_com_addr:string, byr_dept_name:string, byr_emp_name:string, byr_tel_num:string, byr_email:string, broker_com_id:string, broker_com_regno:CHAR, broker_rep_name:string, broker_com_name:string, broker_com_type:string, broker_com_classify:string, broker_com_addr:string, broker_dept_name:string, broker_emp_name:string, broker_tel_num:string, broker_email:string, sup_amount:integer, tax_amount:integer, total_amount:integer, dti_msg:BLOB, amend_code:string, ori_issue_id:string, remark:string, remark2:string, remark3:string, EXCHANGED_DOC_ID:string, SUP_BIZPLACE_CODE:string, BYR_BIZPLACE_CODE:string, BROKER_BIZPLACE_CODE:string, byr_dept_name2:string, byr_emp_name2:string, byr_tel_num2:string, byr_email2:string, attachfile_yn:CHAR, dtt_yn:CHAR"
+sequelize model:create --name dti_main --attributes "conversation_id:CHAR, supbuy_type:CHAR, direction:CHAR, dti_wdate:date, dti_type:string, tax_demand:string, issue_id:string, seq_id:string, invoice_num:string, sup_com_id:string, sup_com_regno:CHAR, sup_rep_name:string, sup_com_name:string, sup_com_type:string, sup_com_classify:string, sup_com_addr:string, sup_dept_name:string, sup_emp_name:string, sup_tel_num:string, sup_email:string, byr_com_id:string, byr_com_regno:CHAR, byr_rep_name:string, byr_com_name:string, byr_com_type:string, byr_com_classify:string, byr_com_addr:string, byr_dept_name:string, byr_emp_name:string, byr_tel_num:string, byr_email:string, broker_com_id:string, broker_com_regno:CHAR, broker_rep_name:string, broker_com_name:string, broker_com_type:string, broker_com_classify:string, broker_com_addr:string, broker_dept_name:string, broker_emp_name:string, broker_tel_num:string, broker_email:string, sup_amount:integer, tax_amount:integer, total_amount:integer, dti_msg:BLOB, amend_code:string, ori_issue_id:string, remark:string, remark2:string, remark3:string, EXCHANGED_DOC_ID:string, SUP_BIZPLACE_CODE:string, BYR_BIZPLACE_CODE:string, BROKER_BIZPLACE_CODE:string, byr_dept_name2:string, byr_emp_name2:string, byr_tel_num2:string, byr_email2:string, attachfile_yn:CHAR, dtt_yn:CHAR"
 
-sequelize model:create --name dti/item --attributes "conversation_id:CHAR, supbuy_type:CHAR, direction:CHAR, dti_line_num:integer, item_code:string, item_name:string, item_size:string, item_md:date,unit_price:integer, item_qty:integer, sup_amount:integer, tax_amount:integer, foreign_amount:integer, currency_code:string, item_gubun:string, remark:string, created_by:string, last_updated_by:string"
+sequelize model:create --name dti_item --attributes "conversation_id:CHAR, supbuy_type:CHAR, direction:CHAR, dti_line_num:integer, item_code:string, item_name:string, item_size:string, item_md:date,unit_price:integer, item_qty:integer, sup_amount:integer, tax_amount:integer, foreign_amount:integer, currency_code:string, item_gubun:string, remark:string, created_by:string, last_updated_by:string"
 
-sequelize model:create --name dti/status --attributes "conversation_id:CHAR, supbuy_type:CHAR, direction:CHAR, dti_status:char, return_code:char, return_description:string, sbdescription:string, dept_name:string, created_by:string, last_updated_by:string"
+sequelize model:create --name dti_status --attributes "conversation_id:CHAR, supbuy_type:CHAR, direction:CHAR, dti_status:char, return_code:char, return_description:string, sbdescription:string, dept_name:string, created_by:string, last_updated_by:string"
+
+sequelize model:create --name user --attributes "com_regno:CHAR, user_name:string, email:string, password:string, salt:string, dept_name:string, sbid:string, sbpass:string, token:string"
+
+sequelize model:create --name company --attributes "com_regno:CHAR, com_name:string, rep_name:string, addr:string, type:string, classify:string, bizplace_code:CHAR, code:string"
 
 sequelize db:migrate
+
+migrations 파일 수정(main, item, status table primarykey 설정 추가)
+queryInterface.addConstraint('dti_main', ['conversation_id', 'supbuy_type', 'direction'], {
+  type: 'primaryKey',
+  name: 'dti_main_pk'
+});
 
 ALTER TABLE dti_status ADD CONSTRAINT FK_dti_status FOREIGN KEY(conversation_id, supbuy_type, direction)
 REFERENCES dti_main (conversation_id, supbuy_type, direction);
