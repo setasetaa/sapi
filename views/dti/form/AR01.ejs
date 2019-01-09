@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB SA - ARForm</title>
+  <title>SB SA - 매출 세금계산서</title>
 
   <!-- Bootstrap core CSS-->
   <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -41,11 +41,26 @@
         <!-- DataTables -->
         <div class="card mb-3">
           <div class="card-header">
-            <i class="fas fa-table"></i> AR Form</div>
+            <i class="fas fa-table"></i> AR01</div>
           <div class="card-body">
             <div class="table-responsive">
               <form id="sendForm">
-                
+
+                <div class="row">
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label>공급자</label>
+                      <label for="supComRegno">사업자번호</label>
+                      <input type="text" class="form-control" id="supComRegno" placeholder="사업자번호">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>공급받는자</label>
+                      <label for="byrComRegno">사업자번호</label>
+                      <input type="text" class="form-control" id="byrComRegno" placeholder="사업자번호">
+                    </div>
+                  </div>
+                </div>
+
                 <input type="hidden" id="sbType" name="sbType" value="AR">
               </form>
             </div>

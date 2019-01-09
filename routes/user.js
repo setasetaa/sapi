@@ -33,12 +33,11 @@ router.post("/register", function(req, res, next){
         sbpass: body.SBPass,
         token: body.token
       }).then( result => {
-        res.send("success");
+        console.log("success");
         res.redirect("/user/login");
       }).catch( err => {
-        console.log("============");
         console.log(err);
-        res.status(401).send("fail");
+        res.redirect("/user/register");
       })
     });
   });
