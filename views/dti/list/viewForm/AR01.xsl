@@ -283,37 +283,6 @@
         </style>
       </head>
 
-      <table width="100%" height="35" cellpadding="0" cellspacing="1"  border="0" bgcolor="#F0F0F0">
-        <tr>
-          <td bgcolor="#F9F9F9" style="padding:10px 10px 10px 10px" class="red">
-            <xsl:variable name="DtiStatus" select="/sb:TaxInvoice/dti:SmartBillArea/dti:Status"/>
-            <xsl:choose>
-              <xsl:when test="$DtiStatus = 'B'">
-                <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-              </xsl:when>
-              <xsl:when test="$DtiStatus = 'H'">
-                <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-              </xsl:when>
-              <xsl:when test="$DtiStatus = 'K'">
-                <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-              </xsl:when>
-              <xsl:when test="$DtiStatus = 'L'">
-                <img src="/image/center/ic_point.gif" border="0"/> 본 세금계산서는 아직 발행 전 세금계산서로 법적 효력을 가질 수 없으며 국세청 전송도 불가능
-                합니다. 세금계산서 발급자는 세금계산서 정보 확인 후 반드시 실제 발행해 주시기 바랍니다.
-              </xsl:when>
-              <xsl:otherwise>
-                <img src="/image/center/ic_point.gif" border="0"/> 국세청에서 발표된 전자세금계산서 표준 Ver 3.0에 따라 스마트빌 세금계산서 양식이 변경되어
-                적용되었습니다.
-              </xsl:otherwise>
-            </xsl:choose>
-
-          </td>
-        </tr>
-      </table>
-
       <body>
         <div class="taxBillDivision">
           <p class="taxBillFormDescription">

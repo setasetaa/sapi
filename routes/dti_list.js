@@ -1,70 +1,30 @@
 const express = require('express');
 const models = require('../models');
 const router = express.Router();
-const crypto = require('crypto');
-const sequelize = require('sequelize');
 const fs = require('fs');
 
-router.post('/getXML', function(req, res, next) {
-  var viewData;
-  var supbuyType = req.body.supbuyType;
-  var dtiType = req.body.dtiType;
-  //console.log(supbuyType+'~~~'+dtiType);
-  models.dti_main.findAll({
-    attributes : ['dti_msg'],
-    where : {conversation_id : req.body.conversationID}}
-  ).then(function(data){
-    //console.log("======length"+data.length);
-    if(data.length != 0){
-      if(dtiType == '0101' || dtiType == '0102' || dtiType == '0102' || dtiType == '0201' || dtiType == '0202' || dtiType == '0104' || dtiType == '0204'){
-        if(supbuyType == 'AR'){
-          viewData = fs.readFileSync('views/dti/list/viewForm/AR01.xsl', 'utf-8');
-        }else{
-          viewData = fs.readFileSync('views/dti/list/viewForm/AP01.xsl', 'utf-8');
-        }
-      }else if(dtiType == '0301' || dtiType == '0304' || dtiType == '0401' || dtiType == '0404'){
-        if(supbuyType == 'AR'){
-          viewData = fs.readFileSync('views/dti/list/viewForm/AR02.xsl', 'utf-8');
-        }else{
-          viewData = fs.readFileSync('views/dti/list/viewForm/AP02.xsl', 'utf-8');
-        }
-      }else if(dtiType == '0103' || dtiType == '0105' || dtiType == '0203' || dtiType == '0205'){
-        if(supbuyType == 'AR'){
-          viewData = fs.readFileSync('views/dti/list/viewForm/AR03.xsl', 'utf-8');
-        }else{
-          viewData = fs.readFileSync('views/dti/list/viewForm/AP03.xsl', 'utf-8');
-        }
-      }else if(dtiType == '0303' || dtiType == '0403'){
-        if(supbuyType == 'AR'){
-          viewData = fs.readFileSync('views/dti/list/viewForm/AR04.xsl', 'utf-8');
-        }else{
-          viewData = fs.readFileSync('views/dti/list/viewForm/AP04.xsl', 'utf-8');
-        }
-      }
-      //console.log(data);
-      res.send({result:true, xml:data, html:viewData});
-      }else{
-        res.send({result:true, msg:"no data"});
-      }
-    }).catch(function(err){
-      console.log(err);
-      res.send({result:false, msg:"fail"});
-    });
+router.get('/ARlist', function(req, res, next){
+  res.render('dti/list/ARlist', {session : req.session});
 });
+
 router.get('/APlist', function(req, res, next){
-  res.render("dti/list/APlist");
+  res.render('dti/list/APlist', {session : req.session});
 });
-router.post('/APlist', function(req, res, next) {
+
+router.post('/list', function(req, res, next) {
   let body = req.body;
   console.log(body);
   var search = {};
   var join = {};
   var where = {};
-  var dateType, fromDate, endDate, regno, comName, supAmount, taxAmount, issueID, dtiType, direction, dtiStatus, taxDemand;
+  var dateType, fromDate, endDate, regno, comName, supAmount, taxAmount, issueID, dtiType, direction, dtiStatus, taxDemand, sbType;
 
   for(var i = 0; i < body.length; i++){
     var searchType = body[i].name;
     switch(searchType){
+      case 'sbType' :
+      sbType = body[i].value;
+      break;
       case 'dateType' :
       dateType = body[i].value;
       break;
@@ -119,7 +79,7 @@ router.post('/APlist', function(req, res, next) {
       break;
     }
   }
-
+  where['supbuy_Type'] = sbType;
   if(dateType != "" && dateType != null){
     where[dateType] = {$between: [fromDate, endDate]};
   }
@@ -141,84 +101,80 @@ router.post('/APlist', function(req, res, next) {
   }
   if(dtiType != "" && dtiType != null){
     var temp = [];
-    if(dtiType.indexOf('All') != -1){
-    }else {
-      if(dtiType.indexOf('과세') != -1){
-        temp = temp.concat('0101', '0102', '0103', '0104', '0105', '0201', '0202', '0203', '0204', '0205');
-      }
-      if(dtiType.indexOf('면세') != -1){
-        temp = temp.concat('0301', '0303', '0304', '0401', '0403', '0404');
-      }
-      if(dtiType.indexOf('수정') != -1){
-        temp = temp.concat('0201', '0202', '0203', '0204', '0205', '0401', '0403', '0404');
-      }
-      if(dtiType.indexOf('위수탁') != -1){
-        temp = temp.concat('0103', '0105', '0203', '0205', '0303', '0403');
-      }
-      var value = temp.toString().split(',');
-      var uniqArray = Array.from(new Set(value));
-      where['dti_type'] = [uniqArray];
+
+    if(dtiType.indexOf('과세') != -1){
+      temp = temp.concat('0101', '0102', '0103', '0104', '0105', '0201', '0202', '0203', '0204', '0205');
     }
+    if(dtiType.indexOf('면세') != -1){
+      temp = temp.concat('0301', '0303', '0304', '0401', '0403', '0404');
+    }
+    if(dtiType.indexOf('수정') != -1){
+      temp = temp.concat('0201', '0202', '0203', '0204', '0205', '0401', '0403', '0404');
+    }
+    if(dtiType.indexOf('위수탁') != -1){
+      temp = temp.concat('0103', '0105', '0203', '0205', '0303', '0403');
+    }
+    var value = temp.toString().split(',');
+    var uniqArray = Array.from(new Set(value));
+    where['dti_type'] = [uniqArray];
+    
   }
   if(direction != "" && direction != null){
     var temp = [];
-    if(direction.indexOf('All') != -1){
-    }else{
-      if(direction.indexOf('1') != -1){
-        temp = temp.concat('1');
-      }
-      if(direction.indexOf('2') != -1){
-        temp = temp.concat('2');
-      }
-      var value = temp.toString().split(',');
-      where['direction'] = [value];
+    
+    if(direction.indexOf('1') != -1){
+      temp = temp.concat('1');
     }
+    if(direction.indexOf('2') != -1){
+      temp = temp.concat('2');
+    }
+    var value = temp.toString().split(',');
+    where['direction'] = [value];
+    
   }
   if(dtiStatus != "" && dtiStatus != null){
     var temp = [];
-    if(dtiStatus.indexOf('All') != -1){
-    }else{
-      if(dtiStatus.indexOf('S') != -1){
-        temp = temp.concat('S');
-      }
-      if(dtiStatus.indexOf('I') != -1){
-        temp = temp.concat('I');
-      }
-      if(dtiStatus.indexOf('C') != -1){
-        temp = temp.concat('C');
-      }
-      if(dtiStatus.indexOf('R') != -1){
-        temp = temp.concat('R');
-      }
-      if(dtiStatus.indexOf('O') != -1){
-        temp = temp.concat('O');
-      }
-      if(dtiStatus.indexOf('V') != -1){
-        temp = temp.concat('V');
-      }
-      if(dtiStatus.indexOf('W') != -1){
-        temp = temp.concat('W');
-      }
-      var value = temp.toString().split(',');
-      //where['dti_status'] = [value];
-      join['where'] = {'dti_status': [value] };
+    if(dtiStatus.indexOf('S') != -1){
+      temp = temp.concat('S');
     }
+    if(dtiStatus.indexOf('I') != -1){
+      temp = temp.concat('I');
+    }
+    if(dtiStatus.indexOf('C') != -1){
+      temp = temp.concat('C');
+    }
+    if(dtiStatus.indexOf('R') != -1){
+      temp = temp.concat('R');
+    }
+    if(dtiStatus.indexOf('T') != -1){
+      temp = temp.concat('T');
+    }
+    if(dtiStatus.indexOf('O') != -1){
+      temp = temp.concat('O');
+    }
+    if(dtiStatus.indexOf('V') != -1){
+      temp = temp.concat('V');
+    }
+    if(dtiStatus.indexOf('W') != -1){
+      temp = temp.concat('W');
+    }
+    var value = temp.toString().split(',');
+    //where['dti_status'] = [value];
+    join['where'] = {'dti_status': [value] };
+    
   }
   if(taxDemand != "" && taxDemand != null){
     var temp = [];
-    if(taxDemand.indexOf('All') != -1){
-    }else{
-      if(taxDemand.indexOf('01') != -1){
-        temp = temp.concat('01');
-      }
-      if(taxDemand.indexOf('02') != -1){
-        temp = temp.concat('02');
-      }
-      var value = temp.toString().split(',');
-      where['tax_demand'] = [value];
+    if(taxDemand.indexOf('01') != -1){
+      temp = temp.concat('01');
     }
+    if(taxDemand.indexOf('02') != -1){
+      temp = temp.concat('02');
+    }
+    var value = temp.toString().split(',');
+    where['tax_demand'] = [value];
+    
   }
-
   if(Object.keys(where).length > 0){
     search.where = where;
   }
@@ -243,7 +199,6 @@ router.post('/APlist', function(req, res, next) {
 
 router.post('/save', function(req, res, next) {
   console.log("data save");
-
   let body = req.body;
   var t;
   models.sequelize.transaction().then(function(transaction){
@@ -267,7 +222,7 @@ router.post('/save', function(req, res, next) {
       sup_com_type : body.supComType,
       sup_com_classify : body.supComClassify,
       sup_com_addr : body.supComAddr,
-      sup_dept_name : "",
+      sup_dept_name : body.supDeptName,
       sup_emp_name : body.supEmpName,
       sup_tel_num : body.supTelNum,
       sup_email : body.supEmail,
@@ -279,7 +234,7 @@ router.post('/save', function(req, res, next) {
       byr_com_type : body.byrComType,
       byr_com_classify : body.byrComClassify,
       byr_com_addr : body.byrComAddr,
-      byr_dept_name : "",
+      byr_dept_name : body.byrDeptName,
       byr_emp_name : body.byrEmpName,
       byr_tel_num : body.byrTelNum,
       byr_email : body.byrEmail,
@@ -294,7 +249,7 @@ router.post('/save', function(req, res, next) {
       broker_com_type : body.brkComType,
       broker_com_classify : body.brkComClassify,
       broker_com_addr : body.brkComAddr,
-      broker_dept_name : "",
+      broker_dept_name : body.brkDeptName,
       broker_emp_name : body.brkEmpName,
       broker_tel_num : body.brkTelNum,
       broker_email : body.brkEmail,
@@ -312,7 +267,7 @@ router.post('/save', function(req, res, next) {
       dtt_yn : ""
     })
     .then( result => {
-        for(var i =0;i < body.itemCount; i++){
+        for(var i =0; i < body.itemCount; i++){
           models.dti_item.create({
             conversation_id : body.conversationID,
             supbuy_type : body.supbuyType,
@@ -346,21 +301,163 @@ router.post('/save', function(req, res, next) {
     t.rollback();
     res.send({result:false, msg:"fail"});
   });
-
 });
 
+router.post('/updateStatus', function(req, res, next) {
+  let conversationID = req.body.conversationID;
+  let supbuyType = req.body.supbuyType;
+  let signal = req.body.signal;
+  let reason = req.body.reason;
+  var status;
+  //console.log(signal);
+  switch(signal){
+    case 'APPROVE':
+    status = 'C';
+    break;
+    case 'REJECT':
+    status = 'T';
+    break;
+    case 'CANCELRREQUEST':
+    status = 'W';
+    break;
+    case 'RIREJECT':
+    status = 'R';
+    break;
+    case 'CANCELALL':
+    status = 'O';
+    break;
+  }
+  //console.log(status+reason+conversationID);
+  models.dti_status.update({
+      dti_status : status,
+      sbdescription : reason
+  },{
+      where: {conversation_id: conversationID, supbuyType: supbuyType}
+  })
+  .then( result => {
+      console.log("데이터 수정 완료");
+      res.render("dti/list/APlist");
+  })
+  .catch( err => {
+      console.log("데이터 수정 실패");
+  });
+});
 
+router.post('/renewStatus', function(req, res, next) {
+  let conversationID = req.body.conversationID;
+  let supbuyType = req.body.supbuyType;
+  let issueID = req.body.issueID;
+  let status = req.body.status;
+  let ntsStatus = req.body.NTSstatus;
+  let ntsCode = req.body.NTSCode;
+  let dtiIdate = req.body.dtiIdate;
+  let dtiSdate = req.body.dtiSdate;
+  console.log(dtiSdate);
+  var t;
+  models.sequelize.transaction().then(function(transaction){
+    t = transaction;
+    models.dti_status.update({
+      dti_status : status,
+      send_request : ntsStatus,
+      result_request : ntsCode
+    },
+    {
+      where: {conversation_id: conversationID, supbuyType: supbuyType}
+    }).then( result => {
+      models.dti_main.update({
+        issue_id : issueID,
+        dti_idate : dtiIdate,
+        dti_sdate : dtiSdate
+      },
+      {
+        where: {conversation_id: conversationID, supbuyType: supbuyType}
+      });
+    });
+  }).then(function(result) {
+    t.commit();
+    console.log("데이터 수정 완료");
+  }).catch(function(err){
+    if(t)
+    t.rollback();
+    console.log(err);
+  });
+});
 
+// 검증 전
+router.post('/delete', function(req, res, next) {
+  console.log("data delete");
+  let body = req.body;
+  var t;
+  models.sequelize.transaction().then(function(transaction){
+    t = transaction;
+    models.dti_status.destroy({ 
+      where: {conversation_id: conversationID, supbuyType: supbuyType}
+    }).then( result => {
+      models.dti_item.destroy({ 
+        where: {conversation_id: conversationID, supbuyType: supbuyType}
+      }).then( result => {
+        models.dti_main.destroy({ 
+          where: {conversation_id: conversationID, supbuyType: supbuyType}
+        });
+      });
+    });
+  }).then(function(result) {
+    t.commit();
+    console.log("삭제 완료");
+    res.send({result:true, msg:"suc"});
+  }).catch(function(err){
+    if(t)
+    t.rollback();
+    res.send({result:false, msg:"fail"});
+  });
+});
 
-
-
-
-
-
-
-
-
-
+router.post('/getXML', function(req, res, next) {
+  var viewData;
+  var supbuyType = req.body.supbuyType;
+  var dtiType = req.body.dtiType;
+  //console.log(supbuyType+'~~~'+dtiType);
+  models.dti_main.findAll({
+    attributes : ['dti_msg'],
+    where : {conversation_id : req.body.conversationID}}
+  ).then(function(data){
+    //console.log("======length"+data.length);
+    if(data.length != 0){
+      if(dtiType == '0101' || dtiType == '0102' || dtiType == '0102' || dtiType == '0201' || dtiType == '0202' || dtiType == '0104' || dtiType == '0204'){
+        if(supbuyType == 'AR'){
+          viewData = fs.readFileSync('views/dti/list/viewForm/AR01.xsl', 'utf-8');
+        }else{
+          viewData = fs.readFileSync('views/dti/list/viewForm/AP01.xsl', 'utf-8');
+        }
+      }else if(dtiType == '0301' || dtiType == '0304' || dtiType == '0401' || dtiType == '0404'){
+        if(supbuyType == 'AR'){
+          viewData = fs.readFileSync('views/dti/list/viewForm/AR02.xsl', 'utf-8');
+        }else{
+          viewData = fs.readFileSync('views/dti/list/viewForm/AP02.xsl', 'utf-8');
+        }
+      }else if(dtiType == '0103' || dtiType == '0105' || dtiType == '0203' || dtiType == '0205'){
+        if(supbuyType == 'AR'){
+          viewData = fs.readFileSync('views/dti/list/viewForm/AR03.xsl', 'utf-8');
+        }else{
+          viewData = fs.readFileSync('views/dti/list/viewForm/AP03.xsl', 'utf-8');
+        }
+      }else if(dtiType == '0303' || dtiType == '0403'){
+        if(supbuyType == 'AR'){
+          viewData = fs.readFileSync('views/dti/list/viewForm/AR04.xsl', 'utf-8');
+        }else{
+          viewData = fs.readFileSync('views/dti/list/viewForm/AP04.xsl', 'utf-8');
+        }
+      }
+      //console.log(data);
+      res.send({result:true, xml:data, html:viewData});
+      }else{
+        res.send({result:true, msg:"no data"});
+      }
+    }).catch(function(err){
+      console.log(err);
+      res.send({result:false, msg:"fail"});
+    });
+});
 
 
 module.exports = router;

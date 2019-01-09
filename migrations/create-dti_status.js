@@ -55,8 +55,8 @@ module.exports = {
       name: 'dti_status_pk'
     });
 
-    return queryInterface.sequelize.query("ALTER TABLE dti_status ADD CONSTRAINT FK_dti_status FOREIGN KEY(conversation_id, supbuy_type, direction)
-    REFERENCES dti_main (conversation_id, supbuy_type, direction);");
+    //return queryInterface.sequelize.query("ALTER TABLE dti_status ADD CONSTRAINT FK_dti_status FOREIGN KEY(conversation_id, supbuy_type, direction)
+    //REFERENCES dti_main (conversation_id, supbuy_type, direction);");
 
     },
     down: function (queryInterface, Sequelize) {

@@ -2,29 +2,33 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('user', {
-
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        type: Sequelize.INTEGER,
+      com_regno: {
+        type: Sequelize.CHAR,
+        primaryKey: true
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false
+      user_name: {
+        type: Sequelize.STRING
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          isEmail: true
-        },
         primaryKey: true
       },
       password: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
       },
-      salt:{
+      salt: {
+        type: Sequelize.STRING
+      },
+      dept_name: {
+        type: Sequelize.STRING
+      },
+      sbid: {
+        type: Sequelize.STRING
+      },
+      sbpass: {
+        type: Sequelize.STRING
+      },
+      token: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -35,6 +39,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    });
+    queryInterface.addConstraint('user', ['com_regno', 'email'], {
+      type: 'primaryKey',
+      name: 'user_pk'
     });
   },
   down: (queryInterface, Sequelize) => {

@@ -6,6 +6,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user');
 var dtiListRouter = require('./routes/dti_list');
+var dtiFormRouter = require('./routes/dti_form');
 var methodOverride = require('method-override');
 var session = require('express-session');
 var app = express();
@@ -34,12 +35,13 @@ app.use(session({
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('sb'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/dti/list', dtiListRouter);
+app.use('/dti/form', dtiFormRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

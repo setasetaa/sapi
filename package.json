@@ -18,6 +18,7 @@
     "http-errors": "~1.6.2",
     "jquery": "3.3.1",
     "jquery.easing": "^1.4.1",
+    "jshint": "^2.9.6",
     "method-override": "^3.0.0",
     "morgan": "~1.9.0",
     "mysql": "^2.16.0",

@@ -73,8 +73,7 @@ module.exports = {
         allowNull: false,
       },
       sup_dept_name: {
-        type: Sequelize.STRING(200),
-        allowNull: false,
+        type: Sequelize.STRING(200)
       },
       sup_emp_name: {
         type: Sequelize.STRING(200),
@@ -111,7 +110,7 @@ module.exports = {
         allowNull: false,
       },
       byr_dept_name: {
-        type: Sequelize.STRING(200),
+        type: Sequelize.STRING(200)
       },
       byr_emp_name: {
         type: Sequelize.STRING(200),
@@ -144,7 +143,7 @@ module.exports = {
         type: Sequelize.STRING(400),
       },
       broker_dept_name: {
-        type: Sequelize.STRING(200),
+        type: Sequelize.STRING(200)
       },
       broker_emp_name: {
         type: Sequelize.STRING(200),

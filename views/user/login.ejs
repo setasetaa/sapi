@@ -28,10 +28,10 @@
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
-        <form action="/user/login" method="post">
+        <form action="user/login" method="post" id="loginForm">
           <div class="form-group">
             <div class="form-label-group">
-              <input type="email" id="userEmail" name="userEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
+              <input type="email" id="userEmail" name="userEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus" value="<%- email %>">
               <label for="userEmail">Email address</label>
             </div>
           </div>
@@ -44,12 +44,10 @@
           <div class="form-group">
             <div class="checkbox">
               <label>
-                  <input type="checkbox" value="remember-me">
-                  Remember Password
-                </label>
+                <input type="checkbox" id="check" name="check" value="checked">Remember EMAIL
+              </label>
             </div>
           </div>
-
           <input class="btn btn-primary btn-block" type="submit" value="login">
         </form>
         <div class="text-center">
@@ -68,5 +66,26 @@
   <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 </body>
-
+<script type="text/javascript">
+  $('#loginForm').submit(function(event){
+    event.preventDefault();
+    var url = $(this).attr('action');
+    var data = $(this).serialize();
+  
+    $.post( url, data )
+    .done(function( data ) {
+    }).fail(function(jqXHR, textStatus){
+      switch(jqXHR.status){
+        case 401:
+        alert('비밀번호를 확인하세요');
+        break;
+        case 402:
+        alert('메일정보를 확인하세요');
+        break;
+      }
+    }).always(function(){
+      location.reload();
+    });
+  });
+</script>
 </html>

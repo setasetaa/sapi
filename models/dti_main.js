@@ -68,8 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     sup_dept_name: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     sup_emp_name: DataTypes.STRING,
     sup_tel_num: DataTypes.STRING,
