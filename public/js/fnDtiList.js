@@ -33,20 +33,20 @@ function fnListView(data, supbuyType){
 			selector: 'td:first-child'
 		},
 		order: [
-						[ 1, 'asc' ]
+			[ 1, 'asc' ]
 		],
 		searching: false,
 		columns: [
 			{title: "<input type='checkbox' name='select_all' value='1' id='select_all' style='align:center'>", data: ""},
-			{title: "TYPE", data: "dtiType"},
-			{title: "B / N", data: "regno"},
-			{title: "COMPANY", data: "name"},
-			{title: "WDATE", data: "wdate"},
-			{title: "STATUS", data: "status"},
-			{title: "SUPPLY<br>AMOUNT", data: "supAmount"},
-			{title: "TAX<br>AMOUNT", data: "taxAmount"},
-			{title: "TOTAL<br>AMOUNT", data: "totalAmount"},
-			{title: "ISSUE ID", data: "issueID"},
+			{title: "종류", data: "dtiType"},
+			{title: "사업자번호", data: "regno"},
+			{title: "회사명", data: "name"},
+			{title: "작성일자", data: "wdate"},
+			{title: "상태", data: "status"},
+			{title: "공급가액", data: "supAmount"},
+			{title: "세액", data: "taxAmount"},
+			{title: "합계금액", data: "totalAmount"},
+			{title: "승인번호", data: "issueID"},
 			{title: "CONVERSATIONID", data: "conversationID"},
 			{title: "supbuyType", data: "supbuyType"},
 			{title: "DIRECTION", data: "direction"},
@@ -211,34 +211,65 @@ function fnListView(data, supbuyType){
 	}
 	if(totalCount != 0){
 		for ( var i = 0; i < totalCount; i++ ) {
-			table.row.add({
-				"": "",
-				"dtiType": data[i].dti_type, //세금계산서 종류
-				"regno": data[i].sup_com_regno, //공급자 사업자번호
-				"name": data[i].sup_com_name, //공급자 회사명
-				"status": data[i].dti_status.dti_status, //세금계산서 상태
-				"wdate": data[i].dti_wdate, //세금계산서 작성일자
-				"supAmount": data[i].sup_amount, //세금계산서 공급가액
-				"taxAmount": data[i].tax_amount, //세금계산서 공급가액
-				"totalAmount": data[i].total_amount, //세금계산서 공급가액
-				"issueID": data[i].issue_id, //세금계산서 승인번호
-				"conversationID": data[i].conversation_id, //세금계산서 참조번호
-				"supbuyType": data[i].supbuy_type, // 매출/매입 구분
-				"direction": data[i].direction, //세금계산서 정/역 구분
-				"supEmpName": data[i].sup_emp_name,  //  공급자 담당자
-				"supEmail": data[i].sup_email, //공급자 이메일
-				"supTelNum": data[i].sup_tel_num, // 공급자 연락처
-				"byrEmpName": data[i].byr_emp_name, // 공받자 담당자
-				"byrEmail": data[i].byr_email, //공받자 이메일
-				"byrTelNum": data[i].byr_tel_num, // 공받자 연락처
-				"brkEmpName": data[i].broker_emp_name, // 위탁자 담당자
-				"brkEmail": data[i].broker_email, //위탁자 이메일
-				"brkTelNum": data[i].broker_tel_num, // 위탁자 연락처
-				"sendRequest": data[i].dti_status.send_request, // 국세청 전송 결과
-				"sendRequestDesc": data[i].dti_status.send_request_desc, // 전송 실패 사유
-				"supComRegno": data[i].sup_com_regno, // 공급자 사업자번호
-				"byrComRegno": data[i].byr_com_regno // 공급받는자 사업자번호
-			}).draw();
+			if('AP' == supbuyType){
+				table.row.add({
+					"": "",
+					"dtiType": data[i].dti_type, //세금계산서 종류
+					"regno": data[i].sup_com_regno, //거래처 사업자번호
+					"name": data[i].sup_com_name, //거래처 회사명
+					"status": data[i].dti_status.dti_status, //세금계산서 상태
+					"wdate": data[i].dti_wdate, //세금계산서 작성일자
+					"supAmount": data[i].sup_amount, //세금계산서 공급가액
+					"taxAmount": data[i].tax_amount, //세금계산서 공급가액
+					"totalAmount": data[i].total_amount, //세금계산서 공급가액
+					"issueID": data[i].issue_id, //세금계산서 승인번호
+					"conversationID": data[i].conversation_id, //세금계산서 참조번호
+					"supbuyType": data[i].supbuy_type, // 매출/매입 구분
+					"direction": data[i].direction, //세금계산서 정/역 구분
+					"supEmpName": data[i].sup_emp_name,  //  공급자 담당자
+					"supEmail": data[i].sup_email, //공급자 이메일
+					"supTelNum": data[i].sup_tel_num, // 공급자 연락처
+					"byrEmpName": data[i].byr_emp_name, // 공받자 담당자
+					"byrEmail": data[i].byr_email, //공받자 이메일
+					"byrTelNum": data[i].byr_tel_num, // 공받자 연락처
+					"brkEmpName": data[i].broker_emp_name, // 위탁자 담당자
+					"brkEmail": data[i].broker_email, //위탁자 이메일
+					"brkTelNum": data[i].broker_tel_num, // 위탁자 연락처
+					"sendRequest": data[i].dti_status.send_request, // 국세청 전송 결과
+					"sendRequestDesc": data[i].dti_status.send_request_desc, // 전송 실패 사유
+					"supComRegno": data[i].sup_com_regno, // 공급자 사업자번호
+					"byrComRegno": data[i].byr_com_regno // 공급받는자 사업자번호
+				}).draw();
+			}else{
+				table.row.add({
+					"": "",
+					"dtiType": data[i].dti_type, //세금계산서 종류
+					"regno": data[i].byr_com_regno, //거래처 사업자번호
+					"name": data[i].byr_com_name, //거래처 회사명
+					"status": data[i].dti_status.dti_status, //세금계산서 상태
+					"wdate": data[i].dti_wdate, //세금계산서 작성일자
+					"supAmount": data[i].sup_amount, //세금계산서 공급가액
+					"taxAmount": data[i].tax_amount, //세금계산서 공급가액
+					"totalAmount": data[i].total_amount, //세금계산서 공급가액
+					"issueID": data[i].issue_id, //세금계산서 승인번호
+					"conversationID": data[i].conversation_id, //세금계산서 참조번호
+					"supbuyType": data[i].supbuy_type, // 매출/매입 구분
+					"direction": data[i].direction, //세금계산서 정/역 구분
+					"supEmpName": data[i].sup_emp_name,  //  공급자 담당자
+					"supEmail": data[i].sup_email, //공급자 이메일
+					"supTelNum": data[i].sup_tel_num, // 공급자 연락처
+					"byrEmpName": data[i].byr_emp_name, // 공받자 담당자
+					"byrEmail": data[i].byr_email, //공받자 이메일
+					"byrTelNum": data[i].byr_tel_num, // 공받자 연락처
+					"brkEmpName": data[i].broker_emp_name, // 위탁자 담당자
+					"brkEmail": data[i].broker_email, //위탁자 이메일
+					"brkTelNum": data[i].broker_tel_num, // 위탁자 연락처
+					"sendRequest": data[i].dti_status.send_request, // 국세청 전송 결과
+					"sendRequestDesc": data[i].dti_status.send_request_desc, // 전송 실패 사유
+					"supComRegno": data[i].sup_com_regno, // 공급자 사업자번호
+					"byrComRegno": data[i].byr_com_regno // 공급받는자 사업자번호
+				}).draw();
+			}
 		}
 	}
 
@@ -488,15 +519,15 @@ function SBGetList( data, supbuyType ) {
 				searching: false,
 				columns: [
 					{title: "<input type='checkbox' name='select_all' value='1' id='select_all' style='align:center'>", data: ""},
-					{title: "B / N", data: "regno"},
-					{title: "COMPANY", data: "name"},
-					{title: "DTI WDATE", data: "wdate"},
-					{title: "STATUS", data: "status"},
-					{title: "SUP AMOUNT", data: "supAmount"},
+					{title: "사업자번호", data: "regno"},
+					{title: "회사명", data: "name"},
+					{title: "작성일자", data: "wdate"},
+					{title: "상태", data: "status"},
+					{title: "공급가액", data: "supAmount"},
 					{title: "conversationID", data: "conversationID"},
 					{title: "direction", data: "direction"},
 					{title: "DTITYPE", data: "dtiType"},
-					{title: "ISSUEID", data: "issueID"},
+					{title: "승인번호", data: "issueID"},
 					{title: "NTS", data: "sendStatus"},
 					{title: "email", data: "email"}
 				],
