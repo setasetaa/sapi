@@ -46,8 +46,8 @@
                     <div class="container">
                       <div class="row">
                         <div class="col-sm">
-                          <div class="card card-register mx-auto mt-5">
-                            <div class="card-header">공급자</div>
+                          <div class="card">
+                            <div class="card-header">공급자 정보</div>
                               <div class="card-body">
 
                                 <div class="form-group">
@@ -147,8 +147,8 @@
                           </div>
 
                           <div class="col-sm">
-                            <div class="card card-register mx-auto mt-5">
-                                <div class="card-header">공급받는자</div>
+                            <div class="card">
+                                <div class="card-header">공급받는자 정보</div>
                                   <div class="card-body">
                                       <div class="form-group">
                                         <div class="form-row">
@@ -252,20 +252,92 @@
               <div class="float-sm-left">
                   <div class="form-group" style="margin-top:2em;margin-left:1em;">
                     <label>관리번호
-                      <input type="text" id="seqID" name="seqID" class="form-control form-control-sm" style="width:145px" >
+                      <input type="text" id="seqID" name="seqID" class="custom custom-sm form-control form-control-sm" style="width:250px" >
                     </label>
                     <label>작성일자
-                      <input type="date" id="dtiWdate" name="dtiWdate" class="form-control form-control-sm" style="width:145px">
+                      <input type="date" id="dtiWdate" name="dtiWdate" class="custom custom-sm form-control form-control-sm" style="width:200px">
                     </label>
                     <label>공급가액
-                      <input type="text" id="supAmount" name="supAmount"class="form-control form-control-sm" style="width:120px">
+                      <input type="text" id="supAmount" name="supAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
                     </label>
                     <label>세액
-                      <input type="text" id="taxAmount" name="taxAmount"class="form-control form-control-sm" style="width:110px">
+                      <input type="text" id="taxAmount" name="taxAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
                     </label>
                     <label>합계금액
-                      <input type="text" id="totalAmount" name="totalAmount"class="form-control form-control-sm" style="width:200px">
+                      <input type="text" id="totalAmount" name="totalAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
                     </label>
+                  </div>
+                  
+                  <div class="form-group" style="margin-left:1em;width:800px">             
+                    <div class="input-group mb-3"> 
+                      <select id="taxDemand" name="taxDemand" class="custom-select custom-select-sm form-control form-control-sm" >
+                        <option value="02">청구</option>
+                        <option value="01">영수</option>
+                      </select> 
+                      <select id="amendCode" name="amendCode" class="custom-select custom-select-sm form-control form-control-sm" >
+                        <option value="">수정사유</option>
+                        <option value="01">기재사항의 착오/정정</option>
+                        <option value="02">공급가액 변동</option>
+                        <option value="03">환입</option>
+                        <option value="04">계약의 해제</option>
+                        <option value="05">내국신용장 사후 개설</option>
+                        <option value="06">착오에 의한 이중발급</option>
+                      </select>
+                      <input type="text" class="custom custom-sm form-control form-control-sm" placeholder="당초승인번호" aria-label="당초승인번호" aria-describedby="button-addon2">
+                      <div class="input-group-append">
+                        <button class="custom-button custom-button-sm form-control form-control-sm" id="searchIssueID" type="button" >찾아보기</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="input-group input-group-sm mb-3" style="width:1000px;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">비고1</span> 
+                    </div>
+                    <input type="text" id="remark" name="remark" class="form-control" aria-label="remark" aria-describedby="basic-addon1">
+                  </div>
+                  
+                  <div class="input-group input-group-sm mb-3" style="width:1000px;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon2">비고2</span> 
+                    </div>
+                    <input type="text" id="remark2" name="remark" class="form-control" aria-label="remark" aria-describedby="basic-addon2">
+                  </div>
+
+                  <div class="input-group input-group-sm mb-3" style="width:1000px;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon3">비고3</span> 
+                    </div>
+                    <input type="text" id="remark3" name="remark" class="form-control" aria-label="remark" aria-describedby="basic-addon3">
+                  </div>
+
+                  <div class="form-group" style="margin-top:2em;margin-left:1em;">
+                    <div class="input-group mb-3">
+                      <label>구매일자
+                        <input type="text" id="itemMD" name="itemMD" class="custom custom-sm form-control form-control-sm" style="width:250px" >
+                      </label>
+                      <label>품목
+                        <input type="date" id="itemName" name="itemName" class="custom custom-sm form-control form-control-sm" style="width:200px">
+                      </label>
+                      <label>규격
+                        <input type="text" id="supAmount" name="supAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
+                      </label>
+                      <label>수량
+                        <input type="text" id="itemQTY" name="itemQTY" class="custom custom-sm form-control form-control-sm" style="width:150px">
+                      </label>
+                      <label>단가
+                        <input type="text" id="unitPrice" name="unitPrice" class="custom custom-sm form-control form-control-sm" style="width:150px">
+                      </label>
+                      <label>공급가액
+                        <input type="text" id="itemSupAmount" name="itemSupAmount" class="custom custom-sm form-control form-control-sm" style="width:150px">
+                      </label>
+                      <label>세액
+                        <input type="text" id="itemTaxAmount" name="itemTaxAmount" class="custom custom-sm form-control form-control-sm" style="width:150px">
+                      </label>
+                      <label>비고
+                        <input type="text"  id="itemRemark" namea="itemRemark" class="custom custom-sm form-control form-control-sm" style="width:150px">
+                      </label>
+                    </div>
                   </div>
                   
               </div>

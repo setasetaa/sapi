@@ -58,19 +58,19 @@
                   <label>End Date
                     <input type="date" id="endDate" name="endDate" class="form-control form-control-sm" style="width:145px">
                   </label>
-                  <label>B / N
+                  <label>사업자번호
                     <input type="text" id="regno" name="regno"class="form-control form-control-sm" style="width:125px">
                   </label>
-                  <label>Comany Name
+                  <label>회사명
                     <input type="text" id="comName" name="comName"class="form-control form-control-sm" style="width:140px">
                   </label>
-                  <label>Supply Amount
+                  <label>공급가액
                     <input type="text" id="supAmount" name="supAmount"class="form-control form-control-sm" style="width:120px">
                   </label>
-                  <label>Tax Amount
+                  <label>세액
                     <input type="text" id="taxAmount" name="taxAmount"class="form-control form-control-sm" style="width:110px">
                   </label>
-                  <label>Issue ID
+                  <label>승인번호
                     <input type="text" id="issueID" name="issueID"class="form-control form-control-sm" style="width:200px">
                   </label>
                 </div>
@@ -327,7 +327,7 @@
       $('#SBfrom').val(fromDate());
       $('#SBend').val(nowDate());
       initView();
-      search();
+      search('AP');
     });
 
   </script>
