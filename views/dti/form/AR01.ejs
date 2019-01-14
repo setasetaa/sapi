@@ -47,7 +47,9 @@
                       <div class="row">
                         <div class="col-sm">
                           <div class="card">
-                            <div class="card-header">공급자 정보</div>
+                            <div class="card-header font-weight-bold">공급자 정보
+                              <input type="button" id="searchSUP" class="btn btn-outline-secondary btn-sm float-right" value="검색"/>
+                            </div>
                               <div class="card-body">
 
                                 <div class="form-group">
@@ -148,7 +150,9 @@
 
                           <div class="col-sm">
                             <div class="card">
-                                <div class="card-header">공급받는자 정보</div>
+                                <div class="card-header font-weight-bold">공급받는자 정보
+                                  <input type="button" id="searchBYR" class="btn btn-outline-secondary btn-sm float-right" value="검색"/>
+                                </div>
                                   <div class="card-body">
                                       <div class="form-group">
                                         <div class="form-row">
@@ -251,19 +255,19 @@
               </div> 
               <div class="float-sm-left">
                   <div class="form-group" style="margin-top:2em;margin-left:1em;">
-                    <label>관리번호
+                    <label class="font-weight-bold">관리번호
                       <input type="text" id="seqID" name="seqID" class="custom custom-sm form-control form-control-sm" style="width:250px" >
                     </label>
-                    <label>작성일자
+                    <label class="font-weight-bold">작성일자
                       <input type="date" id="dtiWdate" name="dtiWdate" class="custom custom-sm form-control form-control-sm" style="width:200px">
                     </label>
-                    <label>공급가액
+                    <label class="font-weight-bold">공급가액
                       <input type="text" id="supAmount" name="supAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
                     </label>
-                    <label>세액
+                    <label class="font-weight-bold">세액
                       <input type="text" id="taxAmount" name="taxAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
                     </label>
-                    <label>합계금액
+                    <label class="font-weight-bold">합계금액
                       <input type="text" id="totalAmount" name="totalAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
                     </label>
                   </div>
@@ -292,55 +296,89 @@
                   
                   <div class="input-group input-group-sm mb-3" style="width:1000px;">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1">비고1</span> 
+                      <span class="input-group-text font-weight-bold" id="basic-addon1">비고1</span> 
                     </div>
                     <input type="text" id="remark" name="remark" class="form-control" aria-label="remark" aria-describedby="basic-addon1">
                   </div>
                   
                   <div class="input-group input-group-sm mb-3" style="width:1000px;">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon2">비고2</span> 
+                      <span class="input-group-text font-weight-bold" id="basic-addon2">비고2</span> 
                     </div>
                     <input type="text" id="remark2" name="remark" class="form-control" aria-label="remark" aria-describedby="basic-addon2">
                   </div>
 
                   <div class="input-group input-group-sm mb-3" style="width:1000px;">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon3">비고3</span> 
+                      <span class="input-group-text font-weight-bold" id="basic-addon3">비고3</span> 
                     </div>
                     <input type="text" id="remark3" name="remark" class="form-control" aria-label="remark" aria-describedby="basic-addon3">
                   </div>
 
-                  <div class="form-group" style="margin-top:2em;margin-left:1em;">
-                    <div class="input-group mb-3">
-                      <label>구매일자
-                        <input type="text" id="itemMD" name="itemMD" class="custom custom-sm form-control form-control-sm" style="width:250px" >
-                      </label>
-                      <label>품목
-                        <input type="date" id="itemName" name="itemName" class="custom custom-sm form-control form-control-sm" style="width:200px">
-                      </label>
-                      <label>규격
-                        <input type="text" id="supAmount" name="supAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
-                      </label>
-                      <label>수량
-                        <input type="text" id="itemQTY" name="itemQTY" class="custom custom-sm form-control form-control-sm" style="width:150px">
-                      </label>
-                      <label>단가
-                        <input type="text" id="unitPrice" name="unitPrice" class="custom custom-sm form-control form-control-sm" style="width:150px">
-                      </label>
-                      <label>공급가액
-                        <input type="text" id="itemSupAmount" name="itemSupAmount" class="custom custom-sm form-control form-control-sm" style="width:150px">
-                      </label>
-                      <label>세액
-                        <input type="text" id="itemTaxAmount" name="itemTaxAmount" class="custom custom-sm form-control form-control-sm" style="width:150px">
-                      </label>
-                      <label>비고
-                        <input type="text"  id="itemRemark" namea="itemRemark" class="custom custom-sm form-control form-control-sm" style="width:150px">
-                      </label>
-                    </div>
+                  <div class="container" style="margin-top:2em;width:100%">
+                    <!--품목별 단가 start -->
+                    <table  id="itemData" class="table table-bordered">
+                      <colgroup>
+                          <col width="100px"/>
+                          <col width="240px"/>
+                          <col width="100px"/>
+                          <col width="100px"/>
+                          <col width="150px"/>
+                          <col width="200px"/>
+                          <col width="200px"/>
+                          <col width="240px"/>
+                          <col width="40px"/>
+                      </colgroup>
+                      <thead>
+                      <tr>
+                          <th class="fontB" style="text-align:center">구매일자</th>
+                          <th class="fontB" style="text-align:center">품 목</th>
+                          <th class="fontB" style="text-align:center">규 격</th>
+                          <th class="fontB" style="text-align:center">수 량</th>
+                          <th class="fontB" style="text-align:center">단 가</th>
+                          <th class="fontB" style="text-align:center">공 급 가 액</th>
+                          <th class="fontB" style="text-align:center">세 액</th>
+                          <th class="fontB" style="text-align:center">비 고</th>
+                          <th><input type="button" id="itemAdd1" class="btn btn-outline-secondary btn-sm float-right" value="+1" onclick="itemAdd('01');"/></th>
+                      </tr>
+                      </thead>
+
+                      <tbody id="itembody">
+                        <tr id="itemrow0">
+                            <td class="center">
+                                <input type="date" class="custom custom-sm form-control form-control-sm"  id="itemMD" name="itemMD"  style="margin-bottom: 2px;text-align:center"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemName" name="itemName" maxlength="100" style="margin-bottom: 2px"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemSize" name="itemSize" maxlength="60"  style="margin-bottom: 2px"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm" id="itemQTY"  name="itemQTY" element-name="품목 수량" maxlength="18" style="margin-bottom: 2px;text-align:right" />
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="unitPrice"  name="unitPrice"  element-name="품목 단가" maxlength="18"  style="margin-bottom: 2px;text-align:right" />
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemSupAmount" name="itemSupAmount" maxlength="18" valid="trim,required" element-name="품목 공급가액" style="margin-bottom: 2px;text-align:right"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemTaxAmount" name="itemTaxAmount" maxlength="18" valid="trim,required" element-name="품목 세액" style="margin-bottom: 2px;text-align:right"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemRemark" name="itemRemark" maxlength="100"  style="margin-bottom: 2px"/>
+                            </td>
+                            <td class="center"></td>
+                            <input type="hidden" id="dtiLineNum" name="dtiLineNum" maxlength="3" value="1"/>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button type="button" id="saveBtn" class="btn btn-outline-info btn-sm" >SAVE</button>
+                    <button type="button" id="sendBtn" class="btn btn-outline-success btn-sm " >SEND</button>
                   </div>
-                  
               </div>
+
             </form> 
           </div>
       </div>
