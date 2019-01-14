@@ -52,16 +52,37 @@ function isDate(value) {
             return false;
     }
 }
+function s1(){
+	return ((1 + Math.random()) * 0x10000 | 0).toString(16).substr(0,1);
+}
 
-function guid() {
+function s4(){
+	return s1() + s1() + s1() + s1();
+}
+
+function guid(){
 	var comregno = $('#comRegno').val();
-    function s4() {
-      return ((1 + Math.random()) * 0x10000 | 0).toString(16).substr(0,1);
-    }
+    
     return comregno.substr(0,8) + '-' + s4() + '-' + s4() + '-' + s4() + '-' + nowDate() + s4();
 }
 
 function createConversationID(supComregno, byrComregno){
-	var convId = supComregno + byrComregno.substr(0,10) + nowDate() + guid().s4() + '006';
-	return convId;
+	var convId = supComregno + byrComregno.substr(0,10) + nowDate() + s4() + '006';
+	return convId.replace(/-/gi,'');
 }
+
+$.fn.serializeObject = function() {
+	var o = {};
+	var a = this.serializeArray();
+	$.each(a, function() {
+		if (o[this.name]) {
+			if (!o[this.name].push) {
+				o[this.name] = [o[this.name]];
+			}
+			o[this.name].push(this.value || '');
+		} else {
+			o[this.name] = this.value || '';
+		}
+	});
+	return o;
+};

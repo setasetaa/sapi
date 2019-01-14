@@ -201,6 +201,7 @@ router.post('/save', function(req, res, next) {
   console.log("data save");
   let body = req.body;
   var t;
+  console.log(body);
   models.sequelize.transaction().then(function(transaction){
     t = transaction;
     models.dti_main.create({

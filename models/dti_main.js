@@ -35,8 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     issue_id: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     seq_id: {
       type: DataTypes.STRING,
@@ -56,12 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     sup_com_type: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     sup_com_classify: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     sup_com_addr: {
       type: DataTypes.STRING,
@@ -87,12 +84,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     byr_com_type: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     byr_com_classify: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     byr_com_addr: {
       type: DataTypes.STRING,
@@ -134,8 +129,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     tax_amount: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.INTEGER
     },
     total_amount: {
       type: DataTypes.INTEGER,

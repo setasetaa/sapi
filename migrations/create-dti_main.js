@@ -61,12 +61,10 @@ module.exports = {
         allowNull: false,
       },
       sup_com_type: {
-        type: Sequelize.STRING(200),
-        allowNull: false,
+        type: Sequelize.STRING(200)
       },
       sup_com_classify: {
-        type: Sequelize.STRING(200),
-        allowNull: false,
+        type: Sequelize.STRING(200)
       },
       sup_com_addr: {
         type: Sequelize.STRING(400),
@@ -159,8 +157,7 @@ module.exports = {
         allowNull: false,
       },
       tax_amount: {
-        type: Sequelize.INTEGER(20),
-        allowNull: false,
+        type: Sequelize.INTEGER(20)
       },
       total_amount: {
         type: Sequelize.INTEGER(20),
