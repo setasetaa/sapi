@@ -37,8 +37,8 @@ router.post('/list', function(req, res, next) {
       case 'regno' :
       regno = body[i].value;
       break;
-      case 'conName' :
-      conName = body[i].value;
+      case 'comName' :
+      comName = body[i].value;
       break;
       case 'supAmount' :
       supAmount = body[i].value;
@@ -85,10 +85,18 @@ router.post('/list', function(req, res, next) {
   }
   if(regno != "" && regno != null){
     regno = regno.replace('-','');
-    where['sup_com_regno'] = regno;
+    if('AP' == sbType){
+      where['sup_com_regno'] = regno;
+    }else{
+      where['byr_com_regno'] = regno;
+    }
   }
   if(comName != "" && comName != null){
-    where['sup_com_name'] = {$like: comName + '%'};
+    if('AP' == sbType){
+      where['sup_com_name'] = {$like: comName + '%'};
+    }else{
+      where['byr_com_name'] = {$like: comName + '%'};
+    }
   }
   if(supAmount != "" && supAmount != null){
     where['sup_amount'] = supAmount;

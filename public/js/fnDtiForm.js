@@ -7,6 +7,7 @@ function init(supbuyType){
     var telNum = $('#telNum').val();
     var comRegno = $('#comRegno').val();
     var bizCode = $('#bizCode').val();
+    var comName = $('#comName').val();
     var repName = $('#repName').val();
     var comAddr = $('#comAddr').val();
     var comType = $('#comType').val();
@@ -19,6 +20,7 @@ function init(supbuyType){
         $('#byrDeptName').val(deptName);
         $('#byrTelNum').val(telNum);
         $('#byrBizplaceCode').val(bizCode);
+        $('#byrComName').val(comName);
         $('#byrRepName').val(repName);
         $('#byrComAddr').val(comAddr);
         $('#byrComType').val(comType);
@@ -30,6 +32,7 @@ function init(supbuyType){
         $('#supDeptName').val(deptName);
         $('#supTelNum').val(telNum);
         $('#supBizplaceCode').val(bizCode);
+        $('#supComName').val(comName);
         $('#supRepName').val(repName);
         $('#supComAddr').val(comAddr);
         $('#supComType').val(comType);

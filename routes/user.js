@@ -60,6 +60,7 @@ router.get('/login', function(req, res, next) {
 
 router.post("/login", function(req,res,next){
     let body = req.body;
+    var comRegno, bizCode;
     console.log(body.check);
     if(body.check == 'checked'){
       // 쿠키 설정
@@ -85,14 +86,15 @@ router.post("/login", function(req,res,next){
           req.session.deptname = result.dataValues.dept_name;
           req.session.telNum = result.dataValues.tel_num;
           req.session.sbid = result.dataValues.sbid;
-          
-          //req.session.bizCode = result.dataValues.bizCode;
-          //console.log(req.session.email);
-          //res.redirect("/");
+          comRegno = result.dataValues.com_regno;
+          bizCode = result.dataValues.bizplace_code;
+          if(null == bizCode){
+            bizCode = '';
+          }
           models.company.find({
-            where: {com_regno : body.comRegno, bizplace_code : body.bizCode}
+            where: {com_regno : comRegno, bizplace_code : bizCode}
           }).then( result => {
-            req.session.comregno = result.dataValues.com_regno;
+            req.session.comRegno = result.dataValues.com_regno;
             req.session.bizCode = result.dataValues.bizplace_code;
             req.session.comName = result.dataValues.com_name;
             req.session.repName = result.dataValues.rep_name;
@@ -100,6 +102,7 @@ router.post("/login", function(req,res,next){
             req.session.comType = result.dataValues.type;
             req.session.comClassify = result.dataValues.classify;
             req.session.code = result.dataValues.code;
+            console.log(req.session);
             res.status(200).send();
           }).catch( err => {
             console.log(err);
@@ -111,9 +114,7 @@ router.post("/login", function(req,res,next){
           res.status(401).send();
         }
       });
-
-    })
-    .catch( err => {
+    }).catch( err => {
         console.log(err);
         res.status(402).send();
     });

@@ -15,6 +15,8 @@ select * from information_schema.table_constraints where table_name = 'dti_statu
 
 SELECT CAST(dti_msg AS CHAR(10000) CHARACTER SET utf8) FROM dti_main;
 
+인증코드 : BD3275C8ABDA402EB907993B200DFA46
+
 인증토큰 : QURiYWV1RTZpTkhDcU1lQW5hUGUraUxQaUZGZ0hDclBFOVFCVjZOSFA2TT0K
 
 0101 일반 세금계산서

@@ -47,33 +47,34 @@
               <form id="searchForm">
                 <div class="form-group">
                   <select id="dateType" name="dateType" class="custom-select custom-select-sm form-control form-control-sm" style="width:100px">
-                    <option value="dti_wdate">WDATE</option>
-                    <option value="dti_Idate">IDATE</option>
-                    <option value="dti_Sdate">SDATE</option>
+                    <option value="dti_wdate">작성일자</option>
+                    <option value="dti_Idate">발행일자</option>
+                    <option value="dti_Sdate">전송일자</option>
                   </select>
 
-                  <label>From Date
+                  <label class="font-weight-bold">조회 기간
                     <input type="date" id="fromDate" name="fromDate" class="form-control form-control-sm" style="width:145px">
-                  </label>
-                  <label>End Date
+                  </label> ~
+                  <label class="font-weight-bold">
                     <input type="date" id="endDate" name="endDate" class="form-control form-control-sm" style="width:145px">
                   </label>
-                  <label>사업자번호
+                  <label class="font-weight-bold text-center">사업자번호
                     <input type="text" id="regno" name="regno"class="form-control form-control-sm" style="width:125px">
                   </label>
-                  <label>회사명
+                  <label class="font-weight-bold text-center">회사명
                     <input type="text" id="comName" name="comName"class="form-control form-control-sm" style="width:140px">
                   </label>
-                  <label>공급가액
+                  <label class="font-weight-bold text-center">공급가액
                     <input type="text" id="supAmount" name="supAmount"class="form-control form-control-sm" style="width:120px">
                   </label>
-                  <label>세액
+                  <label class="font-weight-bold text-center">세액
                     <input type="text" id="taxAmount" name="taxAmount"class="form-control form-control-sm" style="width:110px">
                   </label>
-                  <label>승인번호
+                  <label class="font-weight-bold text-center">승인번호
                     <input type="text" id="issueID" name="issueID"class="form-control form-control-sm" style="width:200px">
                   </label>
                 </div>
+
                 <div class="form-group">
                   <span class="badge badge-secondary">&nbsp;&nbsp;종류&nbsp;&nbsp;</span>
                   <div class="custom-control custom-checkbox custom-control-inline">
