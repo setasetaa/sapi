@@ -261,13 +261,13 @@
                       <input type="date" id="dtiWdate" name="dtiWdate" class="custom custom-sm form-control form-control-sm" style="width:200px" required="required">
                     </label>
                     <label class="font-weight-bold">공급가액
-                      <input type="text" id="supAmount" name="supAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" required="required">
+                      <input type="text" id="supAmount" name="supAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" required="required" disabled>
                     </label>
                     <label class="font-weight-bold">세액
-                      <input type="text" id="taxAmount" name="taxAmount"class="custom custom-sm form-control form-control-sm" style="width:150px">
+                      <input type="text" id="taxAmount" name="taxAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" disabled>
                     </label>
                     <label class="font-weight-bold">합계금액
-                      <input type="text" id="totalAmount" name="totalAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" required="required">
+                      <input type="text" id="totalAmount" name="totalAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" required="required" disabled>
                     </label>
                   </div>
                   
@@ -373,11 +373,14 @@
                         </tr>
                       </tbody>
                     </table>
-                    <button type="button" id="saveBtn" onClick="insertData('AR');" class="btn btn-outline-primary btn-sm" >SAVE</button>
+                    <button type="button" id="saveBtn" onClick="saveForm('AR','01');" class="btn btn-outline-primary btn-sm" >SAVE</button>
                     <button type="button" id="sendBtn" class="btn btn-outline-success btn-sm " >SEND</button>
                   </div>
               </div>
-
+              <input type="hidden" id="conversationID">
+              <input type="hidden" id="supbuyType">
+              <input type="hidden" id="direction">
+              <input type="hidden" id="status">
             </form> 
           </div>
       </div>
@@ -410,8 +413,7 @@
             <table id="viewForm"></table>
         </div>
         
-        <input type="hidden" id="conversationID">
-        <input type="hidden" id="supbuyType">
+        
         <input type="hidden" id="supRegno">
         <input type="hidden" id="byrRegno">
     </div>
@@ -427,7 +429,7 @@
 
   <script type="text/javascript" class="init">
     $(document).ready(function() {
-      
+      init('AR');
     });
 
   </script>

@@ -514,7 +514,7 @@ function SBGetList( data, supbuyType ) {
 					selector: 'td:first-child'
 				},
 				order: [
-								[ 1, 'asc' ]
+					[ 1, 'asc' ]
 				],
 				searching: false,
 				columns: [
@@ -920,11 +920,10 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 			objData.itemUnitPrice[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("UnitAmount")[0].childNodes[0].nodeValue;
 		}
 	}
-	return objData;
+	return JSON.stringify(objData);
 }
 
-function insertData(objData){
-	var request = JSON.stringify(objData);
+function insertData(jsonData){
 	var returnMSG;
 	$.ajax({
 		type: "POST",
@@ -933,7 +932,7 @@ function insertData(objData){
 		contentType: "application/json",
 		url: "save",
 		async: false,
-		data: request,
+		data: jsonData,
 		success: function(data) {
 			returnMSG = true;
 		},
@@ -941,7 +940,7 @@ function insertData(objData){
 			returnMSG = false;
 		}
 	});
-		return returnMSG;
+	return returnMSG;
 }
 
 function updateStatus(signal, conversationID, supbuyType, reason){

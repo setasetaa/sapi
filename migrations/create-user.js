@@ -3,7 +3,12 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('user', {
       com_regno: {
-        type: Sequelize.CHAR,
+        type: Sequelize.CHAR(13),
+        allowNull: false,
+        primaryKey: true
+      },
+      bizCode: {
+        type: Sequelize.CHAR(4),
         primaryKey: true
       },
       user_name: {
@@ -20,6 +25,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       dept_name: {
+        type: Sequelize.STRING
+      },
+      tel_num: {
         type: Sequelize.STRING
       },
       sbid: {

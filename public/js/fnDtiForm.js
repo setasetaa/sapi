@@ -1,5 +1,42 @@
 document.write('<script src="/js/fnData.js" type="text/javascript"></script>');
 
+function init(supbuyType){
+    var userName = $('#userName').val();
+    var email = $('#userEmail').val();
+    var deptName = $('#deptName').val();
+    var telNum = $('#telNum').val();
+    var comRegno = $('#comRegno').val();
+    var bizCode = $('#bizCode').val();
+    var repName = $('#repName').val();
+    var comAddr = $('#comAddr').val();
+    var comType = $('#comType').val();
+    var comClassify = $('#comClassify').val();
+    
+    if('AP' == supbuyType){
+        $('#byrComRegno').val(comRegno);
+        $('#byrEmpName').val(userName);
+        $('#byrEmail').val(email);
+        $('#byrDeptName').val(deptName);
+        $('#byrTelNum').val(telNum);
+        $('#byrBizplaceCode').val(bizCode);
+        $('#byrRepName').val(repName);
+        $('#byrComAddr').val(comAddr);
+        $('#byrComType').val(comType);
+        $('#byrComClassify').val(comClassify);
+    }else{
+        $('#supComRegno').val(comRegno);
+        $('#supEmpName').val(userName);
+        $('#supEmail').val(email);
+        $('#supDeptName').val(deptName);
+        $('#supTelNum').val(telNum);
+        $('#supBizplaceCode').val(bizCode);
+        $('#supRepName').val(repName);
+        $('#supComAddr').val(comAddr);
+        $('#supComType').val(comType);
+        $('#supComClassify').val(comClassify);
+    }
+}
+
 function itemAdd(dtiType){
     var tcount = $('#itembody tr').eq($("#itembody tr").length-1).find("input[name^=dtiLineNum]").val() + 1;
     
@@ -23,7 +60,28 @@ function itemAdd(dtiType){
         });
 }
 
-function insertData(supbuyType){
+function insertData(formData){
+    var returnMSG;
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		crossDomain: true,
+		contentType: "application/json",
+		url: "save",
+		async: false,
+		data: formData,
+		success: function(data) {
+			returnMSG = true;
+		},
+		error: function(error) {
+            alert(error);
+			returnMSG = false;
+		}
+    });
+    return returnMSG;
+}
+
+function saveForm(supbuyType, dtiType){
     var supComRegno = $('#supComRegno').val().replace(/-/gi,'');
     var byrComRegno = $('#byrComRegno').val().replace(/-/gi,'');
     $('#supComRegno').val(supComRegno);
@@ -51,9 +109,64 @@ function insertData(supbuyType){
         formData.status = 'S';
         formData.direction = '2';
     }
-    formData.typeCode = '0101';
+    // typecode 정의
+    switch(dtiType){
+        case '01':
+            if('' == formData.amendCode || null == formData.amendCode){
+                formData.typeCode = '01';
+                if('0' == formData.taxAmount){
+                    formData.typeCode = formData.typeCode + '02';
+                }else{
+                    formData.typeCode = formData.typeCode + '01';
+                }
+            }else{
+                formData.typeCode = '02';
+                if('0' == formData.taxAmount){
+                    formData.typeCode = formData.typeCode + '02';
+                }else{
+                    formData.typeCode = formData.typeCode + '01';
+                }
+            }
+        break;
+        case '02':
+            if('' == formData.amendCode || null == formData.amendCode){
+                formData.typeCode = '03';
+                formData.typeCode = formData.typeCode + '01';
+            }else{
+                formData.typeCode = '04';
+                formData.typeCode = formData.typeCode + '01';
+            }       
+        break;
+        case '03':
+            if('' == formData.amendCode || null == formData.amendCode){
+                formData.typeCode = '01';
+                if('0' == formData.taxAmount){
+                    formData.typeCode = formData.typeCode + '05';
+                }else{
+                    formData.typeCode = formData.typeCode + '03';
+                }
+            }else{
+                formData.typeCode = '02';
+                if('0' == formData.taxAmount){
+                    formData.typeCode = formData.typeCode + '05';
+                }else{
+                    formData.typeCode = formData.typeCode + '03';
+                }
+            }    
+        break;
+        case '04':
+            if('' == formData.amendCode || null == formData.amendCode){
+                formData.typeCode = '03';
+                formData.typeCode = formData.typeCode + '03';
+            }else{
+                formData.typeCode = '04';
+                formData.typeCode = formData.typeCode + '03';
+            }   
+        break;
+    }
+    
     formData.itemCount = $("#itembody tr").length;
-
+    
     // formData.push({ name: 'conversationID', value: createConversationID(supComRegno, byrComRegno) });
     // formData.push({ name: 'supbuyType', value:  supbuyType });
     // if('AP' == supbuyType){
@@ -66,21 +179,15 @@ function insertData(supbuyType){
     // formData.push({ name: 'typeCode', value:  '0101' });
     // formData.push({ name: 'itemCount', value:  $("#itembody tr").length });
 
-    var request = JSON.stringify(formData);
-    alert(request);
-	$.ajax({
-		type: "POST",
-		dataType: "json",
-		crossDomain: true,
-		contentType: "application/json",
-		url: "save",
-		async: false,
-		data: request,
-		success: function(data) {
-			alert('success');
-		},
-		error: function(error) {
-			alert('저장 실패');
-		}
-	});
+    var result = insertData(JSON.stringify(formData));
+    if(result){
+        if('AP' == supbuyType){
+            location.href='/dti/list/APlist';
+        }else{
+            location.href='/dti/list/ARlist';
+        }
+        
+    }
 }
+
+

@@ -26,25 +26,55 @@
 
   <div class="container">
     <div class="card card-register mx-auto mt-5">
-      <div class="card-header">Register an Account</div>
+      <div class="card-header font-weight-bold">Register an Account</div>
       <div class="card-body">
         <form action="/user/register" method="post">
           <div class="form-group">
-            <div class="form-label-group">
-              <input type="text" id="comRegno" name="comRegno" class="form-control" placeholder="B / N" required="required">
-              <label for="comRegno">B / N</label>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-label-group">
+                  <input type="text" id="comRegno" name="comRegno" class="form-control" placeholder="사업자번호" required="required">
+                  <label for="comRegno">사업자번호</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-label-group">
+                  <input type="text" id="bizCode" name="bizCode" class="form-control" placeholder="종사업자번호" >
+                <label for="bizCode">종사업자번호</label>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-group">
-            <div class="form-label-group">
-              <input type="text" id="userName" name="userName" class="form-control" placeholder="User Name" required="required">
-              <label for="userName">User Name</label>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-label-group">
+                  <input type="text" id="userName" name="userName" class="form-control" placeholder="사용자명" required="required">
+                  <label for="userName">사용자명</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-label-group">
+                  <input type="email" id="userEmail" name="userEmail" class="form-control" placeholder="Email" required="required">
+                  <label for="userEmail">Email</label>
+                </div>
+              </div>
             </div>
-          </div>  
+          </div>
           <div class="form-group">
-            <div class="form-label-group">
-              <input type="email" id="userEmail" name="userEmail" class="form-control" placeholder="Email address" required="required">
-              <label for="userEmail">Email address</label>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-label-group">
+                  <input type="text" id="telNum" name="telNum" class="form-control" placeholder="연락처" >
+                  <label for="telNum">연락처</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-label-group">
+                  <input type="text" id="dept" name="dept" class="form-control" placeholder="부서명" >
+                  <label for="dept">부서명</label>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -64,23 +94,22 @@
             </div>
           </div>
           <div class="form-group">
-            <div class="form-label-group">
-              <input type="text" id="dept" name="dept" class="form-control" placeholder="Department" >
-              <label for="dept">Department</label>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-label-group">
+                  <input type="text" id="SBID" name="SBID" class="form-control" placeholder="Smartbill ID" >
+                  <label for="SBID">Smartbill ID</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-label-group">
+                  <input type="text" id="SBPass" name="SBPass" class="form-control" placeholder="Smartbill PASSWORD" >
+                  <label for="SBPass">Smartbill PASSWORD</label>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <div class="form-label-group">
-              <input type="text" id="SBID" name="SBID" class="form-control" placeholder="Smartbill ID" >
-              <label for="SBID">Smartbill ID</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="form-label-group">
-              <input type="text" id="SBPass" name="SBPass" class="form-control" placeholder="Smartbill PASSWORD" >
-              <label for="SBPass">Smartbill PASSWORD</label>
-            </div>
-          </div>
+          
           <div class="form-group">
             <div class="form-label-group">
               <input type="text" id="token" name="token" class="form-control" placeholder="Api Token" >

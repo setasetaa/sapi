@@ -24,8 +24,10 @@ router.post("/register", function(req, res, next){
     crypto.pbkdf2(body.password, salt, 100000, 64, 'sha512', function(err, key){
       models.user.create({
         com_regno: body.comRegno,
+        bizCode: body.bizCode,
         user_name: body.userName,
         email: body.userEmail,
+        tel_num: body.telNum,
         password: key.toString('base64'),
         salt: salt,
         dept_name: body.dept,
@@ -33,7 +35,7 @@ router.post("/register", function(req, res, next){
         sbpass: body.SBPass,
         token: body.token
       }).then( result => {
-        console.log("success");
+        console.log("register success");
         res.redirect("/user/login");
       }).catch( err => {
         console.log(err);
@@ -79,17 +81,34 @@ router.post("/login", function(req,res,next){
           console.log("비밀번호 일치");
           req.session.email = result.dataValues.email;
           req.session.username = result.dataValues.user_name;
-          req.session.comregno = result.dataValues.com_regno;
           req.session.token = result.dataValues.token;
           req.session.deptname = result.dataValues.dept_name;
+          req.session.telNum = result.dataValues.tel_num;
           req.session.sbid = result.dataValues.sbid;
+          
+          //req.session.bizCode = result.dataValues.bizCode;
           //console.log(req.session.email);
           //res.redirect("/");
-          res.status(200).send();
+          models.company.find({
+            where: {com_regno : body.comRegno, bizplace_code : body.bizCode}
+          }).then( result => {
+            req.session.comregno = result.dataValues.com_regno;
+            req.session.bizCode = result.dataValues.bizplace_code;
+            req.session.comName = result.dataValues.com_name;
+            req.session.repName = result.dataValues.rep_name;
+            req.session.comAddr = result.dataValues.addr;
+            req.session.comType = result.dataValues.type;
+            req.session.comClassify = result.dataValues.classify;
+            req.session.code = result.dataValues.code;
+            res.status(200).send();
+          }).catch( err => {
+            console.log(err);
+            res.status(402).send();
+          });
         }
         else{
-            console.log("비밀번호 불일치");
-            res.status(401).send();
+          console.log("비밀번호 불일치");
+          res.status(401).send();
         }
       });
 

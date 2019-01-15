@@ -3,9 +3,13 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('company', {
       com_regno: {
-        type: Sequelize.CHAR,
-        primaryKey: true,
-        allowNull: false
+        type: Sequelize.CHAR(13),
+        allowNull: false,
+        primaryKey: true
+      },
+      bizplace_code: {
+        type: Sequelize.CHAR(4),
+        primaryKey: true
       },
       com_name: {
         type: Sequelize.STRING
@@ -22,9 +26,6 @@ module.exports = {
       classify: {
         type: Sequelize.STRING
       },
-      bizplace_code: {
-        type: Sequelize.CHAR
-      },
       code: {
         type: Sequelize.STRING
       },
@@ -36,6 +37,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    });
+    queryInterface.addConstraint('company', ['com_regno', 'bizplace_code'], {
+      type: 'primaryKey',
+      name: 'company_pk'
     });
   },
   down: (queryInterface, Sequelize) => {
