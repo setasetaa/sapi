@@ -33,9 +33,8 @@ router.post('/save', function(req, res, next) {
     console.log("data save");
     let body = req.body;
     console.log(body);
-    var t;
-    models.sequelize.transaction().then(function(transaction){
-        t = transaction;
+
+    models.sequelize.transaction().then(function(t){
         models.dti_main.create({
             conversation_id : body.conversationID,
             supbuy_type : body.supbuyType,
@@ -96,42 +95,46 @@ router.post('/save', function(req, res, next) {
             exchanaged_doc_id : "",
             attachfile_yn : "",
             dtt_yn : ""
-            })
-            .then( result => {
-                for(var i =0; i < body.itemCount; i++){
-                models.dti_item.create({
-                    conversation_id : body.conversationID,
-                    supbuy_type : body.supbuyType,
-                    direction : body.direction,
-                    dti_line_num : body.itemLineNum[i],
-                    item_name : body.itemName[i],
-                    item_size : body.itemSize[i],
-                    item_md : body.itemMD[i],
-                    unit_price : body.itemUnitPrice[i],
-                    item_qty : body.itemQTY[i],
-                    sup_amount : body.itemSupAmount[i],
-                    tax_amount : body.itemTaxAmount[i],
-                    remark : body.itemRemark[i],
-                    item_gubun : "DTI"
-                });
-                }
-
-                models.dti_status.create({
+        },{transaction: t}).then(function (){
+            models.dti_status.create({
                 conversation_id : body.conversationID,
                 supbuy_type : body.supbuyType,
                 direction : body.direction,
                 dti_status : body.status
-                });
-                console.log("저장 완료");
+            },{transaction: t}).then(function(){
+                for(var i = 0; i < body.itemCount; i++){
+                    models.dti_item.create({
+                        conversation_id : body.conversationID,
+                        supbuy_type : body.supbuyType,
+                        direction : body.direction,
+                        dti_line_num : body.dtiLineNum[i],
+                        item_name : body.itemName[i],
+                        item_size : body.itemSize[i],
+                        item_md : body.itemMD[i],
+                        unit_price : body.unitPrice[i],
+                        item_qty : body.itemQTY[i],
+                        sup_amount : body.itemSupAmount[i],
+                        tax_amount : body.itemTaxAmount[i],
+                        remark : body.itemRemark[i],
+                        item_gubun : "DTI"
+                    },{transaction: t}).then(function(){
+                        t.commit();
+                        console.log("저장 완료");
+                        res.send({result:true, msg:"suc"});
+                    }).catch(function(err){
+                        t.rollback();
+                        res.send({result:false, msg:"fail"});
+                    });
+                }
+            }).catch(function(err){
+                t.rollback();
+                res.send({result:false, msg:"fail"});
             });
-        }).then(function(result) {
-            t.commit();
-            res.send({result:true, msg:"suc"});
         }).catch(function(err){
-            if(t)
             t.rollback();
             res.send({result:false, msg:"fail"});
         });
     });
+});
 
 module.exports = router;

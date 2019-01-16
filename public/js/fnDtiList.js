@@ -338,13 +338,13 @@ function fnListView(data, supbuyType){
 					case 'S':
 						$('#ARISSUE').show();
 						$('#EDIT').show();
-						$('#DELETE').show();
+						$('#DEL').show();
 						$('#status').html("세금계산서 상태 : 저장");
 						break;
 					case 'A':
 						$('#RARREQUEST').show();
 						$('#EDIT').show();
-						$('#DELETE').show();
+						$('#DEL').show();
 						$('#status').html("세금계산서 상태 : 저장");
 						break;
 					case 'V':
@@ -1601,7 +1601,16 @@ $('#EDIT').click(function(){
 });
 
 $('#DEL').click(function(){
-	deleteData();
+	if(deleteData()){
+		alert('success');
+		if('AP' == $('#supbuyType').val()){
+            location.href='/dti/list/APlist';
+        }else{
+            location.href='/dti/list/ARlist';
+        }
+	}else{
+		alert('fail');
+	}
 });
 
 $('#resultMail').click(function(){

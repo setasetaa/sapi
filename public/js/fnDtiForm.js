@@ -215,21 +215,32 @@ function saveForm(supbuyType){
         break;
     }
     
-    formData.itemCount = $("#itembody tr").length;
     formData.supAmount = $('#supAmount').val();
     formData.taxAmount = $('#taxAmount').val();
     formData.totalAmount = $('#totalAmount').val();
-    // formData.push({ name: 'conversationID', value: createConversationID(supComRegno, byrComRegno) });
-    // formData.push({ name: 'supbuyType', value:  supbuyType });
-    // if('AP' == supbuyType){
-    //     formData.push({ name: 'status', value:  'A' });
-    //     formData.push({ name: 'direction', value:  '1' });
-    // }else{
-    //     formData.push({ name: 'status', value:  'S' });
-    //     formData.push({ name: 'direction', value:  '2' });
-    // }
-    // formData.push({ name: 'typeCode', value:  '0101' });
-    // formData.push({ name: 'itemCount', value:  $("#itembody tr").length });
+    formData.itemCount = $("#itembody tr").length;
+
+    formData.dtiLineNum = [];
+	formData.itemRemark = [];
+	formData.itemSupAmount = [];
+	formData.itemQTY = [];
+	formData.itemSize = [];
+	formData.itemName = [];
+	formData.itemMD = [];
+	formData.itemTaxAmount = [];
+    formData.unitPrice = [];
+    
+    for(var i=0; i<formData.itemCount; i++){
+        if($('input[name=dtiLineNum]:eq(' + i + ')').val()) formData.dtiLineNum[i] = $('input[name=dtiLineNum]:eq(' + i + ')').val();
+        if($('input[name=itemRemark]:eq(' + i + ')').val()) formData.itemRemark[i] = $('input[name=itemRemark]:eq(' + i + ')').val();
+        if($('input[name=itemSupAmount]:eq(' + i + ')').val()) formData.itemSupAmount[i] = $('input[name=itemSupAmount]:eq(' + i + ')').val();
+        if($('input[name=itemTaxAmount]:eq(' + i + ')').val()) formData.itemTaxAmount[i] = $('input[name=itemTaxAmount]:eq(' + i + ')').val();
+        if($('input[name=itemQTY]:eq(' + i + ')').val()) formData.itemQTY[i] = $('input[name=itemQTY]:eq(' + i + ')').val();
+        if($('input[name=itemSize]:eq(' + i + ')').val()) formData.itemSize[i] = $('input[name=itemSize]:eq(' + i + ')').val();
+        if($('input[name=itemName]:eq(' + i + ')').val()) formData.itemName[i] = $('input[name=itemName]:eq(' + i + ')').val();
+        if($('input[name=itemMD]:eq(' + i + ')').val()) formData.itemMD[i] = $('input[name=itemMD]:eq(' + i + ')').val();
+        if($('input[name=unitPrice]:eq(' + i + ')').val()) formData.unitPrice[i] = $('input[name=unitPrice]:eq(' + i + ')').val();
+    }
 
     var result = insertData(JSON.stringify(formData));
     if(result){
@@ -241,5 +252,3 @@ function saveForm(supbuyType){
         
     }
 }
-
-
