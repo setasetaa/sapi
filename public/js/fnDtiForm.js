@@ -1,6 +1,7 @@
 document.write('<script src="/js/fnData.js" type="text/javascript"></script>');
 
 function init(supbuyType){
+
     var userName = $('#userName').val();
     var email = $('#userEmail').val();
     var deptName = $('#deptName').val();
@@ -38,10 +39,16 @@ function init(supbuyType){
         $('#supComType').val(comType);
         $('#supComClassify').val(comClassify);
     }
+    $('#itemSupAmount').keyup(function(){
+        sum();
+    });
+    $('#itemTaxAmount').keyup(function(){
+        sum();
+    });
 }
 
 function itemAdd(dtiType){
-    var tcount = $('#itembody tr').eq($("#itembody tr").length-1).find("input[name^=dtiLineNum]").val() + 1;
+    var tcount = parseInt($('#itembody tr').eq($("#itembody tr").length-1).find("input[name^=dtiLineNum]").val()) + 1;
     
     var itemAdd =           "<tr id='itemrow"+tcount+"'> <td class='center'> <input type='date'  class='custom custom-sm form-control form-control-sm' id='itemMD"+tcount+"'  name='itemMD' style='margin-bottom: 2px;text-align:center'/> </td>";
         itemAdd = itemAdd + "<td class='center'> <input type='text' class='custom custom-sm form-control form-control-sm' id='itemName"+tcount+"' name='itemName' maxlength='100' style='margin-bottom: 2px'/> </td>";
@@ -57,10 +64,49 @@ function itemAdd(dtiType){
         itemAdd = itemAdd + "<input type='hidden' id='dtiLineNum"+tcount+"' name='dtiLineNum' value="+tcount+" />";
         
         $('#itemData > tbody:last').append(itemAdd);
-        $('#itemDelete' +tcount).click(function(){
+        $('#itemDelete' + tcount).click(function(){
             $(this).parent().parent().remove();
             $(window).resize();
+            sum();
         });
+
+        $('#itemSupAmount' + tcount).keyup(function(){
+            sum();
+        });
+        $('#itemTaxAmount' + tcount).keyup(function(){
+            sum();
+        });
+        
+}
+
+function sum(){
+    var dtiType = $('#dtiType').val();
+    var count = $("#itembody tr").length;
+    var tsup = 0, ttax = 0, total = 0;
+    for(var i=0; i <count;i++ ){
+        var supAmount = 'input[name=itemSupAmount]:eq(' + i + ')';
+        var sup,tax;
+        
+        if('' == $(supAmount).val()){
+            sup = 0;
+        }else{
+            sup = parseInt($(supAmount).val());
+        }
+        tsup += sup;
+        if('01' == dtiType || '03' == dtiType){
+            var taxAmount = 'input[name=itemTaxAmount]:eq(' + i + ')';
+            if('' == $(taxAmount).val()){
+                tax = 0;
+            }else{
+                tax = parseInt($(taxAmount).val());
+            }
+            ttax += tax;
+        }
+    }
+    total = tsup + ttax;
+    $('#supAmount').val(tsup);
+    $('#taxAmount').val(ttax);
+    $('#totalAmount').val(total);
 }
 
 function insertData(formData){
@@ -84,7 +130,8 @@ function insertData(formData){
     return returnMSG;
 }
 
-function saveForm(supbuyType, dtiType){
+function saveForm(supbuyType){
+    var dtiType = $('#dtiType').val();
     var supComRegno = $('#supComRegno').val().replace(/-/gi,'');
     var byrComRegno = $('#byrComRegno').val().replace(/-/gi,'');
     $('#supComRegno').val(supComRegno);
@@ -169,7 +216,9 @@ function saveForm(supbuyType, dtiType){
     }
     
     formData.itemCount = $("#itembody tr").length;
-    
+    formData.supAmount = $('#supAmount').val();
+    formData.taxAmount = $('#taxAmount').val();
+    formData.totalAmount = $('#totalAmount').val();
     // formData.push({ name: 'conversationID', value: createConversationID(supComRegno, byrComRegno) });
     // formData.push({ name: 'supbuyType', value:  supbuyType });
     // if('AP' == supbuyType){

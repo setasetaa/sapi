@@ -40,7 +40,7 @@ router.post('/save', function(req, res, next) {
             conversation_id : body.conversationID,
             supbuy_type : body.supbuyType,
             direction : body.direction,
-            dti_wdate : body.dtiWDate,
+            dti_wdate : body.dtiWdate,
             dti_type : body.typeCode,
             tax_demand : body.taxDemand,
             issue_id : body.issueID,
