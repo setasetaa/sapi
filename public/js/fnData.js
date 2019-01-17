@@ -1,5 +1,3 @@
-
-
 function nowDate() {
 	var today = new Date();
 	var dd = today.getDate();
@@ -53,7 +51,7 @@ function isDate(value) {
     }
 }
 function s1(){
-	return ((1 + Math.random()) * 0x10000 | 0).toString(16).substr(0,1);
+	return Math.floor(Math.random() * 10);
 }
 
 function s4(){
@@ -70,19 +68,3 @@ function createConversationID(supComregno, byrComregno){
 	var convId = supComregno + byrComregno.substr(0,10) + nowDate() + s4() + '006';
 	return convId.replace(/-/gi,'');
 }
-
-$.fn.serializeObject = function() {
-	var o = {};
-	var a = this.serializeArray();
-	$.each(a, function() {
-		if (o[this.name]) {
-			if (!o[this.name].push) {
-				o[this.name] = [o[this.name]];
-			}
-			o[this.name].push(this.value || '');
-		} else {
-			o[this.name] = this.value || '';
-		}
-	});
-	return o;
-};

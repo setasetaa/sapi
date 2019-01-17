@@ -208,10 +208,10 @@ router.post('/list', function(req, res, next) {
 router.post('/save', function(req, res, next) {
   console.log("data save");
   let body = req.body;
-  var t;
+
   console.log(body);
-  models.sequelize.transaction().then(function(transaction){
-    t = transaction;
+  models.sequelize.transaction().then(function(t){
+
     models.dti_main.create({
       dti_msg : body.dtiMSG,
       conversation_id : body.conversationID,
@@ -274,8 +274,14 @@ router.post('/save', function(req, res, next) {
       exchanaged_doc_id : "",
       attachfile_yn : "",
       dtt_yn : ""
-    })
-    .then( result => {
+    },{transaction: t}).then(function (){
+      models.dti_status.create({
+        conversation_id : body.conversationID,
+        supbuy_type : body.supbuyType,
+        direction : body.direction,
+        dti_status : body.status
+      },{transaction: t}).then(function (){
+
         for(var i =0; i < body.itemCount; i++){
           models.dti_item.create({
             conversation_id : body.conversationID,
@@ -291,24 +297,23 @@ router.post('/save', function(req, res, next) {
             tax_amount : body.itemTaxAmount[i],
             remark : body.itemRemark[i],
             item_gubun : "DTI"
+          },{transaction: t}).then(function(){
+            t.commit();
+            console.log("저장 완료");
+            res.send({result:true, msg:"suc"});
+          }).catch(function(err){
+              t.rollback();
+              res.send({result:false, msg:"fail"});
           });
         }
-
-        models.dti_status.create({
-          conversation_id : body.conversationID,
-          supbuy_type : body.supbuyType,
-          direction : body.direction,
-          dti_status : body.status
-        });
-        console.log("저장 완료");
-    });
-  }).then(function(result) {
-    t.commit();
-    res.send({result:true, msg:"suc"});
-  }).catch(function(err){
-    if(t)
-    t.rollback();
-    res.send({result:false, msg:"fail"});
+      }).catch(function(err){
+        t.rollback();
+        res.send({result:false, msg:"fail"});
+    });  
+    }).catch(function(err){
+      t.rollback();
+      res.send({result:false, msg:"fail"});
+  });
   });
 });
 
@@ -396,28 +401,37 @@ router.post('/renewStatus', function(req, res, next) {
 router.post('/delete', function(req, res, next) {
   console.log("data delete");
   let body = req.body;
-  var t;
-  models.sequelize.transaction().then(function(transaction){
-    t = transaction;
+
+  models.sequelize.transaction().then(function(t){
+
     models.dti_status.destroy({ 
-      where: {conversation_id: conversationID, supbuyType: supbuyType}
-    }).then( result => {
+      where: {conversation_id: body.conversationID, supbuy_type: body.supbuyType}
+    },{transaction: t}).then(function(){
       models.dti_item.destroy({ 
-        where: {conversation_id: conversationID, supbuyType: supbuyType}
-      }).then( result => {
+        where: {conversation_id: body.conversationID, supbuy_type: body.supbuyType}
+      },{transaction: t}).then(function(){
         models.dti_main.destroy({ 
-          where: {conversation_id: conversationID, supbuyType: supbuyType}
+          where: {conversation_id: body.conversationID, supbuy_type: body.supbuyType}
+        }).then(function(result) {
+          t.commit();
+          console.log("삭제 완료");
+          res.send({result:true, msg:"suc"});
+        }).catch(function(err){
+          console.log(err);
+          t.rollback();
+          res.send({result:false, msg:"fail"});
         });
+      }).catch(function(err){
+        console.log(err);
+        t.rollback();
+        res.send({result:false, msg:"fail"});
       });
+    }).catch(function(err){
+      console.log(err);
+      t.rollback();
+      res.send({result:false, msg:"fail"});
     });
-  }).then(function(result) {
-    t.commit();
-    console.log("삭제 완료");
-    res.send({result:true, msg:"suc"});
-  }).catch(function(err){
-    if(t)
-    t.rollback();
-    res.send({result:false, msg:"fail"});
+
   });
 });
 

@@ -354,7 +354,7 @@
                                 <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemSize" name="itemSize" maxlength="60"  style="margin-bottom: 2px"/>
                             </td>
                             <td class="center">
-                                <input type="text" class="custom custom-sm form-control form-control-sm" id="itemQTY"  name="itemQTY" element-name="품목 수량" maxlength="18" style="margin-bottom: 2px;text-align:right" />
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemQTY"  name="itemQTY" element-name="품목 수량" maxlength="18" style="margin-bottom: 2px;text-align:right" />
                             </td>
                             <td class="center">
                                 <input type="text" class="custom custom-sm form-control form-control-sm"  id="unitPrice"  name="unitPrice"  element-name="품목 단가" maxlength="18"  style="margin-bottom: 2px;text-align:right" />
@@ -373,7 +373,7 @@
                         </tr>
                       </tbody>
                     </table>
-                    <button type="button" id="saveBtn" onClick="saveForm('AR','01');" class="btn btn-outline-primary btn-sm" >SAVE</button>
+                    <button type="button" id="saveBtn" onClick="saveForm('AR');" class="btn btn-outline-primary btn-sm" >SAVE</button>
                     <button type="button" id="sendBtn" class="btn btn-outline-success btn-sm " >SEND</button>
                   </div>
               </div>
@@ -381,6 +381,7 @@
               <input type="hidden" id="supbuyType">
               <input type="hidden" id="direction">
               <input type="hidden" id="status">
+              <input type="hidden" id="dtiType" value='01'>
             </form> 
           </div>
       </div>
@@ -431,7 +432,6 @@
     $(document).ready(function() {
       init('AR');
     });
-
   </script>
 </body>
 
