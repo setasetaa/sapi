@@ -131,13 +131,8 @@ function insertData(formData){
     return returnMSG;
 }
 
-function saveForm(supbuyType){
+function saveForm(supbuyType, signal){
     var dtiType = $('#dtiType').val();
-    var supComRegno = $('#supComRegno').val().replace(/-/gi,'');
-    var byrComRegno = $('#byrComRegno').val().replace(/-/gi,'');
-    $('#supComRegno').val(supComRegno);
-    $('#byrComRegno').val(byrComRegno);
-    
     var formData = {};
 	var a = $('#sendForm').serializeArray();
 	$.each(a, function() {
@@ -150,8 +145,9 @@ function saveForm(supbuyType){
 			formData[this.name] = this.value || '';
 		}
 	});
- 
-    formData.conversationID = createConversationID(supComRegno, byrComRegno);
+    formData.supComRegno = $('#supComRegno').val().replace(/-/gi,'');
+    formData.byrComRegno = $('#byrComRegno').val().replace(/-/gi,'');
+    formData.conversationID = createConversationID(formData.supComRegno, formData.byrComRegno);
     formData.supbuyType = supbuyType;
     if('AP' == supbuyType){
         formData.status = 'A';
@@ -250,6 +246,21 @@ function saveForm(supbuyType){
         }else{
             location.href='/dti/list/ARlist';
         }
-        
     }
+}
+
+function selectForm(){
+
+}
+
+function createXML(){
+    if (window.DOMParser){
+        parser=new DOMParser();
+        xmlDoc=parser.parseFromString(text,"text/xml");
+    }
+    else{ // IE
+        xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+        xmlDoc.async=false;
+        xmlDoc.loadXML(text); 
+    } 
 }
