@@ -1,5 +1,3 @@
-
-
 function nowDate() {
 	var today = new Date();
 	var dd = today.getDate();
@@ -62,7 +60,6 @@ function s4(){
 
 function guid(){
 	var comregno = $('#comRegno').val();
-    
     return comregno.substr(0,8) + '-' + s4() + '-' + s4() + '-' + s4() + '-' + nowDate() + s4();
 }
 

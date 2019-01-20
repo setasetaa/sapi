@@ -36,6 +36,7 @@ router.post('/save', function(req, res, next) {
 
     models.sequelize.transaction().then(function(t){
         models.dti_main.create({
+            dti_msg : body.dtiMSG,
             conversation_id : body.conversationID,
             supbuy_type : body.supbuyType,
             direction : body.direction,
@@ -107,7 +108,7 @@ router.post('/save', function(req, res, next) {
                         conversation_id : body.conversationID,
                         supbuy_type : body.supbuyType,
                         direction : body.direction,
-                        dti_line_num : body.dtiLineNum[i],
+                        dti_line_num : i+1,
                         item_name : body.itemName[i],
                         item_size : body.itemSize[i],
                         item_md : body.itemMD[i],

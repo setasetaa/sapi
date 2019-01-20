@@ -897,10 +897,15 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 	objData.itemUnitPrice = [];
 
 	for(var i = 0; i < objData.itemCount; i++){
-		objData.itemLineNum[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("SequenceNumeric")[0].childNodes[0].nodeValue;
-		objData.itemSupAmount[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("InvoiceAmount")[0].childNodes[0].nodeValue;
-		objData.itemTaxAmount[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("CalculatedAmount")[0].childNodes[0].nodeValue;
-
+		if(xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("SequenceNumeric")[0] != null){
+			objData.itemLineNum[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("SequenceNumeric")[0].childNodes[0].nodeValue;
+		}
+		if(xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("InvoiceAmount")[0] != null){
+			objData.itemSupAmount[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("InvoiceAmount")[0].childNodes[0].nodeValue;
+		}
+		if(xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("CalculatedAmount")[0] != null){
+			objData.itemTaxAmount[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("CalculatedAmount")[0].childNodes[0].nodeValue;
+		}
 		if(xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("DescriptionText")[0] != null){
 			objData.itemRemark[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("DescriptionText")[0].childNodes[0].nodeValue;
 		}

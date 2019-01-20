@@ -39,6 +39,7 @@ function init(supbuyType){
         $('#supComType').val(comType);
         $('#supComClassify').val(comClassify);
     }
+    $('#dtiWdate').val(nowDate());
     $('#itemSupAmount').keyup(function(){
         sum();
     });
@@ -130,13 +131,8 @@ function insertData(formData){
     return returnMSG;
 }
 
-function saveForm(supbuyType){
+function saveForm(supbuyType, signal){
     var dtiType = $('#dtiType').val();
-    var supComRegno = $('#supComRegno').val().replace(/-/gi,'');
-    var byrComRegno = $('#byrComRegno').val().replace(/-/gi,'');
-    $('#supComRegno').val(supComRegno);
-    $('#byrComRegno').val(byrComRegno);
-    
     var formData = {};
 	var a = $('#sendForm').serializeArray();
 	$.each(a, function() {
@@ -149,8 +145,9 @@ function saveForm(supbuyType){
 			formData[this.name] = this.value || '';
 		}
 	});
- 
-    formData.conversationID = createConversationID(supComRegno, byrComRegno);
+    formData.supComRegno = $('#supComRegno').val().replace(/-/gi,'');
+    formData.byrComRegno = $('#byrComRegno').val().replace(/-/gi,'');
+    formData.conversationID = createConversationID(formData.supComRegno, formData.byrComRegno);
     formData.supbuyType = supbuyType;
     if('AP' == supbuyType){
         formData.status = 'A';
@@ -242,13 +239,432 @@ function saveForm(supbuyType){
         if($('input[name=unitPrice]:eq(' + i + ')').val()) formData.unitPrice[i] = $('input[name=unitPrice]:eq(' + i + ')').val();
     }
 
+    formData.dtiMSG = createXML(formData);
     var result = insertData(JSON.stringify(formData));
+
     if(result){
-        if('AP' == supbuyType){
-            location.href='/dti/list/APlist';
+        if('save' != signal){
+            sendData(formData, signal);
         }else{
-            location.href='/dti/list/ARlist';
+            alert('저장 성공');
+            if('AP' == supbuyType){
+                location.href='/dti/list/APlist';
+            }else{
+                location.href='/dti/list/ARlist';
+            }
         }
-        
+    }else{
+        alert('저장 실패');
     }
+}
+
+function createXML(formData){
+    var parser, xmlDoc;
+    var dtiMSG;
+    var node, elements, addNode, addNode2, textNode, header, item;
+
+    dtiMSG = '<TaxInvoice></TaxInvoice>';
+    if (window.DOMParser){
+        parser = new DOMParser();
+        xmlDoc = parser.parseFromString(dtiMSG,"text/xml");
+    }
+    else{ // IE
+        xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+        xmlDoc.async = false;
+        xmlDoc.loadXML(dtiMSG);
+    }
+    elements = xmlDoc.getElementsByTagName("TaxInvoice");
+    
+    var tax1 = xmlDoc.createAttribute('xmlns');
+    tax1.nodeValue = 'urn:kr:or:kec:standard:Tax:ReusableAggregateBusinessInformationEntitySchemaModule:1:0';
+    var tax2 = xmlDoc.createAttribute('xmlns:xsi');
+    tax2.nodeValue = 'http://www.w3.org/2001/XMLSchema-instance';
+    var tax3 = xmlDoc.createAttribute('xsi:schemaLocation');
+    tax3.nodeValue = 'urn:kr:or:kec:standard:Tax:ReusableAggregateBusinessInformationEntitySchemaModule:1:0 http://www.kec.or.kr/standard/Tax/TaxInvoiceSchemaModule_1.0.xsd';
+    elements[0].setAttributeNode(tax1);
+    elements[0].setAttributeNode(tax2);
+    elements[0].setAttributeNode(tax3);
+
+    // 발행일자 생성
+    node = xmlDoc.createElement("ExchangedDocument");
+    addNode = xmlDoc.createElement("IssueDateTime");
+    textNode = xmlDoc.createTextNode('');
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    elements[0].appendChild(node);
+
+    // TaxInvoiceDocument
+    node = xmlDoc.createElement("TaxInvoiceDocument");
+    
+    addNode = xmlDoc.createElement("IssueID");
+    textNode = xmlDoc.createTextNode(formData.issueID);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("TypeCode");
+    textNode = xmlDoc.createTextNode(formData.typeCode);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("IssueDateTime");
+    textNode = xmlDoc.createTextNode(formData.dtiWdate);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("PurposeCode");
+    textNode = xmlDoc.createTextNode(formData.taxDemand);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    elements[0].appendChild(node);
+
+    //TaxInvoiceTradeSettlement
+    header = xmlDoc.createElement("TaxInvoiceTradeSettlement");
+    // 공급자 정보
+    node = xmlDoc.createElement("InvoicerParty");
+
+    addNode = xmlDoc.createElement("ID");
+    textNode = xmlDoc.createTextNode(formData.supComRegno);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    if(formData.supComType != null){
+        addNode = xmlDoc.createElement("TypeCode");
+        textNode = xmlDoc.createTextNode(formData.supComType);
+        addNode.appendChild(textNode);
+        node.appendChild(addNode);
+    }
+    addNode = xmlDoc.createElement("NameText");
+    textNode = xmlDoc.createTextNode(formData.supComName);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    if(formData.supComClassify != null){
+        addNode = xmlDoc.createElement("ClassificationCode");
+        textNode = xmlDoc.createTextNode(formData.supComClassify);
+        addNode.appendChild(textNode);
+        node.appendChild(addNode);
+    }
+
+    if(formData.supBizplaceCode != '' && formData.supBizplaceCode != null){
+        addNode = xmlDoc.createElement("SpecifiedOrganization");
+        addNode2 = xmlDoc.createElement("TaxRegistrationID");
+        textNode = xmlDoc.createTextNode(formData.supBizplaceCode);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+        node.appendChild(addNode);
+    }
+
+    addNode = xmlDoc.createElement("SpecifiedPerson");
+    addNode2 = xmlDoc.createElement("NameText");
+    textNode = xmlDoc.createTextNode(formData.supRepName);
+    addNode2.appendChild(textNode);
+    addNode.appendChild(addNode2);
+    node.appendChild(addNode);
+
+    addNode = xmlDoc.createElement("DefinedContact");
+    if(formData.supEmpName != null){
+        addNode2 = xmlDoc.createElement("PersonNameText");
+        textNode = xmlDoc.createTextNode(formData.supEmpName);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+    }
+    if(formData.supTelNum != null){
+        addNode2 = xmlDoc.createElement("TelephoneCommunication");
+        textNode = xmlDoc.createTextNode(formData.supTelNum);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+    }
+    if(formData.supEmail != null){
+        addNode2 = xmlDoc.createElement("URICommunication");
+        textNode = xmlDoc.createTextNode(formData.supEmail);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+    }
+
+    node.appendChild(addNode);
+
+    addNode = xmlDoc.createElement("SpecifiedAddress");
+    addNode2 = xmlDoc.createElement("LineOneText");
+    textNode = xmlDoc.createTextNode(formData.supComAddr);
+    addNode2.appendChild(textNode);
+    addNode.appendChild(addNode2);
+    node.appendChild(addNode);
+
+    header.appendChild(node);
+
+    // 공급받는자 정보
+    node = xmlDoc.createElement("InvoiceeParty");
+
+    addNode = xmlDoc.createElement("ID");
+    textNode = xmlDoc.createTextNode(formData.byrComRegno);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    if(formData.byrComType != null){
+        addNode = xmlDoc.createElement("TypeCode");
+        textNode = xmlDoc.createTextNode(formData.byrComType);
+        addNode.appendChild(textNode);
+        node.appendChild(addNode);
+    }
+    addNode = xmlDoc.createElement("NameText");
+    textNode = xmlDoc.createTextNode(formData.byrComName);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    if(formData.byrComClassify != null){
+        addNode = xmlDoc.createElement("ClassificationCode");
+        textNode = xmlDoc.createTextNode(formData.byrComClassify);
+        addNode.appendChild(textNode);
+        node.appendChild(addNode);
+    }
+
+    addNode = xmlDoc.createElement("SpecifiedOrganization");
+    if(formData.byrBizplaceCode != '' && formData.byrBizplaceCode != null){
+        addNode2 = xmlDoc.createElement("TaxRegistrationID");
+        textNode = xmlDoc.createTextNode(formData.byrBizplaceCode);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+    }
+    addNode2 = xmlDoc.createElement("BusinessTypeCode");
+    switch(formData.byrComRegno.length){
+        case 10:
+        textNode = xmlDoc.createTextNode('01');
+        break;
+        case 13:
+        if('99999' == formData.byrComRegno.subString(0,5)){
+            textNode = xmlDoc.createTextNode('03');
+        }else{
+            textNode = xmlDoc.createTextNode('02');
+        }
+        break;
+    }
+    addNode2.appendChild(textNode);
+    addNode.appendChild(addNode2);
+    node.appendChild(addNode);
+    
+    addNode = xmlDoc.createElement("SpecifiedPerson");
+    addNode2 = xmlDoc.createElement("NameText");
+    textNode = xmlDoc.createTextNode(formData.byrRepName);
+    addNode2.appendChild(textNode);
+    addNode.appendChild(addNode2);
+    node.appendChild(addNode);
+
+    addNode = xmlDoc.createElement("PrimaryDefinedContact");
+    if(formData.byrEmpName != null){
+        addNode2 = xmlDoc.createElement("PersonNameText");
+        textNode = xmlDoc.createTextNode(formData.byrEmpName);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+    }
+    if(formData.byrTelNum != null){
+        addNode2 = xmlDoc.createElement("TelephoneCommunication");
+        textNode = xmlDoc.createTextNode(formData.byrTelNum);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+    }
+    if(formData.byrEmail != null){
+        addNode2 = xmlDoc.createElement("URICommunication");
+        textNode = xmlDoc.createTextNode(formData.byrEmail);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+    }
+    
+    node.appendChild(addNode);
+
+    addNode = xmlDoc.createElement("SpecifiedAddress");
+    addNode2 = xmlDoc.createElement("LineOneText");
+    textNode = xmlDoc.createTextNode(formData.byrComAddr);
+    addNode2.appendChild(textNode);
+    addNode.appendChild(addNode2);
+    node.appendChild(addNode);
+
+    header.appendChild(node);
+
+    // 수탁자 정보
+    if('03' == formData.typeCode.subString(2,4) || '05' == formData.typeCode.subString(2,4)){
+        node = xmlDoc.createElement("BrokerParty");
+
+        addNode = xmlDoc.createElement("ID");
+        textNode = xmlDoc.createTextNode(formData.brkComRegno);
+        addNode.appendChild(textNode);
+        node.appendChild(addNode);
+        if(formData.brkComType != null){
+            addNode = xmlDoc.createElement("TypeCode");
+            textNode = xmlDoc.createTextNode(formData.brkComType);
+            addNode.appendChild(textNode);
+            node.appendChild(addNode);
+        }
+        addNode = xmlDoc.createElement("NameText");
+        textNode = xmlDoc.createTextNode(formData.brkComName);
+        addNode.appendChild(textNode);
+        node.appendChild(addNode);
+        if(formData.brkComClassify != null){
+            addNode = xmlDoc.createElement("ClassificationCode");
+            textNode = xmlDoc.createTextNode(formData.brkComClassify);
+            addNode.appendChild(textNode);
+            node.appendChild(addNode);
+        }
+
+        if(formData.brkBizplaceCode != '' && formData.brkBizplaceCode != null){
+            addNode = xmlDoc.createElement("SpecifiedOrganization");
+            addNode2 = xmlDoc.createElement("TaxRegistrationID");
+            textNode = xmlDoc.createTextNode(formData.brkBizplaceCode);
+            addNode2.appendChild(textNode);
+            addNode.appendChild(addNode2);
+            node.appendChild(addNode);
+        }
+
+        addNode = xmlDoc.createElement("SpecifiedPerson");
+        addNode2 = xmlDoc.createElement("NameText");
+        textNode = xmlDoc.createTextNode(formData.brkRepName);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+        node.appendChild(addNode);
+
+        addNode = xmlDoc.createElement("DefinedContact");
+        if(formData.brkEmpName != null){
+            addNode2 = xmlDoc.createElement("PersonNameText");
+            textNode = xmlDoc.createTextNode(formData.brkEmpName);
+            addNode2.appendChild(textNode);
+            addNode.appendChild(addNode2);
+        }
+        if(formData.brkTelNum != null){
+            addNode2 = xmlDoc.createElement("TelephoneCommunication");
+            textNode = xmlDoc.createTextNode(formData.brkTelNum);
+            addNode2.appendChild(textNode);
+            addNode.appendChild(addNode2);
+        }
+        if(formData.brkEmail != null){
+            addNode2 = xmlDoc.createElement("URICommunication");
+            textNode = xmlDoc.createTextNode(formData.brkEmail);
+            addNode2.appendChild(textNode);
+            addNode.appendChild(addNode2);
+        }
+
+        node.appendChild(addNode);
+
+        addNode = xmlDoc.createElement("SpecifiedAddress");
+        addNode2 = xmlDoc.createElement("LineOneText");
+        textNode = xmlDoc.createTextNode(formData.brkComAddr);
+        addNode2.appendChild(textNode);
+        addNode.appendChild(addNode2);
+        node.appendChild(addNode);
+
+        header.appendChild(node);
+    }
+
+    node = xmlDoc.createElement("SpecifiedPaymentMeans");
+    addNode = xmlDoc.createElement("TypeCode");
+    textNode = xmlDoc.createTextNode('10');
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("PaidAmount");
+    textNode = xmlDoc.createTextNode(formData.totalAmount);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    header.appendChild(node);
+
+    node = xmlDoc.createElement("SpecifiedPaymentMeans");
+    addNode = xmlDoc.createElement("TypeCode");
+    textNode = xmlDoc.createTextNode('20');
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("PaidAmount");
+    textNode = xmlDoc.createTextNode('0');
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    header.appendChild(node);
+
+    node = xmlDoc.createElement("SpecifiedPaymentMeans");
+    addNode = xmlDoc.createElement("TypeCode");
+    textNode = xmlDoc.createTextNode('30');
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("PaidAmount");
+    textNode = xmlDoc.createTextNode('0');
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    header.appendChild(node);
+
+    node = xmlDoc.createElement("SpecifiedPaymentMeans");
+    addNode = xmlDoc.createElement("TypeCode");
+    textNode = xmlDoc.createTextNode('40');
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("PaidAmount");
+    textNode = xmlDoc.createTextNode('0');
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    header.appendChild(node);
+
+    node = xmlDoc.createElement("SpecifiedMonetarySummation");
+    addNode = xmlDoc.createElement("ChargeTotalAmount");
+    textNode = xmlDoc.createTextNode(formData.supAmount);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("TaxTotalAmount");
+    textNode = xmlDoc.createTextNode(formData.taxAmount);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    addNode = xmlDoc.createElement("GrandTotalAmount");
+    textNode = xmlDoc.createTextNode(formData.totalAmount);
+    addNode.appendChild(textNode);
+    node.appendChild(addNode);
+    header.appendChild(node);
+    elements[0].appendChild(header);
+
+    //TaxInvoiceTradeLineItem
+    
+    item = xmlDoc.createElement("TaxInvoiceTradeLineItem");
+
+    // 아이템 내역
+    
+    console.log((new XMLSerializer()).serializeToString(xmlDoc));
+
+}
+
+function sendData(formData, signal){
+    var comRegno = $('#comRegno').val();
+	var token = $('#token').val();
+    var arrConvId = new Array();
+    var receiveCom;
+    arrConvId[0] = formData.conversationID;
+    switch(signal){
+        case 'ARISSUE' :
+            receiveCom = formData.byrComRegno;
+        break;
+        case 'RARISSUE' :
+            receiveCom = formData.byrComRegno;
+        break;
+    }
+    var request = JSON.stringify({
+        'MessageId': guid(),
+        'Signal': signal,
+        'RequestTime': nowData(),
+        'SendComRegno': comRegno,
+        'ReceiveComRegno': receiveCom,
+        'AuthToken': token,
+        'ServiceCode': 'DTI',
+        'SystemType': 'OAPI',
+        'ConversationId': arrConvId,
+        'SMTPEmail': '',
+//        'RValue': '', // 서명모듈 이용해서 발행할 경우에만 필요
+        'CertPassword': ' Ygvm7lhfuSp6p', // 암호화된 인증서의 비밀번호
+        'SystemId': '',
+        'PlatformCode': '',
+        'SignedXML': formData.xml//서명정보가 있는 세금계산서 xml
+    });
+    $.support.cors = true;
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        crossDomain: true,
+        contentType: "application/json",
+        url: "http://demoapi.smartbill.co.kr/sb-api/request/",
+        data: request,
+        success: function (data) {
+            if ("30000" != data.ResultCode) {
+                alert(data.ResultMessage);
+            }
+            else{
+                alert("정상적으로 처리되었습니다.");
+            }
+        },
+        error: function (error) {
+            alert(error);
+        }
+    });
 }
