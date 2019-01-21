@@ -305,7 +305,7 @@ function createXML(formData){
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     addNode = xmlDoc.createElement("IssueDateTime");
-    textNode = xmlDoc.createTextNode(formData.dtiWdate);
+    textNode = xmlDoc.createTextNode(formData.dtiWdate.replace(/-/gi,''));
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     addNode = xmlDoc.createElement("PurposeCode");
@@ -424,7 +424,7 @@ function createXML(formData){
         textNode = xmlDoc.createTextNode('01');
         break;
         case 13:
-        if('99999' == formData.byrComRegno.subString(0,5)){
+        if('99999' == formData.byrComRegno.substr(0,5)){
             textNode = xmlDoc.createTextNode('03');
         }else{
             textNode = xmlDoc.createTextNode('02');
@@ -474,7 +474,7 @@ function createXML(formData){
     header.appendChild(node);
 
     // 수탁자 정보
-    if('03' == formData.typeCode.subString(2,4) || '05' == formData.typeCode.subString(2,4)){
+    if('03' == formData.typeCode.substr(2,4) || '05' == formData.typeCode.substr(2,4)){
         node = xmlDoc.createElement("BrokerParty");
 
         addNode = xmlDoc.createElement("ID");
@@ -607,13 +607,67 @@ function createXML(formData){
     elements[0].appendChild(header);
 
     //TaxInvoiceTradeLineItem
-    
-    item = xmlDoc.createElement("TaxInvoiceTradeLineItem");
-
     // 아이템 내역
-    
-    console.log((new XMLSerializer()).serializeToString(xmlDoc));
+    for(var i=0; i<formData.itemCount; i++){
+        item = xmlDoc.createElement("TaxInvoiceTradeLineItem");
 
+        node = xmlDoc.createElement("SequenceNumeric");
+        textNode = xmlDoc.createTextNode(i+1);
+        node.appendChild(textNode);
+        item.appendChild(node);
+        if('' != formData.itemRemark[i] && null!= formData.itemRemark[i]){
+            node = xmlDoc.createElement("DescriptionText");
+            textNode = xmlDoc.createTextNode(formData.itemRemark[i]);
+            node.appendChild(textNode);
+            item.appendChild(node);
+        }
+        node = xmlDoc.createElement("InvoiceAmount");
+        textNode = xmlDoc.createTextNode(formData.itemSupAmount[i]);
+        node.appendChild(textNode);
+        item.appendChild(node);
+        if('' != formData.itemQTY[i] && null!= formData.itemQTY[i]){
+            node = xmlDoc.createElement("ChargeableUnitQuantity");
+            textNode = xmlDoc.createTextNode(formData.itemQTY[i]);
+            node.appendChild(textNode);
+            item.appendChild(node);
+        }
+        if('' != formData.itemSize[i] && null!= formData.itemSize[i]){
+            node = xmlDoc.createElement("InformationText");
+            textNode = xmlDoc.createTextNode(formData.itemSize[i]);
+            node.appendChild(textNode);
+            item.appendChild(node);
+        }
+        if('' != formData.itemName[i] && null!= formData.itemName[i]){
+            node = xmlDoc.createElement("NameText");
+            textNode = xmlDoc.createTextNode(formData.itemName[i]);
+            node.appendChild(textNode);
+            item.appendChild(node);
+        }
+        if('' != formData.itemMD[i] && null!= formData.itemMD[i]){
+            node = xmlDoc.createElement("PurchaseExpiryDateTime");
+            textNode = xmlDoc.createTextNode(formData.itemMD[i].replace(/-/gi,'').substr(4,7));
+            node.appendChild(textNode);
+            item.appendChild(node);
+        }
+        node = xmlDoc.createElement("TotalTax");
+        addNode = xmlDoc.createElement("CalculatedAmount");
+        textNode = xmlDoc.createTextNode(formData.itemTaxAmount[i]);
+        addNode.appendChild(textNode);
+        node.appendChild(addNode);
+        item.appendChild(node);
+
+        if('' != formData.unitPrice[i] && null!= formData.unitPrice[i]){
+            node = xmlDoc.createElement("UnitPrice");
+            addNode = xmlDoc.createElement("UnitAmount");
+            textNode = xmlDoc.createTextNode(formData.unitPrice[i]);
+            addNode.appendChild(textNode);
+            node.appendChild(addNode);
+            item.appendChild(node);
+        }
+    }
+    elements[0].appendChild(item);
+    console.log((new XMLSerializer()).serializeToString(xmlDoc));
+    return (new XMLSerializer()).serializeToString(xmlDoc);
 }
 
 function sendData(formData, signal){
@@ -633,7 +687,7 @@ function sendData(formData, signal){
     var request = JSON.stringify({
         'MessageId': guid(),
         'Signal': signal,
-        'RequestTime': nowData(),
+        'RequestTime': nowDate(),
         'SendComRegno': comRegno,
         'ReceiveComRegno': receiveCom,
         'AuthToken': token,
@@ -645,7 +699,7 @@ function sendData(formData, signal){
         'CertPassword': ' Ygvm7lhfuSp6p', // 암호화된 인증서의 비밀번호
         'SystemId': '',
         'PlatformCode': '',
-        'SignedXML': formData.xml//서명정보가 있는 세금계산서 xml
+        'SignedXML': createXML(formData)//서명정보가 있는 세금계산서 xml
     });
     $.support.cors = true;
     $.ajax({
