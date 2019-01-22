@@ -149,6 +149,7 @@ function saveForm(supbuyType, signal){
     formData.byrComRegno = $('#byrComRegno').val().replace(/-/gi,'');
     formData.conversationID = createConversationID(formData.supComRegno, formData.byrComRegno);
     formData.supbuyType = supbuyType;
+    formData.issueID = createIssueID();
     if('AP' == supbuyType){
         formData.status = 'A';
         formData.direction = '1';

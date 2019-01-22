@@ -37,18 +37,18 @@ function dateFormat(str){
 }
 
 function isDate(value) {
-    switch (typeof value) {
-        case 'number':
-            return true;
-        case 'string':
-            return !isNaN(Date.parse(value));
-        case 'object':
-            if (value instanceof Date) {
-                return !isNaN(value.getTime());
-            }
-        default:
-            return false;
-    }
+	switch (typeof value) {
+		case 'number':
+			return true;
+		case 'string':
+			return !isNaN(Date.parse(value));
+		case 'object':
+			if (value instanceof Date) {
+				return !isNaN(value.getTime());
+			}
+		default:
+			return false;
+	}
 }
 function s1(){
 	return Math.floor(Math.random() * 10);
@@ -66,4 +66,9 @@ function guid(){
 function createConversationID(supComregno, byrComregno){
 	var convId = supComregno + byrComregno.substr(0,10) + nowDate() + s4() + '006';
 	return convId.replace(/-/gi,'');
+}
+
+function createIssueID(dtiWdate){
+	var issueID = dtiWdate + '4100008' + s4() + s1() + 'tnt';
+	return issueID.replace(/-/gi,'');
 }
