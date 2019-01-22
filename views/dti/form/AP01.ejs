@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SB SA - 매입 세금계산서</title>
+
+  <!-- Bootstrap core CSS-->
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template-->
+  <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Custom styles for this template-->
+  <link href="/css/sb-admin.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <% include ../../sidemenu/Navbar %>
+
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <% include ../../sidemenu/Sidebar %>
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-table"></i> 매입 세금계산서
+          </div>
+          <div class="card-body">
+            <form id="sendForm">
+              <div class="table-responsive">
+                <div class="float-sm-left">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-sm">
+                        <div class="card">
+                          <div class="card-header font-weight-bold">공급자 정보
+                            <input type="button" id="searchSUP" class="btn btn-secondary btn-sm float-right" value="검색"/>
+                          </div>
+                            <div class="card-body">
+
+                              <div class="form-group">
+                                <div class="form-row">
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="text" id="supComRegno" name="supComRegno" class="form-control" placeholder="사업자번호" required="required">
+                                      <label for="supComRegno">사업자번호</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="text" id="supComName" name="supComName" class="form-control" placeholder="상호" required="required">
+                                      <label for="supComName">상호(법인명)</label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>             
+                              
+                              <div class="form-group">
+                                <div class="form-row">
+                                  <div class="col-md-6">
+                                      <div class="form-label-group">
+                                        <input type="text" id="supRepName" name="supRepName" class="form-control" placeholder="대표자명" required="required">
+                                        <label for="supRepName">대표자명</label>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="text" id="supBizplaceCode" name="supBizplaceCode" class="form-control" placeholder="종사업장번호" >
+                                      <label for="supBizplaceCode">종사업장번호</label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>  
+
+                              <div class="form-group">
+                                <div class="form-label-group">
+                                  <input type="text" id="supComAddr" name="supComAddr" class="form-control" placeholder="사업장 주소" >
+                                  <label for="supComAddr">사업장 주소</label>
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <div class="form-row">
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="text" id="supComType" name="supComType" class="form-control" placeholder="업태" >
+                                      <label for="supComType">업태</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="text" id="supComClassify" name="supComClassify" class="form-control" placeholder="업종" >
+                                      <label for="supComClassify">업종</label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="form-group">
+                                <div class="form-row">
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="text" id="supEmpName" name="supEmpName" class="form-control" placeholder="담당자명" >
+                                      <label for="supEmpName">담당자명</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="text" id="supDeptName" name="supDeptName" class="form-control" placeholder="부서명" >
+                                      <label for="supDeptName">부서명</label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div class="form-group">
+                                <div class="form-row">
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="email" id="supEmail" name="supEmail" class="form-control" placeholder="이메일" >
+                                      <label for="supEmail">이메일</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-label-group">
+                                      <input type="text" id="supTelNum" name="supTelNum" class="form-control" placeholder="연락처" >
+                                      <label for="supTelNum">연락처</label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm">
+                          <div class="card">
+                              <div class="card-header font-weight-bold">공급받는자 정보
+                                <input type="button" id="searchBYR" class="btn btn-secondary btn-sm float-right" value="검색"/>
+                              </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                      <div class="form-row">
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="text" id="byrComRegno" name="byrComRegno" class="form-control" placeholder="사업자번호" required="required">
+                                            <label for="byrComRegno">사업자번호</label>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="text" id="byrComName" name="byrComName" class="form-control" placeholder="상호" required="required">
+                                            <label for="byrComName">상호(법인명)</label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>             
+                                    
+                                    <div class="form-group">
+                                      <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-label-group">
+                                              <input type="text" id="byrRepName" name="byrRepName" class="form-control" placeholder="대표자명" required="required">
+                                              <label for="byrRepName">대표자명</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="text" id="byrBizplaceCode" name="byrBizplaceCode" class="form-control" placeholder="종사업장번호" >
+                                            <label for="byrBizplaceCode">종사업장번호</label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>  
+
+                                    <div class="form-group">
+                                      <div class="form-label-group">
+                                        <input type="text" id="byrComAddr" name="byrComAddr" class="form-control" placeholder="사업장 주소" >
+                                        <label for="byrComAddr">사업장 주소</label>
+                                      </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                      <div class="form-row">
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="text" id="byrComType" name="byrComType" class="form-control" placeholder="업태" >
+                                            <label for="byrComType">업태</label>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="text" id="byrComClassify" name="byrComClassify" class="form-control" placeholder="업종" >
+                                            <label for="byrComClassify">업종</label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                      <div class="form-row">
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="text" id="byrEmpName" name="byrEmpName" class="form-control" placeholder="담당자명" >
+                                            <label for="byrEmpName">담당자명</label>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="text" id="byrDeptName" name="byrDeptName" class="form-control" placeholder="부서명" >
+                                            <label for="byrDeptName">부서명</label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                      <div class="form-row">
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="email" id="byrEmail" name="byrEmail" class="form-control" placeholder="이메일" >
+                                            <label for="byrEmail">이메일</label>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <div class="form-label-group">
+                                            <input type="text" id="byrTelNum" name="byrTelNum" class="form-control" placeholder="연락처" >
+                                            <label for="byrTelNum">연락처</label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                </div> 
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+              <div class="float-sm-left">
+                  <div class="form-group" style="margin-top:2em;margin-left:1em;">
+                    <label class="font-weight-bold">관리번호
+                      <input type="text" id="seqID" name="seqID" class="custom custom-sm form-control form-control-sm" style="width:250px" >
+                    </label>
+                    <label class="font-weight-bold">작성일자
+                      <input type="date" id="dtiWdate" name="dtiWdate" class="custom custom-sm form-control form-control-sm" style="width:200px" required="required">
+                    </label>
+                    <label class="font-weight-bold">공급가액
+                      <input type="text" id="supAmount" name="supAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" required="required" disabled>
+                    </label>
+                    <label class="font-weight-bold">세액
+                      <input type="text" id="taxAmount" name="taxAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" disabled>
+                    </label>
+                    <label class="font-weight-bold">합계금액
+                      <input type="text" id="totalAmount" name="totalAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" required="required" disabled>
+                    </label>
+                  </div>
+                  
+                  <div class="form-group" style="margin-left:1em;width:800px">             
+                    <div class="input-group mb-3"> 
+                      <select id="taxDemand" name="taxDemand" class="custom-select custom-select-sm form-control form-control-sm" >
+                        <option value="02">청구</option>
+                        <option value="01">영수</option>
+                      </select> 
+                      <select id="amendCode" name="amendCode" class="custom-select custom-select-sm form-control form-control-sm" >
+                        <option value="">수정사유</option>
+                        <option value="01">기재사항의 착오/정정</option>
+                        <option value="02">공급가액 변동</option>
+                        <option value="03">환입</option>
+                        <option value="04">계약의 해제</option>
+                        <option value="05">내국신용장 사후 개설</option>
+                        <option value="06">착오에 의한 이중발급</option>
+                      </select>
+                      <input type="text" class="custom custom-sm form-control form-control-sm" placeholder="당초승인번호" aria-label="당초승인번호" aria-describedby="button-addon2">
+                      <div class="input-group-append">
+                        <button class="btn btn-secondary btn-sm" id="searchIssueID" type="button" >찾아보기</button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="input-group input-group-sm mb-3" style="width:1000px;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text font-weight-bold" id="basic-addon1">비고1</span> 
+                    </div>
+                    <input type="text" id="remark" name="remark" class="form-control" aria-label="remark" aria-describedby="basic-addon1">
+                  </div>
+                  
+                  <div class="input-group input-group-sm mb-3" style="width:1000px;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text font-weight-bold" id="basic-addon2">비고2</span> 
+                    </div>
+                    <input type="text" id="remark2" name="remark2" class="form-control" aria-label="remark" aria-describedby="basic-addon2">
+                  </div>
+
+                  <div class="input-group input-group-sm mb-3" style="width:1000px;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text font-weight-bold" id="basic-addon3">비고3</span> 
+                    </div>
+                    <input type="text" id="remark3" name="remark3" class="form-control" aria-label="remark" aria-describedby="basic-addon3">
+                  </div>
+
+                  <div class="container" style="margin-top:2em;width:100%">
+                    <!--품목별 단가 start -->
+                    <table  id="itemData" class="table table-bordered">
+                      <colgroup>
+                          <col width="100px"/>
+                          <col width="240px"/>
+                          <col width="100px"/>
+                          <col width="100px"/>
+                          <col width="150px"/>
+                          <col width="200px"/>
+                          <col width="200px"/>
+                          <col width="240px"/>
+                          <col width="40px"/>
+                      </colgroup>
+                      <thead>
+                      <tr>
+                          <th class="fontB" style="text-align:center">구매일자</th>
+                          <th class="fontB" style="text-align:center">품 목</th>
+                          <th class="fontB" style="text-align:center">규 격</th>
+                          <th class="fontB" style="text-align:center">수 량</th>
+                          <th class="fontB" style="text-align:center">단 가</th>
+                          <th class="fontB" style="text-align:center">공 급 가 액</th>
+                          <th class="fontB" style="text-align:center">세 액</th>
+                          <th class="fontB" style="text-align:center">비 고</th>
+                          <th><input type="button" id="itemAdd1" class="btn btn-outline-secondary btn-sm float-right" value="+1" onclick="itemAdd('01');"/></th>
+                      </tr>
+                      </thead>
+
+                      <tbody id="itembody">
+                        <tr id="itemrow0">
+                            <td class="center">
+                                <input type="date" class="custom custom-sm form-control form-control-sm"  id="itemMD" name="itemMD"  style="margin-bottom: 2px;text-align:center"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemName" name="itemName" maxlength="100" style="margin-bottom: 2px"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemSize" name="itemSize" maxlength="60"  style="margin-bottom: 2px"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemQTY"  name="itemQTY" element-name="품목 수량" maxlength="18" style="margin-bottom: 2px;text-align:right" />
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="unitPrice"  name="unitPrice"  element-name="품목 단가" maxlength="18"  style="margin-bottom: 2px;text-align:right" />
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemSupAmount" name="itemSupAmount" maxlength="18" valid="trim,required" element-name="품목 공급가액" style="margin-bottom: 2px;text-align:right"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemTaxAmount" name="itemTaxAmount" maxlength="18" valid="trim,required" element-name="품목 세액" style="margin-bottom: 2px;text-align:right"/>
+                            </td>
+                            <td class="center">
+                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemRemark" name="itemRemark" maxlength="100"  style="margin-bottom: 2px"/>
+                            </td>
+                            <td class="center"></td>
+                            <input type="hidden" id="dtiLineNum" name="dtiLineNum" maxlength="3" value="1"/>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button type="button" id="saveBtn" onClick="saveForm('AR','save');" class="btn btn-outline-primary btn-sm" >저장</button>
+                    <button type="button" id="sendBtn" onClick="saveForm('AR','RARREQUEST');" class="btn btn-outline-success btn-sm " >역발행요청</button>
+                  </div>
+              </div>
+              <input type="hidden" id="conversationID">
+              <input type="hidden" id="supbuyType">
+              <input type="hidden" id="direction">
+              <input type="hidden" id="status">
+              <input type="hidden" id="dtiType" value='01'>
+            </form> 
+          </div>
+      </div>
+      <!-- /.container-fluid -->
+
+      <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © SETASETA Website 2019</span>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+   <!-- View Modal-->
+  <div class="modal" id="viewModal">
+    <div class="modal-content">
+        <span id="viewClose" class="close">&times;</span>
+        <div id="viewContent">
+            <table id="viewForm"></table>
+        </div>
+        
+        
+        <input type="hidden" id="supRegno">
+        <input type="hidden" id="byrRegno">
+    </div>
+  </div>
+
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/sb-admin.min.js"></script>
+  <script src="/js/fnDtiForm.js"></script>
+  <script src="/js/fnData.js"></script>
+  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+  <script type="text/javascript" class="init">
+    $(document).ready(function() {
+      init('AP');
+    });
+  </script>
+</body>
+
+</html>

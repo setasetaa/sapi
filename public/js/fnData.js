@@ -55,7 +55,7 @@ function s1(){
 }
 
 function s4(){
-	return s1() + s1() + s1() + s1();
+	return s1()*1000 + s1()*100 + s1()*10 + s1();
 }
 
 function guid(){
@@ -69,6 +69,6 @@ function createConversationID(supComregno, byrComregno){
 }
 
 function createIssueID(dtiWdate){
-	var issueID = dtiWdate + '4100008' + s4() + s1() + 'tnt';
+	var issueID = dtiWdate + '41000008' + s4() + s1() + 'tnt';
 	return issueID.replace(/-/gi,'');
 }

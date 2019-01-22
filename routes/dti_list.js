@@ -17,7 +17,7 @@ router.post('/list', function(req, res, next) {
   var search = {};
   var join = {};
   var where = {};
-  var dateType, fromDate, endDate, regno, comName, supAmount, taxAmount, issueID, dtiType, direction, dtiStatus, taxDemand, sbType;
+  var dateType, fromDate, endDate, regno, comName, supAmount, taxAmount, issueID, dtiType, direction, dtiStatus, taxDemand, sbType, userEmail, userComRegno;
 
   for(var i = 0; i < body.length; i++){
     var searchType = body[i].name;
@@ -77,6 +77,12 @@ router.post('/list', function(req, res, next) {
         taxDemand = body[i].value;
       }
       break;
+      case 'userEmail' :
+      userEmail = body[i].value;
+      break
+      case 'userComRegno' :
+      userComRegno = body[i].value;
+      break
     }
   }
   where['supbuy_Type'] = sbType;
@@ -87,8 +93,12 @@ router.post('/list', function(req, res, next) {
     regno = regno.replace('-','');
     if('AP' == sbType){
       where['sup_com_regno'] = regno;
+      where['byr_com_regno'] = userComRegno;
+      where['byr_email'] = userEmail;
     }else{
       where['byr_com_regno'] = regno;
+      where['sup_com_regno'] = userComRegno;
+      where['sup_email'] = userEmail;
     }
   }
   if(comName != "" && comName != null){

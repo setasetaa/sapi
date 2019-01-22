@@ -365,9 +365,6 @@
                     <label class="font-weight-bold">공급가액
                       <input type="text" id="supAmount" name="supAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" required="required" disabled>
                     </label>
-                    <label class="font-weight-bold">세액
-                        <input type="text" id="taxAmount" name="taxAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" disabled>
-                      </label>
                     <label class="font-weight-bold">합계금액
                       <input type="text" id="totalAmount" name="totalAmount"class="custom custom-sm form-control form-control-sm" style="width:150px" required="required" disabled>
                     </label>
@@ -420,15 +417,14 @@
                     <!--품목별 단가 start -->
                     <table  id="itemData" class="table table-bordered">
                       <colgroup>
-                        <col width="100px"/>
-                        <col width="240px"/>
-                        <col width="100px"/>
-                        <col width="100px"/>
-                        <col width="150px"/>
-                        <col width="200px"/>
-                        <col width="200px"/>
-                        <col width="240px"/>
-                        <col width="40px"/>
+                          <col width="100px"/>
+                          <col width="240px"/>
+                          <col width="100px"/>
+                          <col width="100px"/>
+                          <col width="150px"/>
+                          <col width="200px"/>
+                          <col width="240px"/>
+                          <col width="40px"/>
                       </colgroup>
                       <thead>
                       <tr>
@@ -438,7 +434,6 @@
                           <th class="fontB" style="text-align:center">수 량</th>
                           <th class="fontB" style="text-align:center">단 가</th>
                           <th class="fontB" style="text-align:center">공 급 가 액</th>
-                          <th class="fontB" style="text-align:center">세 액</th>
                           <th class="fontB" style="text-align:center">비 고</th>
                           <th><input type="button" id="itemAdd1" class="btn btn-outline-secondary btn-sm float-right" value="+1" onclick="itemAdd('01');"/></th>
                       </tr>
@@ -465,9 +460,6 @@
                                 <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemSupAmount" name="itemSupAmount" maxlength="18" valid="trim,required" element-name="품목 공급가액" style="margin-bottom: 2px;text-align:right"/>
                             </td>
                             <td class="center">
-                                <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemTaxAmount" name="itemTaxAmount" maxlength="18" valid="trim,required" element-name="품목 세액" style="margin-bottom: 2px;text-align:right"/>
-                            </td>
-                            <td class="center">
                                 <input type="text" class="custom custom-sm form-control form-control-sm"  id="itemRemark" name="itemRemark" maxlength="100"  style="margin-bottom: 2px"/>
                             </td>
                             <td class="center"></td>
@@ -476,14 +468,14 @@
                       </tbody>
                     </table>
                     <button type="button" id="saveBtn" onClick="saveForm('AR','save');" class="btn btn-outline-primary btn-sm" >저장</button>
-                    <button type="button" id="sendBtn" onClick="saveForm('AR','ARISSUE');" class="btn btn-outline-success btn-sm " >발행</button>
+                    <button type="button" id="sendBtn" onClick="saveForm('AR','RARREQUEST');" class="btn btn-outline-success btn-sm " >역발행요청</button>
                   </div>
               </div>
               <input type="hidden" id="conversationID">
               <input type="hidden" id="supbuyType">
               <input type="hidden" id="direction">
               <input type="hidden" id="status">
-              <input type="hidden" id="dtiType" value='03'>
+              <input type="hidden" id="dtiType" value='04'>
             </form> 
           </div>
       </div>

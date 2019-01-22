@@ -1,7 +1,11 @@
 document.write('<script src="/js/fnData.js" type="text/javascript"></script>');
 
 function search(supbuyType) {
-	var request = JSON.stringify($('#searchForm').serializeArray());
+	var request = JSON.stringify(
+		$('#searchForm').serializeArray(),
+		{name:'userEmail', value: $('#userEmail').val()},
+		{name: 'userComregno', value: $('#comRegno').val()}
+	);
 
 	$.support.cors = true;
 	$.ajax({
@@ -528,7 +532,7 @@ function SBGetList( data, supbuyType ) {
 					{title: "direction", data: "direction"},
 					{title: "DTITYPE", data: "dtiType"},
 					{title: "승인번호", data: "issueID"},
-					{title: "NTS", data: "sendStatus"},
+					{title: "국세청", data: "sendStatus"},
 					{title: "email", data: "email"}
 				],
 				columnDefs: [

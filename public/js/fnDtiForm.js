@@ -54,7 +54,7 @@ function itemAdd(dtiType){
     var itemAdd =           "<tr id='itemrow"+tcount+"'> <td class='center'> <input type='date'  class='custom custom-sm form-control form-control-sm' id='itemMD"+tcount+"'  name='itemMD' style='margin-bottom: 2px;text-align:center'/> </td>";
         itemAdd = itemAdd + "<td class='center'> <input type='text' class='custom custom-sm form-control form-control-sm' id='itemName"+tcount+"' name='itemName' maxlength='100' style='margin-bottom: 2px'/> </td>";
         itemAdd = itemAdd + "<td class='center'><input type='text' class='custom custom-sm form-control form-control-sm' id='itemSize"+tcount+"' name='itemSize' maxlength='18'  style='margin-bottom: 2px'/> </td>";
-        itemAdd = itemAdd + "<td class='center'><input type='number' class='custom custom-sm form-control form-control-sm' id='itemQTY"+tcount+"' name='itemQTY'  maxlength='18' style='margin-bottom: 2px;text-align:right' /> </td>";
+        itemAdd = itemAdd + "<td class='center'><input type='text' class='custom custom-sm form-control form-control-sm' id='itemQTY"+tcount+"' name='itemQTY'  maxlength='18' style='margin-bottom: 2px;text-align:right' /> </td>";
         itemAdd = itemAdd + "<td class='center'><input type='text' class='custom custom-sm form-control form-control-sm' id='unitPrice"+tcount+"' name='unitPrice'  maxlength='18' style='margin-bottom: 2px;text-align:right' /> </td>";
         itemAdd = itemAdd + "<td class='center'><input type='text' class='custom custom-sm form-control form-control-sm' id='itemSupAmount"+tcount+"' name='itemSupAmount'  maxlength='18' valid='trim,required' element-name='품목 공급가액' style='margin-bottom: 2px;text-align:right'/> </td>";
         if(dtiType != "02"){
@@ -149,7 +149,7 @@ function saveForm(supbuyType, signal){
     formData.byrComRegno = $('#byrComRegno').val().replace(/-/gi,'');
     formData.conversationID = createConversationID(formData.supComRegno, formData.byrComRegno);
     formData.supbuyType = supbuyType;
-    formData.issueID = createIssueID();
+    formData.issueID = createIssueID(formData.dtiWdate);
     if('AP' == supbuyType){
         formData.status = 'A';
         formData.direction = '1';
@@ -248,11 +248,11 @@ function saveForm(supbuyType, signal){
             sendData(formData, signal);
         }else{
             alert('저장 성공');
-            if('AP' == supbuyType){
-                location.href='/dti/list/APlist';
-            }else{
-                location.href='/dti/list/ARlist';
-            }
+        }
+        if('AP' == supbuyType){
+            location.href='/dti/list/APlist';
+        }else{
+            location.href='/dti/list/ARlist';
         }
     }else{
         alert('저장 실패');
@@ -264,7 +264,7 @@ function createXML(formData){
     var dtiMSG;
     var node, elements, addNode, addNode2, textNode, header, item;
 
-    dtiMSG = '<TaxInvoice></TaxInvoice>';
+    dtiMSG = '<?xml version="1.0" encoding="UTF-8"?> <TaxInvoice></TaxInvoice>';
     if (window.DOMParser){
         parser = new DOMParser();
         xmlDoc = parser.parseFromString(dtiMSG,"text/xml");
@@ -289,7 +289,7 @@ function createXML(formData){
     // 발행일자 생성
     node = xmlDoc.createElement("ExchangedDocument");
     addNode = xmlDoc.createElement("IssueDateTime");
-    textNode = xmlDoc.createTextNode('');
+    textNode = xmlDoc.createTextNode(nowDate().replace(/-/gi,'') + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds());
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     elements[0].appendChild(node);
@@ -547,13 +547,14 @@ function createXML(formData){
         header.appendChild(node);
     }
 
+    // 현금, 수표, 어음, 외상미수금
     node = xmlDoc.createElement("SpecifiedPaymentMeans");
     addNode = xmlDoc.createElement("TypeCode");
     textNode = xmlDoc.createTextNode('10');
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     addNode = xmlDoc.createElement("PaidAmount");
-    textNode = xmlDoc.createTextNode(formData.totalAmount);
+    textNode = xmlDoc.createTextNode('');
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     header.appendChild(node);
@@ -564,7 +565,7 @@ function createXML(formData){
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     addNode = xmlDoc.createElement("PaidAmount");
-    textNode = xmlDoc.createTextNode('0');
+    textNode = xmlDoc.createTextNode('');
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     header.appendChild(node);
@@ -575,7 +576,7 @@ function createXML(formData){
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     addNode = xmlDoc.createElement("PaidAmount");
-    textNode = xmlDoc.createTextNode('0');
+    textNode = xmlDoc.createTextNode('');
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     header.appendChild(node);
@@ -586,7 +587,7 @@ function createXML(formData){
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     addNode = xmlDoc.createElement("PaidAmount");
-    textNode = xmlDoc.createTextNode('0');
+    textNode = xmlDoc.createTextNode('');
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     header.appendChild(node);
@@ -646,7 +647,7 @@ function createXML(formData){
         }
         if('' != formData.itemMD[i] && null!= formData.itemMD[i]){
             node = xmlDoc.createElement("PurchaseExpiryDateTime");
-            textNode = xmlDoc.createTextNode(formData.itemMD[i].replace(/-/gi,'').substr(4,7));
+            textNode = xmlDoc.createTextNode(formData.itemMD[i].substr(0,10).replace(/-/gi,''));
             node.appendChild(textNode);
             item.appendChild(node);
         }

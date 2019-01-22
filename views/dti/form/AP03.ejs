@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB SA - 위수탁 매출 세금계산서</title>
+  <title>SB SA - 위수탁 매입 세금계산서</title>
 
   <!-- Bootstrap core CSS-->
   <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -36,7 +36,7 @@
       <div class="container-fluid">
         <div class="card mb-3">
           <div class="card-header">
-            <i class="fas fa-table"></i> 위수탁 매출 세금계산서
+            <i class="fas fa-table"></i> 위수탁 매입 세금계산서
           </div>
           <div class="card-body">
             <form id="sendForm">
@@ -476,7 +476,7 @@
                       </tbody>
                     </table>
                     <button type="button" id="saveBtn" onClick="saveForm('AR','save');" class="btn btn-outline-primary btn-sm" >저장</button>
-                    <button type="button" id="sendBtn" onClick="saveForm('AR','ARISSUE');" class="btn btn-outline-success btn-sm " >발행</button>
+                    <button type="button" id="sendBtn" onClick="saveForm('AR','RARREQUEST');" class="btn btn-outline-success btn-sm " >역발행요청</button>
                   </div>
               </div>
               <input type="hidden" id="conversationID">
@@ -531,7 +531,7 @@
 
   <script type="text/javascript" class="init">
     $(document).ready(function() {
-      init('AR');
+      init('AP');
     });
   </script>
 </body>
