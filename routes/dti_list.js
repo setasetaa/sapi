@@ -294,7 +294,11 @@ router.post('/updateStatus', function(req, res, next) {
   })
   .then( result => {
       console.log("데이터 수정 완료");
-      res.render("dti/list/APlist");
+      if('AP' == supbuyType){
+        res.render("dti/list/APlist");
+      }else{
+        res.render("dti/list/ARlist");
+      }
   })
   .catch( err => {
       console.log("데이터 수정 실패");
@@ -338,6 +342,25 @@ router.post('/renewStatus', function(req, res, next) {
     if(t)
     t.rollback();
     console.log(err);
+  });
+});
+
+router.post('/updateMSG', function(req, res, next) {
+  let body = req.body;
+  let conversationID = body.conversationID;
+  let supbuyType = body.supbuyType;
+  let dtiMSG = body.dtiMSG;
+
+  models.dti_main.update({
+      dti_msg : dtiMSG
+  },{
+      where: {conversation_id: conversationID, supbuyType: supbuyType}
+  })
+  .then( result => {
+    res.send({result:true, msg:"suc"});
+  })
+  .catch( err => {
+    res.send({result:false, msg:"fail"});
   });
 });
 
@@ -414,12 +437,16 @@ router.post('/getXML', function(req, res, next) {
         }else{
           viewData = fs.readFileSync('views/dti/list/viewForm/AP04.xsl', 'utf-8');
         }
+      }else{
+        res.send({result:true, xml:data});
       }
       //console.log(data);
       res.send({result:true, xml:data, html:viewData});
+
       }else{
         res.send({result:true, msg:"no data"});
       }
+
     }).catch(function(err){
       console.log(err);
       res.send({result:false, msg:"fail"});

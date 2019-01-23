@@ -492,19 +492,12 @@ function createXML(formData){
 function xmlParse(conversationID, supbuyType, direction, status, DTI){
 	var parser, xmlDoc;
 	var objData = {};
-	if('정' == direction ){
-		direction = 2;
-	}else{
-		direction = 1;
-	}
+	
 	parser = new DOMParser();
 	xmlDoc = parser.parseFromString(DTI,"text/xml");
   	objData.dtiMSG = DTI;
 	//console.log(objData.dtiMSG);
-	objData.conversationID = conversationID;
-	objData.supbuyType = supbuyType;
-	objData.direction = direction;
-	objData.status = status;
+	
 	if(xmlDoc.getElementsByTagName("IssueDateTime")[0] != null){
 		objData.IDate = dateFormat(xmlDoc.getElementsByTagName("IssueDateTime")[0].childNodes[0].nodeValue);
 	}
@@ -671,6 +664,23 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 		if(xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("UnitAmount")[0] != null){
 			objData.itemUnitPrice[i] = xmlDoc.getElementsByTagName("TaxInvoiceTradeLineItem")[i].getElementsByTagName("UnitAmount")[0].childNodes[0].nodeValue;
 		}
-	}
+    }
+    
+    if('정' == direction ){
+		objData.direction = 2;
+	}else if('역' == direction){
+		objData.direction = 1;
+    }else{
+        objData.direction = 2;
+    }
+
+    if('' == conversationID){
+        objData.conversationID = createConversationID(objData.supComRegno, objData.byrComRegno);
+    }else{
+        objData.conversationID = conversationID;
+    }
+    objData.supbuyType = supbuyType;
+    objData.status = status;
+	
 	return JSON.stringify(objData);
 }
