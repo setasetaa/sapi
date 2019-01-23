@@ -17,119 +17,52 @@ router.post('/list', function(req, res, next) {
   var search = {};
   var join = {};
   var where = {};
-  var dateType, fromDate, endDate, regno, comName, supAmount, taxAmount, issueID, dtiType, direction, dtiStatus, taxDemand, sbType, userEmail, userComRegno;
 
-  for(var i = 0; i < body.length; i++){
-    var searchType = body[i].name;
-    switch(searchType){
-      case 'sbType' :
-      sbType = body[i].value;
-      break;
-      case 'dateType' :
-      dateType = body[i].value;
-      break;
-      case 'fromDate' :
-      fromDate = body[i].value;
-      break;
-      case 'endDate' :
-      endDate = body[i].value;
-      break;
-      case 'regno' :
-      regno = body[i].value;
-      break;
-      case 'comName' :
-      comName = body[i].value;
-      break;
-      case 'supAmount' :
-      supAmount = body[i].value;
-      break;
-      case 'taxAmount' :
-      taxAmount = body[i].value;
-      break;
-      case 'issueID' :
-      issueID = body[i].value;
-      break;
-      case 'dtiType' :
-      if(dtiType != undefined){
-        dtiType = dtiType + body[i].value;
-      }else{
-        dtiType = body[i].value;
-      }
-      break;
-      case 'direction' :
-      if(direction != undefined){
-        direction = direction + body[i].value;
-      }else{
-        direction = body[i].value;
-      }
-      break;
-      case 'dtiStatus' :
-      if(dtiStatus != undefined){
-        dtiStatus = dtiStatus + body[i].value;
-      }else{
-        dtiStatus = body[i].value;
-      }
-      break;
-      case 'taxDemand' :
-      if(taxDemand != undefined){
-        taxDemand = taxDemand + body[i].value;
-      }else{
-        taxDemand = body[i].value;
-      }
-      break;
-      case 'userEmail' :
-      userEmail = body[i].value;
-      break
-      case 'userComRegno' :
-      userComRegno = body[i].value;
-      break
-    }
+  where['supbuy_Type'] = body.sbType;
+  if(body.dateType != "" && body.dateType != null){
+    where[body.dateType] = {$between: [body.fromDate, body.endDate]};
   }
-  where['supbuy_Type'] = sbType;
-  if(dateType != "" && dateType != null){
-    where[dateType] = {$between: [fromDate, endDate]};
-  }
-  if(regno != "" && regno != null){
-    regno = regno.replace('-','');
-    if('AP' == sbType){
-      where['sup_com_regno'] = regno;
-      where['byr_com_regno'] = userComRegno;
-      where['byr_email'] = userEmail;
+  if(body.regno != "" && body.regno != null){
+    body.regno = body.regno.replace('-','');
+    if('AP' == body.sbType){
+      where['sup_com_regno'] = body.regno;
+      where['byr_com_regno'] = body.userComRegno;
+      where['byr_email'] = body.userEmail;
     }else{
-      where['byr_com_regno'] = regno;
-      where['sup_com_regno'] = userComRegno;
-      where['sup_email'] = userEmail;
+      where['byr_com_regno'] = body.regno;
+      where['sup_com_regno'] = body.userComRegno;
+      where['sup_email'] = body.userEmail;
     }
   }
-  if(comName != "" && comName != null){
-    if('AP' == sbType){
-      where['sup_com_name'] = {$like: comName + '%'};
+  if(body.comName != "" && body.comName != null){
+    if('AP' == body.sbType){
+      where['sup_com_name'] = {$like: body.comName + '%'};
     }else{
-      where['byr_com_name'] = {$like: comName + '%'};
+      where['byr_com_name'] = {$like: body.comName + '%'};
     }
   }
-  if(supAmount != "" && supAmount != null){
+  if(body.supAmount != "" && body.supAmount != null){
     where['sup_amount'] = supAmount;
   }
-  if(taxAmount != "" && taxAmount != null){
+  if(body.taxAmount != "" && body.taxAmount != null){
     where['tax_amount'] = taxAmount;
   }
-  if(issueID != "" && issueID != null){
+  if(body.issueID != "" && body.issueID != null){
     where['issue_id'] = issueID;
   }
-  if(dtiType != "" && dtiType != null){
+  if(body.dtiType != "" && body.dtiType != null){
     var temp = [];
 
-    if(dtiType.indexOf('과세') != -1){
+    if(body.dtiType.indexOf('과세') != -1){
       temp = temp.concat('0101', '0102', '0103', '0104', '0105', '0201', '0202', '0203', '0204', '0205');
     }
-    if(dtiType.indexOf('면세') != -1){
+    if(body.dtiType.indexOf('면세') != -1){
       temp = temp.concat('0301', '0303', '0304', '0401', '0403', '0404');
     }
-    if(dtiType.indexOf('수정') != -1){
+    if(body.dtiType.indexOf('수정') != -1){
       temp = temp.concat('0201', '0202', '0203', '0204', '0205', '0401', '0403', '0404');
     }
-    if(dtiType.indexOf('위수탁') != -1){
+    if(body.dtiType.indexOf('위수탁') != -1){
       temp = temp.concat('0103', '0105', '0203', '0205', '0303', '0403');
     }
     var value = temp.toString().split(',');
@@ -137,43 +70,43 @@ router.post('/list', function(req, res, next) {
     where['dti_type'] = [uniqArray];
     
   }
-  if(direction != "" && direction != null){
+  if(body.direction != "" && body.direction != null){
     var temp = [];
     
-    if(direction.indexOf('1') != -1){
+    if(body.direction.indexOf('1') != -1){
       temp = temp.concat('1');
     }
-    if(direction.indexOf('2') != -1){
+    if(body.direction.indexOf('2') != -1){
       temp = temp.concat('2');
     }
     var value = temp.toString().split(',');
     where['direction'] = [value];
     
   }
-  if(dtiStatus != "" && dtiStatus != null){
+  if(body.dtiStatus != "" && body.dtiStatus != null){
     var temp = [];
-    if(dtiStatus.indexOf('S') != -1){
+    if(body.dtiStatus.indexOf('S') != -1){
       temp = temp.concat('S');
     }
-    if(dtiStatus.indexOf('I') != -1){
+    if(body.dtiStatus.indexOf('I') != -1){
       temp = temp.concat('I');
     }
-    if(dtiStatus.indexOf('C') != -1){
+    if(body.dtiStatus.indexOf('C') != -1){
       temp = temp.concat('C');
     }
-    if(dtiStatus.indexOf('R') != -1){
+    if(body.dtiStatus.indexOf('R') != -1){
       temp = temp.concat('R');
     }
-    if(dtiStatus.indexOf('T') != -1){
+    if(body.dtiStatus.indexOf('T') != -1){
       temp = temp.concat('T');
     }
-    if(dtiStatus.indexOf('O') != -1){
+    if(body.dtiStatus.indexOf('O') != -1){
       temp = temp.concat('O');
     }
-    if(dtiStatus.indexOf('V') != -1){
+    if(body.dtiStatus.indexOf('V') != -1){
       temp = temp.concat('V');
     }
-    if(dtiStatus.indexOf('W') != -1){
+    if(body.dtiStatus.indexOf('W') != -1){
       temp = temp.concat('W');
     }
     var value = temp.toString().split(',');
@@ -181,12 +114,12 @@ router.post('/list', function(req, res, next) {
     join['where'] = {'dti_status': [value] };
     
   }
-  if(taxDemand != "" && taxDemand != null){
+  if(body.taxDemand != "" && body.taxDemand != null){
     var temp = [];
-    if(taxDemand.indexOf('01') != -1){
+    if(body.taxDemand.indexOf('01') != -1){
       temp = temp.concat('01');
     }
-    if(taxDemand.indexOf('02') != -1){
+    if(body.taxDemand.indexOf('02') != -1){
       temp = temp.concat('02');
     }
     var value = temp.toString().split(',');
@@ -202,6 +135,7 @@ router.post('/list', function(req, res, next) {
   join = {};
   join['model'] = models.dti_item;
   search.include[1] = join;
+
   models.dti_main.findAll(search)
   .then(function(data){
     if(data.length != 0){
@@ -407,7 +341,7 @@ router.post('/renewStatus', function(req, res, next) {
   });
 });
 
-// 검증 전
+// 데이터 삭제
 router.post('/delete', function(req, res, next) {
   console.log("data delete");
   let body = req.body;
