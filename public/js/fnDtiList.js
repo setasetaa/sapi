@@ -824,6 +824,7 @@ function updateMSG(conversationID, supbuyType, dtiMSG){
 }
 
 function deleteData(){
+	var result;
 	var request = JSON.stringify({
 		'conversationID': $('#conversationID').val(),
 		'supbuyType' : $('#supbuyType').val()
@@ -837,12 +838,13 @@ function deleteData(){
 		async: false,
 		data: request,
 		success: function(data) {
-			return true;
+			result = true;
 		},
 		error: function(error) {
-			return false;
+			result = false;
 		}
 	});
+	return result;
 }
 
 function renewStatus(data){
@@ -1065,6 +1067,7 @@ function uploadXML(supbuyType) {
 }
 
 function updateXML(conversationID, supbuyType){
+	var result;
 	$.support.cors = true;
 	$.ajax({
 		type: "POST",
@@ -1079,17 +1082,18 @@ function updateXML(conversationID, supbuyType){
 			issueDateTime.nodeValue = nowDate().replace(/-/gi,'') + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds();
 			var dtiMSG = (new XMLSerializer()).serializeToString(xmlDoc);
 			if(updateMSG(conversationID, supbuyType, dtiMSG)){
-				return dtiMSG;
+				result = dtiMSG;
 			}else{
 				console.log('업데이트 실패');
-				return false;
+				result = false;
 			}
 		},
 		error: function (error) {
 			console.log('data 불러오기 실패');
-			return false;
+			result = false;
 		}
 	});
+	return result;
 }
 
 function sendData(signal){
@@ -1127,7 +1131,7 @@ function sendData(signal){
         'ConversationId': arrConvId,
         'SMTPEmail': '',
 //        'RValue': '', // 서명모듈 이용해서 발행할 경우에만 필요
-        'CertPassword': ' signgate1!', // 암호화된 인증서의 비밀번호
+        'CertPassword': 'signgate1!', // 암호화된 인증서의 비밀번호
         'SystemId': '',
         'PlatformCode': '',
         'SignedXML': dtiMSG // 세금계산서 xml

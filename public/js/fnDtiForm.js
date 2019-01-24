@@ -110,7 +110,8 @@ function sum(){
     $('#totalAmount').val(total);
 }
 
-function insertData(formData, signal){
+function insertData(formData){
+    var result;
 	$.ajax({
 		type: "POST",
 		dataType: "json",
@@ -120,24 +121,75 @@ function insertData(formData, signal){
 		async: false,
 		data: formData,
 		success: function(data) {
-			if(result){
-                if('save' != signal){
-                    sendData(formData, signal);
-                }else{
-                    alert('저장 성공');
-                }
-                if('AP' == supbuyType){
-                    location.href='/dti/list/APlist';
-                }else{
-                    location.href='/dti/list/ARlist';
-                }
-            }else{
-                alert('저장 실패');
-            }
+			result = data['result'];
 		},
 		error: function(error) {
-            alert(error);
+            result = false;
 		}
+    });
+    return result;
+}
+
+function send(formData, signal){
+    var comRegno = $('#comRegno').val();
+	var token = $('#token').val();
+    var arrConvId = new Array();
+    var receiveCom;
+    arrConvId[0] = formData.conversationID;
+    switch(signal){
+        case 'ARISSUE' :
+            receiveCom = formData.byrComRegno;
+        break;
+        case 'RARREQUEST' :
+            receiveCom = formData.supComRegno;
+        break;
+    }
+    var request = JSON.stringify({
+        'MessageId': guid(),
+        'Signal': signal,
+        'RequestTime': nowDate(),
+        'SendComRegno': comRegno,
+        'ReceiveComRegno': receiveCom,
+        'AuthToken': token,
+        'ServiceCode': 'DTI',
+        'SystemType': 'OAPI',
+        'ConversationId': arrConvId,
+        'SMTPEmail': '',
+//        'RValue': '', // 서명모듈 이용해서 발행할 경우에만 필요
+        'CertPassword': 'signgate1!', // 암호화된 인증서의 비밀번호
+        'SystemId': '',
+        'PlatformCode': '',
+        'SignedXML': formData.dtiMSG // 세금계산서 xml
+    });
+    $.support.cors = true;
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        crossDomain: true,
+        contentType: "application/json",
+        url: "http://demoapi.smartbill.co.kr/sb-api/request/",
+        data: request,
+        success: function (data) {
+            if ("30000" != data.ResultCode) {
+                alert(data.ResultMessage);
+            }
+            else{
+                alert("정상적으로 처리되었습니다.");
+            }
+            if('AP' == formData.supbuyType){
+                location.href='/dti/list/APlist';
+            }else{
+                location.href='/dti/list/ARlist';
+            }
+        },
+        error: function (error) {
+            alert(error);
+            if('AP' == formData.supbuyType){
+                location.href='/dti/list/APlist';
+            }else{
+                location.href='/dti/list/ARlist';
+            }
+        }
     });
 }
 
@@ -253,58 +305,21 @@ function saveForm(supbuyType, signal){
     }
 
     formData.dtiMSG = createXML(formData);
-    insertData(JSON.stringify(formData, signal));
+    var result = insertData(JSON.stringify(formData));
+    
+    if(result){
+        if('save' != signal){
+            send(formData, signal);
+        }else{
+            alert('저장 성공');
+            if('AP' == formData.supbuyType){
+                location.href='/dti/list/APlist';
+            }else{
+                location.href='/dti/list/ARlist';
+            }
+        }
+    }else{
+        alert('저장 실패');
+    }
 }
 
-function sendData(formData, signal){
-    var comRegno = $('#comRegno').val();
-	var token = $('#token').val();
-    var arrConvId = new Array();
-    var receiveCom;
-    arrConvId[0] = formData.conversationID;
-    switch(signal){
-        case 'ARISSUE' :
-            receiveCom = formData.byrComRegno;
-        break;
-        case 'RARREQUEST' :
-            receiveCom = formData.supComRegno;
-        break;
-    }
-    var request = JSON.stringify({
-        'MessageId': guid(),
-        'Signal': signal,
-        'RequestTime': nowDate(),
-        'SendComRegno': comRegno,
-        'ReceiveComRegno': receiveCom,
-        'AuthToken': token,
-        'ServiceCode': 'DTI',
-        'SystemType': 'OAPI',
-        'ConversationId': arrConvId,
-        'SMTPEmail': '',
-//        'RValue': '', // 서명모듈 이용해서 발행할 경우에만 필요
-        'CertPassword': ' Ygvm7lhfuSp6p', // 암호화된 인증서의 비밀번호
-        'SystemId': '',
-        'PlatformCode': '',
-        'SignedXML': formData.dtiMSG // 세금계산서 xml
-    });
-    $.support.cors = true;
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        crossDomain: true,
-        contentType: "application/json",
-        url: "http://demoapi.smartbill.co.kr/sb-api/request/",
-        data: request,
-        success: function (data) {
-            if ("30000" != data.ResultCode) {
-                alert(data.ResultMessage);
-            }
-            else{
-                alert("정상적으로 처리되었습니다.");
-            }
-        },
-        error: function (error) {
-            alert(error);
-        }
-    });
-}
