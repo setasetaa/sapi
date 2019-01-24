@@ -110,8 +110,7 @@ function sum(){
     $('#totalAmount').val(total);
 }
 
-function insertData(formData){
-    var returnMSG;
+function insertData(formData, signal){
 	$.ajax({
 		type: "POST",
 		dataType: "json",
@@ -121,14 +120,25 @@ function insertData(formData){
 		async: false,
 		data: formData,
 		success: function(data) {
-			returnMSG = true;
+			if(result){
+                if('save' != signal){
+                    sendData(formData, signal);
+                }else{
+                    alert('저장 성공');
+                }
+                if('AP' == supbuyType){
+                    location.href='/dti/list/APlist';
+                }else{
+                    location.href='/dti/list/ARlist';
+                }
+            }else{
+                alert('저장 실패');
+            }
 		},
 		error: function(error) {
             alert(error);
-			returnMSG = false;
 		}
     });
-    return returnMSG;
 }
 
 function saveForm(supbuyType, signal){
@@ -243,22 +253,7 @@ function saveForm(supbuyType, signal){
     }
 
     formData.dtiMSG = createXML(formData);
-    var result = insertData(JSON.stringify(formData));
-
-    if(result){
-        if('save' != signal){
-            sendData(formData, signal);
-        }else{
-            alert('저장 성공');
-        }
-        if('AP' == supbuyType){
-            location.href='/dti/list/APlist';
-        }else{
-            location.href='/dti/list/ARlist';
-        }
-    }else{
-        alert('저장 실패');
-    }
+    insertData(JSON.stringify(formData, signal));
 }
 
 function sendData(formData, signal){
@@ -271,8 +266,8 @@ function sendData(formData, signal){
         case 'ARISSUE' :
             receiveCom = formData.byrComRegno;
         break;
-        case 'RARISSUE' :
-            receiveCom = formData.byrComRegno;
+        case 'RARREQUEST' :
+            receiveCom = formData.supComRegno;
         break;
     }
     var request = JSON.stringify({
