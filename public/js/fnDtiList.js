@@ -800,6 +800,29 @@ function updateStatus(signal, conversationID, supbuyType, reason){
 	});
 }
 
+function updateMSG(conversationID, supbuyType, dtiMSG){
+	var request = JSON.stringify({
+		'conversationID': conversationID,
+		'supbuyType': supbuyType,
+		'dti_msg' : dtiMSG
+	});
+	$.support.cors = true;
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		crossDomain: true,
+		contentType: "application/json",
+		url: "updateMSG",
+		data: request,
+		success: function(data) {
+			return true;
+		},
+		error: function(error) {
+			return false;
+		}
+	});
+}
+
 function deleteData(){
 	var request = JSON.stringify({
 		'conversationID': $('#conversationID').val(),
@@ -814,17 +837,16 @@ function deleteData(){
 		async: false,
 		data: request,
 		success: function(data) {
-			returnMSG = true;
+			return true;
 		},
 		error: function(error) {
-			returnMSG = false;
+			return false;
 		}
 	});
-		return returnMSG;
 }
 
 function renewStatus(data){
-	var returnMSG, dtiIdate, dtiSdate;
+	var dtiIdate, dtiSdate;
 	dtiIdate = data.ResultDataSet.Table[0].DTI_ISSUEDATE;
 	dtiSdate = data.ResultDataSet.Table[0].NTS_SEND_DATE;
 	if(!isDate(dtiIdate)){
@@ -852,13 +874,12 @@ function renewStatus(data){
 		url: "renewStatus",
 		data: request,
 		success: function(data) {
-			returnMSG = true;
+			return true;
 		},
 		error: function(error) {
-			returnMSG = false;
+			return false;
 		}
 	});
-	return returnMSG;
 }
 
 function onPrint() {
@@ -1004,7 +1025,7 @@ function sbSearch(supbuyType) {
 	});
 }
 
-function upload(supbuyType) {
+function uploadXML(supbuyType) {
 	var dataset = {};
 	var arrConvId = new Array();
 	var arrDirection = new Array();
@@ -1043,18 +1064,55 @@ function upload(supbuyType) {
 	});
 }
 
-function sendData(formData, signal){
+function updateXML(conversationID, supbuyType){
+	$.support.cors = true;
+	$.ajax({
+		type: "POST",
+		crossDomain: true,
+		url: 'getXML',
+		data: {conversationID : conversationID, dtiType : '', supbuyType : supbuyType},
+		success: function(data) {
+			var parser = new DOMParser();
+			var xmlDoc = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
+			//var xsl = parser.parseFromString(data['html'], "text/xml");
+			var issueDateTime = xmlDoc.getElementsByTagName("IssueDateTime")[0].childNodes[0];
+			issueDateTime.nodeValue = nowDate().replace(/-/gi,'') + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds();
+			var dtiMSG = (new XMLSerializer()).serializeToString(xmlDoc);
+			if(updateMSG(conversationID, supbuyType, dtiMSG)){
+				return dtiMSG;
+			}else{
+				console.log('업데이트 실패');
+				return false;
+			}
+		},
+		error: function (error) {
+			console.log('data 불러오기 실패');
+			return false;
+		}
+	});
+}
+
+function sendData(signal){
     var comRegno = $('#comRegno').val();
 	var token = $('#token').val();
-    var arrConvId = new Array();
-    var receiveCom;
-    arrConvId[0] = formData.conversationID;
+	var arrConvId = new Array();
+	arrConvId[0] = $('#conversationID').val();
+	var supbuyType = $('#supbuyType').val();
+	var dtiMSG = updateXML(arrConvId[0], supbuyType);
+	var receiveComRegno;
+	if(!dtiMSG){
+		alert('XML 원본 가져오기 실패');
+		return;
+	}
     switch(signal){
         case 'ARISSUE' :
-            receiveCom = formData.byrComRegno;
-        break;
+			receiveComRegno = $('#byrRegno').val();
+		break;
+		case 'RARREQUEST' :
+			receiveComRegno = $('#supRegno').val();
+		break;
         case 'RARISSUE' :
-            receiveCom = formData.byrComRegno;
+			receiveComRegno = $('#byrRegno').val();
         break;
     }
     var request = JSON.stringify({
@@ -1062,17 +1120,17 @@ function sendData(formData, signal){
         'Signal': signal,
         'RequestTime': nowDate(),
         'SendComRegno': comRegno,
-        'ReceiveComRegno': receiveCom,
+        'ReceiveComRegno': receiveComRegno,
         'AuthToken': token,
         'ServiceCode': 'DTI',
         'SystemType': 'OAPI',
         'ConversationId': arrConvId,
         'SMTPEmail': '',
 //        'RValue': '', // 서명모듈 이용해서 발행할 경우에만 필요
-        'CertPassword': ' Ygvm7lhfuSp6p', // 암호화된 인증서의 비밀번호
+        'CertPassword': ' signgate1!', // 암호화된 인증서의 비밀번호
         'SystemId': '',
         'PlatformCode': '',
-        'SignedXML': formData.dtiMSG // 세금계산서 xml
+        'SignedXML': dtiMSG // 세금계산서 xml
     });
     $.support.cors = true;
     $.ajax({
@@ -1094,29 +1152,6 @@ function sendData(formData, signal){
             alert(error);
         }
     });
-}
-
-function updateXML(){
-	var rdata = table.row(this).data();
-	$.support.cors = true;
-	$.ajax({
-		type: "POST",
-		crossDomain: true,
-		url: 'getXML',
-		data: {conversationID : rdata.conversationID, dtiType : rdata.dtiType, supbuyType : rdata.supbuyType},
-		success: function(data) {
-			var parser = new DOMParser();
-			var xmlDoc = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
-			//var xsl = parser.parseFromString(data['html'], "text/xml");
-			xmlDoc.getElementsByTagName("IssueDateTime")[0].childNodes[0].nodeValue;
-
-
-		},
-		error: function (error) {
-			alert(error);
-		}
-	});
-
 }
 
 function sendEmail(signal){
