@@ -801,10 +801,12 @@ function updateStatus(signal, conversationID, supbuyType, reason){
 }
 
 function updateMSG(conversationID, supbuyType, dtiMSG){
+	var result;
+	//alert(dtiMSG);
 	var request = JSON.stringify({
 		'conversationID': conversationID,
 		'supbuyType': supbuyType,
-		'dti_msg' : dtiMSG
+		'dtiMSG' : dtiMSG
 	});
 	$.support.cors = true;
 	$.ajax({
@@ -815,10 +817,16 @@ function updateMSG(conversationID, supbuyType, dtiMSG){
 		url: "updateMSG",
 		data: request,
 		success: function(data) {
-			return true;
+			reslut = data.result;
+			if(result){
+				alert('성공');
+			}else{
+				alert('업데이트 실패');
+			}
 		},
 		error: function(error) {
-			return false;
+			result = false;
+			return result;
 		}
 	});
 }
@@ -1066,96 +1074,88 @@ function uploadXML(supbuyType) {
 	});
 }
 
-function updateXML(conversationID, supbuyType){
-	var result;
+function sendData(signal){
+	var comRegno = $('#comRegno').val();
+	var token = $('#token').val();
+	var arrConvId = new Array();
+	arrConvId[0] = $('#conversationID').val();
+	var supbuyType = $('#supbuyType').val();
+	var dtiMSG;
 	$.support.cors = true;
 	$.ajax({
 		type: "POST",
 		crossDomain: true,
 		url: 'getXML',
-		data: {conversationID : conversationID, dtiType : '', supbuyType : supbuyType},
+		data: {conversationID : arrConvId[0], dtiType : '', supbuyType : supbuyType},
 		success: function(data) {
 			var parser = new DOMParser();
 			var xmlDoc = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
 			//var xsl = parser.parseFromString(data['html'], "text/xml");
 			var issueDateTime = xmlDoc.getElementsByTagName("IssueDateTime")[0].childNodes[0];
 			issueDateTime.nodeValue = nowDate().replace(/-/gi,'') + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds();
-			var dtiMSG = (new XMLSerializer()).serializeToString(xmlDoc);
-			if(updateMSG(conversationID, supbuyType, dtiMSG)){
-				result = dtiMSG;
-			}else{
-				console.log('업데이트 실패');
-				result = false;
+			dtiMSG = (new XMLSerializer()).serializeToString(xmlDoc);
+			//console.log(dtiMSG);
+			var password = aes('signgate1!');
+			console.log(password);
+			return;
+			var receiveComRegno;
+			if(!dtiMSG){
+				alert('XML 원본 가져오기 실패');
+				return;
 			}
+			switch(signal){
+				case 'ARISSUE' :
+					receiveComRegno = $('#byrRegno').val();
+				break;
+				case 'RARREQUEST' :
+					receiveComRegno = $('#supRegno').val();
+				break;
+				case 'RARISSUE' :
+					receiveComRegno = $('#byrRegno').val();
+				break;
+			}
+			var request = JSON.stringify({
+				'MessageId': guid(),
+				'Signal': signal,
+				'RequestTime': nowDate(),
+				'SendComRegno': comRegno,
+				'ReceiveComRegno': receiveComRegno,
+				'AuthToken': token,
+				'ServiceCode': 'DTI',
+				'SystemType': 'OAPI',
+				'ConversationId': arrConvId,
+				'SMTPEmail': '',
+				'CertPassword': password, // 암호화된 인증서의 비밀번호
+				'SystemId': '',
+				'PlatformCode': '',
+				'SignedXML': dtiMSG // 세금계산서 xml
+			});
+			$.support.cors = true;
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				crossDomain: true,
+				contentType: "application/json",
+				url: "http://demoapi.smartbill.co.kr/sb-api/request/",
+				data: request,
+				success: function (data) {
+					if ("30000" != data.ResultCode) {
+						alert(data.ResultMessage);
+					}
+					else{
+						alert("정상적으로 처리되었습니다.");
+						updateMSG(conversationID, supbuyType, dtiMSG);
+					}
+				},
+				error: function (error) {
+					alert(error);
+				}
+			});
 		},
 		error: function (error) {
-			console.log('data 불러오기 실패');
-			result = false;
+			console.log(error);
 		}
 	});
-	return result;
-}
-
-function sendData(signal){
-    var comRegno = $('#comRegno').val();
-	var token = $('#token').val();
-	var arrConvId = new Array();
-	arrConvId[0] = $('#conversationID').val();
-	var supbuyType = $('#supbuyType').val();
-	var dtiMSG = updateXML(arrConvId[0], supbuyType);
-	var receiveComRegno;
-	if(!dtiMSG){
-		alert('XML 원본 가져오기 실패');
-		return;
-	}
-    switch(signal){
-        case 'ARISSUE' :
-			receiveComRegno = $('#byrRegno').val();
-		break;
-		case 'RARREQUEST' :
-			receiveComRegno = $('#supRegno').val();
-		break;
-        case 'RARISSUE' :
-			receiveComRegno = $('#byrRegno').val();
-        break;
-    }
-    var request = JSON.stringify({
-        'MessageId': guid(),
-        'Signal': signal,
-        'RequestTime': nowDate(),
-        'SendComRegno': comRegno,
-        'ReceiveComRegno': receiveComRegno,
-        'AuthToken': token,
-        'ServiceCode': 'DTI',
-        'SystemType': 'OAPI',
-        'ConversationId': arrConvId,
-        'SMTPEmail': '',
-//        'RValue': '', // 서명모듈 이용해서 발행할 경우에만 필요
-        'CertPassword': 'signgate1!', // 암호화된 인증서의 비밀번호
-        'SystemId': '',
-        'PlatformCode': '',
-        'SignedXML': dtiMSG // 세금계산서 xml
-    });
-    $.support.cors = true;
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        crossDomain: true,
-        contentType: "application/json",
-        url: "http://demoapi.smartbill.co.kr/sb-api/request/",
-        data: request,
-        success: function (data) {
-            if ("30000" != data.ResultCode) {
-                alert(data.ResultMessage);
-            }
-            else{
-                alert("정상적으로 처리되었습니다.");
-            }
-        },
-        error: function (error) {
-            alert(error);
-        }
-    });
 }
 
 function sendEmail(signal){
@@ -1473,11 +1473,7 @@ $('#RARREQUEST').click(function(){
 });
 
 $('#ARISSUE').click(function(){
-	var request = JSON.stringify({
-		'conversationID': $('#conversationID').val(),
-		'supbuyType'  : $('#supbuyType').val()
-	});
-	selectData(request);
+	sendData('ARISSUE');
 });
 
 $('#RARISSUE').click(function(){

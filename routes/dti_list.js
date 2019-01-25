@@ -245,6 +245,7 @@ router.post('/save', function(req, res, next) {
             t.commit();
             console.log("저장 완료");
             res.send({result:true, msg:"suc"});
+            return true;
           }).catch(function(err){
               t.rollback();
               res.send({result:false, msg:"fail"});
@@ -306,33 +307,26 @@ router.post('/updateStatus', function(req, res, next) {
 });
 
 router.post('/renewStatus', function(req, res, next) {
-  let conversationID = req.body.conversationID;
-  let supbuyType = req.body.supbuyType;
-  let issueID = req.body.issueID;
-  let status = req.body.status;
-  let ntsStatus = req.body.NTSstatus;
-  let ntsCode = req.body.NTSCode;
-  let dtiIdate = req.body.dtiIdate;
-  let dtiSdate = req.body.dtiSdate;
-  console.log(dtiSdate);
+  let body = req.body;
+  console.log(body.dtiSdate);
   var t;
   models.sequelize.transaction().then(function(transaction){
     t = transaction;
     models.dti_status.update({
-      dti_status : status,
-      send_request : ntsStatus,
-      result_request : ntsCode
+      dti_status : body.status,
+      send_request : body.ntsStatus,
+      result_request : body.ntsCode
     },
     {
-      where: {conversation_id: conversationID, supbuyType: supbuyType}
+      where: {conversation_id: body.conversationID, supbuy_type: body.supbuyType}
     }).then( result => {
       models.dti_main.update({
-        issue_id : issueID,
-        dti_idate : dtiIdate,
-        dti_sdate : dtiSdate
+        issue_id : body.issueID,
+        dti_idate : body.dtiIdate,
+        dti_sdate : body.dtiSdate
       },
       {
-        where: {conversation_id: conversationID, supbuyType: supbuyType}
+        where: {conversation_id: body.conversationID, supbuy_type: body.supbuyType}
       });
     });
   }).then(function(result) {
@@ -347,20 +341,20 @@ router.post('/renewStatus', function(req, res, next) {
 
 router.post('/updateMSG', function(req, res, next) {
   let body = req.body;
-  let conversationID = body.conversationID;
-  let supbuyType = body.supbuyType;
-  let dtiMSG = body.dtiMSG;
-
+  console.log("update msg" + body.dtiMSG);
   models.dti_main.update({
-      dti_msg : dtiMSG
+      dti_msg : body.dtiMSG
   },{
-      where: {conversation_id: conversationID, supbuyType: supbuyType}
+      where: {conversation_id: body.conversationID, supbuy_type: body.supbuyType}
   })
   .then( result => {
     res.send({result:true, msg:"suc"});
+    return true;
   })
-  .catch( err => {
+  .catch(function(err){
+    console.log(err);
     res.send({result:false, msg:"fail"});
+    return false;
   });
 });
 
@@ -413,40 +407,41 @@ router.post('/getXML', function(req, res, next) {
   ).then(function(data){
     //console.log("======length"+data.length);
     if(data.length != 0){
-      if(dtiType == '0101' || dtiType == '0102' || dtiType == '0102' || dtiType == '0201' || dtiType == '0202' || dtiType == '0104' || dtiType == '0204'){
+      if('0101' == dtiType || '0102' == dtiType || '0102' == dtiType || '0201' == dtiType || '0202' == dtiType || '0104' == dtiType || '0204' == dtiType){
         if(supbuyType == 'AR'){
           viewData = fs.readFileSync('views/dti/list/viewForm/AR01.xsl', 'utf-8');
         }else{
           viewData = fs.readFileSync('views/dti/list/viewForm/AP01.xsl', 'utf-8');
         }
-      }else if(dtiType == '0301' || dtiType == '0304' || dtiType == '0401' || dtiType == '0404'){
+      }else if('0301' == dtiType || '0304' == dtiType || '0401' == dtiType || '0404' == dtiType){
         if(supbuyType == 'AR'){
           viewData = fs.readFileSync('views/dti/list/viewForm/AR02.xsl', 'utf-8');
         }else{
           viewData = fs.readFileSync('views/dti/list/viewForm/AP02.xsl', 'utf-8');
         }
-      }else if(dtiType == '0103' || dtiType == '0105' || dtiType == '0203' || dtiType == '0205'){
+      }else if('0103' == dtiType || '0105' == dtiType || '0203' == dtiType || '0205' == dtiType ){
         if(supbuyType == 'AR'){
           viewData = fs.readFileSync('views/dti/list/viewForm/AR03.xsl', 'utf-8');
         }else{
           viewData = fs.readFileSync('views/dti/list/viewForm/AP03.xsl', 'utf-8');
         }
-      }else if(dtiType == '0303' || dtiType == '0403'){
+      }else if('0303' == dtiType || '0403' == dtiType){
         if(supbuyType == 'AR'){
           viewData = fs.readFileSync('views/dti/list/viewForm/AR04.xsl', 'utf-8');
         }else{
           viewData = fs.readFileSync('views/dti/list/viewForm/AP04.xsl', 'utf-8');
         }
-      }else{
+      }else if('' == dtiType){
         res.send({result:true, xml:data});
+        return true;
       }
       //console.log(data);
       res.send({result:true, xml:data, html:viewData});
-
+      return true;
       }else{
         res.send({result:true, msg:"no data"});
+        return true;
       }
-
     }).catch(function(err){
       console.log(err);
       res.send({result:false, msg:"fail"});

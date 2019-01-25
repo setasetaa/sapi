@@ -19,6 +19,8 @@ SELECT CAST(dti_msg AS CHAR(10000) CHARACTER SET utf8) FROM dti_main;
 
 인증토큰 : QURiYWV1RTZpTkhDcU1lQW5hUGUraUxQaUZGZ0hDclBFOVFCVjZOSFA2TT0K
 
+인증서 비밀번호 암호화 : 6tVnMtI7GhHX4P9scDgmhw==  / 대칭키 sBcertNonStd
+
 0101 일반 세금계산서
 
 0102 영세율 세금계산서

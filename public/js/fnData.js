@@ -1,3 +1,5 @@
+document.write('<script src="/js/fnCryptoJS.js" type="text/javascript"></script>');
+
 function nowDate() {
 	var today = new Date();
 	var dd = today.getDate();
@@ -683,4 +685,24 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
     objData.status = status;
 	
 	return JSON.stringify(objData);
+}
+
+function aes(message){
+    //alert('aes');
+    var key = CryptoJS.enc.Utf8.parse('sBcertNonStd');
+    var iv = CryptoJS.enc.Utf8.parse('sBcertNonStd');
+    var encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(message), key,
+    {
+        keySize: 128 / 8,
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    var decrypted = CryptoJS.AES.decrypt(encrypted, key);
+
+    // 암호화 이전의 문자열은 toString 함수를 사용하여 추출할 수 있다.
+    var text = decrypted.toString(CryptoJS.enc.Utf8);
+    //alert(text);
+    return encrypted.toString();
+   
 }
