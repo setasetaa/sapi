@@ -2,6 +2,7 @@ const express = require('express');
 const models = require('../models');
 const router = express.Router();
 const fs = require('fs');
+const crypto = require('crypto');
 
 router.get('/ARlist', function(req, res, next){
   res.render('dti/list/ARlist', {session : req.session});
@@ -291,18 +292,17 @@ router.post('/updateStatus', function(req, res, next) {
       dti_status : status,
       sbdescription : reason
   },{
-      where: {conversation_id: conversationID, supbuyType: supbuyType}
+      where: {conversation_id: conversationID, supbuy_type: supbuyType}
   })
   .then( result => {
       console.log("데이터 수정 완료");
-      if('AP' == supbuyType){
-        res.render("dti/list/APlist");
-      }else{
-        res.render("dti/list/ARlist");
-      }
+      res.send({result:true, msg:"suc"});
+      return true;
   })
   .catch( err => {
       console.log("데이터 수정 실패");
+      res.send({result:false, msg:"fail"});
+      return false;
   });
 });
 
@@ -332,10 +332,14 @@ router.post('/renewStatus', function(req, res, next) {
   }).then(function(result) {
     t.commit();
     console.log("데이터 수정 완료");
+    res.send({result:true, msg:"suc"});
+    return true;
   }).catch(function(err){
     if(t)
     t.rollback();
     console.log(err);
+    res.send({result:false, msg:"fail"});
+    return false;
   });
 });
 
@@ -448,5 +452,14 @@ router.post('/getXML', function(req, res, next) {
     });
 });
 
+router.get('/aes', function(req, res, next) {
+  var crypto = require('crypto'),
+    algorithm = 'aes-128-ctr',
+    password = 'sBcertNonStd';
+  var cipher = crypto.createCipher(algorithm,password)
+  var crypted = Buffer.concat([cipher.update(new Buffer("signgate1!", "utf8")),cipher.final()]);
+  console.log('==================='+crypted.toString());
+
+});
 
 module.exports = router;

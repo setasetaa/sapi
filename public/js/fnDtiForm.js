@@ -261,13 +261,37 @@ function saveForm(supbuyType, signal){
     }
 }
 
+function updateStatus(signal, conversationID, supbuyType, reason){
+	var request = JSON.stringify({
+		'signal': signal,
+		'conversationID': conversationID,
+		'supbuyType': supbuyType,
+		'reason': reason
+	});
+	$.support.cors = true;
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		crossDomain: true,
+		contentType: "application/json",
+		url: "updateStatus",
+		data: request,
+		success: function(data) {
+			alert("업데이트 완료!");
+		},
+		error: function(error) {
+			alert(error);
+		}
+	});
+}
+
 function send(formData, signal){
     var comRegno = $('#comRegno').val();
 	var token = $('#token').val();
     var arrConvId = new Array();
     var receiveCom;
-    var password = aes('signgate1!');
-    alert(password);
+    ///var password = aes('signgate1!');
+    var password = '6tVnMtI7GhHX4P9scDgmhw==';
     arrConvId[0] = formData.conversationID;
     switch(signal){
         case 'ARISSUE' :
@@ -308,6 +332,7 @@ function send(formData, signal){
             }
             else{
                 alert("정상적으로 처리되었습니다.");
+                updateStatus(signal, formData.conversationID, formData.supbuyType, '');
             }
             if('AP' == formData.supbuyType){
                 location.href='/dti/list/APlist';

@@ -353,12 +353,14 @@ function fnListView(data, supbuyType){
 						$('#ARISSUE').show();
 						$('#EDIT').show();
 						$('#DEL').show();
+						$('#TAXSTATUS').show();
 						$('#status').html("세금계산서 상태 : 저장");
 						break;
 					case 'A':
 						$('#RARREQUEST').show();
 						$('#EDIT').show();
 						$('#DEL').show();
+						$('#TAXSTATUS').show();
 						$('#status').html("세금계산서 상태 : 저장");
 						break;
 					case 'V':
@@ -792,7 +794,11 @@ function updateStatus(signal, conversationID, supbuyType, reason){
 		url: "updateStatus",
 		data: request,
 		success: function(data) {
-			alert("업데이트 완료!");
+			if(data.result){
+				location.reload();
+			}else{
+				alert('업데이트 실패');
+			}
 		},
 		error: function(error) {
 			alert(error);
@@ -817,8 +823,7 @@ function updateMSG(conversationID, supbuyType, dtiMSG){
 		url: "updateMSG",
 		data: request,
 		success: function(data) {
-			reslut = data.result;
-			if(result){
+			if(data.result){
 				alert('성공');
 			}else{
 				alert('업데이트 실패');
@@ -859,11 +864,18 @@ function renewStatus(data){
 	var dtiIdate, dtiSdate;
 	dtiIdate = data.ResultDataSet.Table[0].DTI_ISSUEDATE;
 	dtiSdate = data.ResultDataSet.Table[0].NTS_SEND_DATE;
+	
 	if(!isDate(dtiIdate)){
 		dtiIdate = null;
+	}else{
+		var iDate = new Date(dtiIdate);
+		dtiIdate = iDate.setHours(iDate.getHours() + 9);
 	}
 	if(!isDate(dtiSdate)){
 		dtiSdate = null;
+	}else{
+		var sDate = new Date(dtiSdate);
+		dtiSdate = sDate.setHours(sDate.getHours() + 9);
 	}
 	var request = JSON.stringify({
 		'supbuyType' : $('#supbuyType').val(),
@@ -884,7 +896,12 @@ function renewStatus(data){
 		url: "renewStatus",
 		data: request,
 		success: function(data) {
-			return true;
+			if(data.result){
+				alert('업데이트 완료');
+				location.reload();
+			}else{
+				alert('업데이트 실패');
+			}
 		},
 		error: function(error) {
 			return false;
@@ -1092,12 +1109,14 @@ function sendData(signal){
 			var xmlDoc = parser.parseFromString(data['xml'][0].dti_msg, "text/xml");
 			//var xsl = parser.parseFromString(data['html'], "text/xml");
 			var issueDateTime = xmlDoc.getElementsByTagName("IssueDateTime")[0].childNodes[0];
-			issueDateTime.nodeValue = nowDate().replace(/-/gi,'') + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds();
+			var now = new Date();
+			issueDateTime.nodeValue = nowDate().replace(/-/gi,'') + ("00" + now.getHours()).slice(-2) + ("00" + now.getMinutes()).slice(-2) + ("00" + now.getSeconds()).slice(-2);
 			dtiMSG = (new XMLSerializer()).serializeToString(xmlDoc);
 			//console.log(dtiMSG);
-			var password = aes('signgate1!');
-			console.log(password);
-			return;
+			//var password = aes('signgate1!');
+			var password = '6tVnMtI7GhHX4P9scDgmhw==';
+			//console.log(password);
+			//return;
 			var receiveComRegno;
 			if(!dtiMSG){
 				alert('XML 원본 가져오기 실패');
@@ -1144,7 +1163,13 @@ function sendData(signal){
 					}
 					else{
 						alert("정상적으로 처리되었습니다.");
-						updateMSG(conversationID, supbuyType, dtiMSG);
+						updateMSG(arrConvId[0], supbuyType, dtiMSG);
+						updateStatus(signal, arrConvId[0], supbuyType, '');
+						if('AP' == supbuyType){
+							location.href='/dti/list/APlist';
+						}else{
+							location.href='/dti/list/ARlist';
+						}
 					}
 				},
 				error: function (error) {
@@ -1523,7 +1548,7 @@ $('#SENDMAIL').click(function(){
 			signal = 'RARREQUEST';
 		break;
 	}
-	alert(status);
+	//alert(status);
 	sendEmail(signal);
 });
 

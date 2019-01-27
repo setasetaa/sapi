@@ -1,5 +1,6 @@
 document.write('<script src="/js/fnCryptoJS.js" type="text/javascript"></script>');
 
+
 function nowDate() {
 	var today = new Date();
 	var dd = today.getDate();
@@ -72,7 +73,7 @@ function createConversationID(supComregno, byrComregno){
 }
 
 function createIssueID(dtiWdate){
-	var issueID = dtiWdate + '41000008' + s4() + s1() + 'tnt';
+	var issueID = dtiWdate + '41000008' + s4() + s1() + 'up7';
 	return issueID.replace(/-/gi,'');
 }
 
@@ -81,6 +82,7 @@ function createXML(formData){
     var parser, xmlDoc;
     var dtiMSG;
     var node, elements, addNode, addNode2, textNode, header, item;
+    var now = new Date();
 
     dtiMSG = '<?xml version="1.0" encoding="UTF-8"?> <TaxInvoice></TaxInvoice>';
     if (window.DOMParser){
@@ -107,7 +109,7 @@ function createXML(formData){
     // 발행일자 생성
     node = xmlDoc.createElement("ExchangedDocument");
     addNode = xmlDoc.createElement("IssueDateTime");
-    textNode = xmlDoc.createTextNode(nowDate().replace(/-/gi,'') + new Date().getHours() + new Date().getMinutes() + new Date().getSeconds());
+    textNode = xmlDoc.createTextNode(nowDate().replace(/-/gi,'') + ("00" + now.getHours()).slice(-2) + ("00" + now.getMinutes()).slice(-2) + ("00" + now.getSeconds()).slice(-2));
     addNode.appendChild(textNode);
     node.appendChild(addNode);
     elements[0].appendChild(node);
@@ -366,49 +368,49 @@ function createXML(formData){
     }
 
     // 현금, 수표, 어음, 외상미수금
-    node = xmlDoc.createElement("SpecifiedPaymentMeans");
-    addNode = xmlDoc.createElement("TypeCode");
-    textNode = xmlDoc.createTextNode('10');
-    addNode.appendChild(textNode);
-    node.appendChild(addNode);
-    addNode = xmlDoc.createElement("PaidAmount");
-    textNode = xmlDoc.createTextNode('');
-    addNode.appendChild(textNode);
-    node.appendChild(addNode);
-    header.appendChild(node);
+    // node = xmlDoc.createElement("SpecifiedPaymentMeans");
+    // addNode = xmlDoc.createElement("TypeCode");
+    // textNode = xmlDoc.createTextNode('10');
+    // addNode.appendChild(textNode);
+    // node.appendChild(addNode);
+    // addNode = xmlDoc.createElement("PaidAmount");
+    // textNode = xmlDoc.createTextNode(0);
+    // addNode.appendChild(textNode);
+    // node.appendChild(addNode);
+    // header.appendChild(node);
 
-    node = xmlDoc.createElement("SpecifiedPaymentMeans");
-    addNode = xmlDoc.createElement("TypeCode");
-    textNode = xmlDoc.createTextNode('20');
-    addNode.appendChild(textNode);
-    node.appendChild(addNode);
-    addNode = xmlDoc.createElement("PaidAmount");
-    textNode = xmlDoc.createTextNode('');
-    addNode.appendChild(textNode);
-    node.appendChild(addNode);
-    header.appendChild(node);
+    // node = xmlDoc.createElement("SpecifiedPaymentMeans");
+    // addNode = xmlDoc.createElement("TypeCode");
+    // textNode = xmlDoc.createTextNode('20');
+    // addNode.appendChild(textNode);
+    // node.appendChild(addNode);
+    // addNode = xmlDoc.createElement("PaidAmount");
+    // textNode = xmlDoc.createTextNode(0);
+    // addNode.appendChild(textNode);
+    // node.appendChild(addNode);
+    // header.appendChild(node);
 
-    node = xmlDoc.createElement("SpecifiedPaymentMeans");
-    addNode = xmlDoc.createElement("TypeCode");
-    textNode = xmlDoc.createTextNode('30');
-    addNode.appendChild(textNode);
-    node.appendChild(addNode);
-    addNode = xmlDoc.createElement("PaidAmount");
-    textNode = xmlDoc.createTextNode('');
-    addNode.appendChild(textNode);
-    node.appendChild(addNode);
-    header.appendChild(node);
+    // node = xmlDoc.createElement("SpecifiedPaymentMeans");
+    // addNode = xmlDoc.createElement("TypeCode");
+    // textNode = xmlDoc.createTextNode('30');
+    // addNode.appendChild(textNode);
+    // node.appendChild(addNode);
+    // addNode = xmlDoc.createElement("PaidAmount");
+    // textNode = xmlDoc.createTextNode(0);
+    // addNode.appendChild(textNode);
+    // node.appendChild(addNode);
+    // header.appendChild(node);
 
-    node = xmlDoc.createElement("SpecifiedPaymentMeans");
-    addNode = xmlDoc.createElement("TypeCode");
-    textNode = xmlDoc.createTextNode('40');
-    addNode.appendChild(textNode);
-    node.appendChild(addNode);
-    addNode = xmlDoc.createElement("PaidAmount");
-    textNode = xmlDoc.createTextNode('');
-    addNode.appendChild(textNode);
-    node.appendChild(addNode);
-    header.appendChild(node);
+    // node = xmlDoc.createElement("SpecifiedPaymentMeans");
+    // addNode = xmlDoc.createElement("TypeCode");
+    // textNode = xmlDoc.createTextNode('40');
+    // addNode.appendChild(textNode);
+    // node.appendChild(addNode);
+    // addNode = xmlDoc.createElement("PaidAmount");
+    // textNode = xmlDoc.createTextNode(0);
+    // addNode.appendChild(textNode);
+    // node.appendChild(addNode);
+    // header.appendChild(node);
 
     node = xmlDoc.createElement("SpecifiedMonetarySummation");
     addNode = xmlDoc.createElement("ChargeTotalAmount");
@@ -688,21 +690,47 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 }
 
 function aes(message){
-    //alert('aes');
-    var key = CryptoJS.enc.Utf8.parse('sBcertNonStd');
-    var iv = CryptoJS.enc.Utf8.parse('sBcertNonStd');
-    var encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(message), key,
-    {
-        keySize: 128 / 8,
-        iv: iv,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7
-    });
-    var decrypted = CryptoJS.AES.decrypt(encrypted, key);
-
-    // 암호화 이전의 문자열은 toString 함수를 사용하여 추출할 수 있다.
-    var text = decrypted.toString(CryptoJS.enc.Utf8);
-    //alert(text);
-    return encrypted.toString();
+    var password = 'sBcertNonStd';
+    var encrypted = CryptoJS.AES.encrypt(message, password);
+    encrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+    return encodeURIComponent(encrypted); 
    
+}
+function dataEncode(text){
+
+    var key, iv;
+    var p = 'sBcertNonStd';
+
+    var key = CryptoJS.enc.Hex.parse(convertToHex(p));
+    var iv =  CryptoJS.enc.Hex.parse(convertToHex(text.slice(0, 32))); 
+    
+    var encrypted = CryptoJS.AES.encrypt(text, key, {iv:iv,mode: CryptoJS.mode.CBC,padding: CryptoJS.pad.Pkcs7});
+    encrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+    return encodeURIComponent(encrypted); 
+}
+
+function parseHexString(str) { 
+    var result = [];
+    while (str.length >= 2) { 
+        result.push(parseInt(str.substr(0, 2), 16));
+        str = str.substr(2, str.length);
+    }
+
+    return result.toString();
+}
+
+function convertToHex(str) {
+    var hex = '';
+    for(var i=0;i<str.length;i++) {
+        hex += ''+str.charCodeAt(i).toString(16);
+    }
+    return hex;
+}
+
+function convertFromHex(hex) {
+    var hex = hex.toString();//force conversion
+    var str = '';
+    for (var i = 0; i < hex.length; i += 2)
+        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+    return str;
 }

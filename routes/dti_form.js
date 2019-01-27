@@ -32,7 +32,7 @@ router.get('/AP04', function(req, res, next){
 router.post('/save', function(req, res, next) {
     console.log("data save");
     let body = req.body;
-    console.log(body);
+    //console.log(body);
 
     models.sequelize.transaction().then(function(t){
         models.dti_main.create({
@@ -135,6 +135,50 @@ router.post('/save', function(req, res, next) {
             t.rollback();
             res.send({result:false, msg:"fail"});
         });
+    });
+});
+
+router.post('/updateStatus', function(req, res, next) {
+    let conversationID = req.body.conversationID;
+    let supbuyType = req.body.supbuyType;
+    let signal = req.body.signal;
+    let reason = req.body.reason;
+    var status;
+    //console.log(signal);
+    switch(signal){
+      case 'APPROVE':
+      status = 'C';
+      break;
+      case 'REJECT':
+      status = 'T';
+      break;
+      case 'CANCELRREQUEST':
+      status = 'W';
+      break;
+      case 'RIREJECT':
+      status = 'R';
+      break;
+      case 'CANCELALL':
+      status = 'O';
+      break;
+    }
+    //console.log(status+reason+conversationID);
+    models.dti_status.update({
+        dti_status : status,
+        sbdescription : reason
+    },{
+        where: {conversation_id: conversationID, supbuyType: supbuyType}
+    })
+    .then( result => {
+        console.log("데이터 수정 완료");
+        if('AP' == supbuyType){
+          res.render("dti/list/APlist");
+        }else{
+          res.render("dti/list/ARlist");
+        }
+    })
+    .catch( err => {
+        console.log("데이터 수정 실패");
     });
 });
 
