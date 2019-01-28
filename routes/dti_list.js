@@ -153,8 +153,7 @@ router.post('/list', function(req, res, next) {
 router.post('/save', function(req, res, next) {
   console.log("data save");
   let body = req.body;
-
-  console.log(body);
+  //console.log(body);
   models.sequelize.transaction().then(function(t){
 
     models.dti_main.create({
@@ -243,23 +242,31 @@ router.post('/save', function(req, res, next) {
             remark : body.itemRemark[i],
             item_gubun : "DTI"
           },{transaction: t}).then(function(){
-            t.commit();
-            console.log("저장 완료");
-            res.send({result:true, msg:"suc"});
-            return true;
+            
           }).catch(function(err){
-              t.rollback();
-              res.send({result:false, msg:"fail"});
+            t.rollback();
+            res.send({result:false, msg:"fail"});
+            return true;
           });
         }
       }).catch(function(err){
         t.rollback();
         res.send({result:false, msg:"fail"});
-    });  
+        return true;
+    });
     }).catch(function(err){
       t.rollback();
       res.send({result:false, msg:"fail"});
-  });
+      return true;
+    });
+  }).then( result => {
+    console.log("데이터 저장 완료");
+    t.commit();
+    res.send({result:true, msg:"suc"});
+    return true;
+  }).catch(function(err){
+    res.send({result:false, msg:"fail"});
+    return true;
   });
 });
 

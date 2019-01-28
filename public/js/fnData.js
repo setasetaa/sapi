@@ -529,10 +529,17 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 	}
 	
 	// 공급자 정보
-	objData.supComRegno = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("ID")[0].childNodes[0].nodeValue;
-	objData.supComType = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("TypeCode")[0].childNodes[0].nodeValue;
-	objData.supComName = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
-	objData.supComClassify = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("ClassificationCode")[0].childNodes[0].nodeValue;
+    objData.supComRegno = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("ID")[0].childNodes[0].nodeValue;
+    if(xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("TypeCode")[0] != null){
+        objData.supComType = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("TypeCode")[0].childNodes[0].nodeValue;
+    }
+    if(xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("NameText")[0] != null){
+        objData.supComName = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
+    }
+    
+    if(xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("ClassificationCode")[0] != null){
+        objData.supComClassify = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("ClassificationCode")[0].childNodes[0].nodeValue;
+    }
 	if(xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("TaxRegistrationID")[0] != null){
 		objData.supBizplaceCode = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("TaxRegistrationID")[0].childNodes[0].nodeValue;
 	}
@@ -547,29 +554,33 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 		objData.supEmail = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("URICommunication")[0].childNodes[0].nodeValue;
 	}
 	if(xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("DepartmentNameText")[0] != null){
-		console.log(xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("DepartmentNameText")[0].length);
+		//console.log(xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("DepartmentNameText")[0].length);
 		if(xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("DepartmentNameText")[0].childNodes[0] != undefined){
 			objData.supDeptName = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("DepartmentNameText")[0].childNodes[0].nodeValue;
 		}
 	}
 	objData.supComAddr = xmlDoc.getElementsByTagName("InvoicerParty")[0].getElementsByTagName("LineOneText")[0].childNodes[0].nodeValue;
 	// 공급받는자 정보
-	objData.byrComRegno = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("ID")[0].childNodes[0].nodeValue;
-	objData.byrComType = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TypeCode")[0].childNodes[0].nodeValue;
-	objData.byrComName = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
-	objData.byrComClassify = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("ClassificationCode")[0].childNodes[0].nodeValue;
+    objData.byrComRegno = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("ID")[0].childNodes[0].nodeValue;
+    if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TypeCode")[0].childNodes[0] != null){
+        objData.byrComType = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TypeCode")[0].childNodes[0].nodeValue;
+    }
+    objData.byrComName = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
+    if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("ClassificationCode")[0].childNodes[0] != null){
+        objData.byrComClassify = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("ClassificationCode")[0].childNodes[0].nodeValue;
+    }
 	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TaxRegistrationID")[0] != null){
 		objData.byrBizplaceCode = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TaxRegistrationID")[0].childNodes[0].nodeValue;
 	}
 	objData.byrBusinessTypeCode = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("BusinessTypeCode")[0].childNodes[0].nodeValue;
 		objData.byrRepName = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("SpecifiedPerson")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
-	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("PersonNameText")[0] != null){
+	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("PersonNameText")[0].childNodes[0] != null){
 		objData.byrEmpName = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("PersonNameText")[0].childNodes[0].nodeValue;
 	}
-	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TelephoneCommunication")[0] != null){
+	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TelephoneCommunication")[0].childNodes[0] != null){
 	objData.byrTelNum = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TelephoneCommunication")[0].childNodes[0].nodeValue;
 }
-	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("URICommunication")[0] != null){
+	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("URICommunication")[0].childNodes[0] != null){
 		objData.byrEmail = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("URICommunication")[0].childNodes[0].nodeValue;
 	}
 	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("DepartmentNameText")[0] != null){
@@ -581,21 +592,27 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 
 	if(objData.typeCode.indexOf('03') != -1 || objData.typeCode.indexOf('03') != -1){
 		// 수탁자 정보
-		objData.brkComRegno = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("ID")[0].childNodes[0].nodeValue;
-		objData.brkComType = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("TypeCode")[0].childNodes[0].nodeValue;
-		objData.brkComName = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
-		objData.brkComClassify = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("ClassificationCode")[0].childNodes[0].nodeValue;
+        objData.brkComRegno = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("ID")[0].childNodes[0].nodeValue;
+        if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("TypeCode")[0].childNodes[0] != null){
+            objData.brkComType = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("TypeCode")[0].childNodes[0].nodeValue;
+        }
+		
+        objData.brkComName = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
+        if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("ClassificationCode")[0].childNodes[0] != null){
+            objData.brkComClassify = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("ClassificationCode")[0].childNodes[0].nodeValue;
+        }
+		
 		if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("TaxRegistrationID")[0] != null){
 		objData.brkBizplaceCode = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("TaxRegistrationID")[0].childNodes[0].nodeValue;
 		}
 		objData.brkRepName = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("SpecifiedPerson")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
-		if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("PersonNameText")[0] != null){
+		if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("PersonNameText")[0].childNodes[0] != null){
 		objData.brkEmpName = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("PersonNameText")[0].childNodes[0].nodeValue;
 		}
-		if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("TelephoneCommunication")[0] != null){
+		if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("TelephoneCommunication")[0].childNodes[0] != null){
 		objData.brkTelNum = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("TelephoneCommunication")[0].childNodes[0].nodeValue;
 		}
-		if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("URICommunication")[0] != null){
+		if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("URICommunication")[0].childNodes[0] != null){
 		objData.brkEmail = xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("URICommunication")[0].childNodes[0].nodeValue;
 		}
 		if(xmlDoc.getElementsByTagName("BrokerParty")[0].getElementsByTagName("DepartmentNameText")[0].childNodes[0] != null){

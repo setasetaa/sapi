@@ -769,7 +769,7 @@ function insertData(jsonData){
 		async: false,
 		data: jsonData,
 		success: function(data) {
-			returnMSG = true;
+			returnMSG = data.result;
 		},
 		error: function(error) {
 			returnMSG = false;
