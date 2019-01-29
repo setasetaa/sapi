@@ -27,9 +27,9 @@
 
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-table"></i>
-          <span>List</span>
-        </a>
+        <i class="fas fa-fw fa-table"></i>
+        <span>List</span>
+      </a>
       <div class="dropdown-menu" aria-labelledby="pagesDropdown">
         <h6 class="dropdown-header">List: Tax invoice</h6>
         <a class="dropdown-item" href="/dti/list/ARlist">매출 보관함</a>
@@ -40,10 +40,14 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="">
+      <a class="nav-link" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-chart-area"></i>
-          <span>etc</span>
+          <span>Company Info</span>
       </a>
+      <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+        <h6 class="dropdown-header">manage: Company Info</h6>
+        <a class="dropdown-item" href="/manage/company">회사정보 관리</a>
+        <a class="dropdown-item" href="/manage/cert">인증서 관리</a>
+      </div>
     </li>
-
   </ul>
