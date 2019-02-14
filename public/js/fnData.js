@@ -574,13 +574,13 @@ function xmlParse(conversationID, supbuyType, direction, status, DTI){
 	}
 	objData.byrBusinessTypeCode = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("BusinessTypeCode")[0].childNodes[0].nodeValue;
 		objData.byrRepName = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("SpecifiedPerson")[0].getElementsByTagName("NameText")[0].childNodes[0].nodeValue;
-	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("PersonNameText")[0].childNodes[0] != null){
+	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("PersonNameText")[0] != null){
 		objData.byrEmpName = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("PersonNameText")[0].childNodes[0].nodeValue;
 	}
-	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TelephoneCommunication")[0].childNodes[0] != null){
+	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TelephoneCommunication")[0] != null){
 	objData.byrTelNum = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("TelephoneCommunication")[0].childNodes[0].nodeValue;
 }
-	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("URICommunication")[0].childNodes[0] != null){
+	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("URICommunication")[0] != null){
 		objData.byrEmail = xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("URICommunication")[0].childNodes[0].nodeValue;
 	}
 	if(xmlDoc.getElementsByTagName("InvoiceeParty")[0].getElementsByTagName("DepartmentNameText")[0] != null){

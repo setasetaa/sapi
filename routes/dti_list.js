@@ -241,32 +241,23 @@ router.post('/save', function(req, res, next) {
             tax_amount : body.itemTaxAmount[i],
             remark : body.itemRemark[i],
             item_gubun : "DTI"
-          },{transaction: t}).then(function(){
-            
-          }).catch(function(err){
-            t.rollback();
-            res.send({result:false, msg:"fail"});
-            return true;
           });
         }
+      }).then( result => {
+        console.log("데이터 저장 완료");
+        t.commit();
+        res.send({result:true, msg:"suc"});
+        return true;
       }).catch(function(err){
         t.rollback();
         res.send({result:false, msg:"fail"});
         return true;
-    });
+      });
     }).catch(function(err){
       t.rollback();
       res.send({result:false, msg:"fail"});
       return true;
     });
-  }).then( result => {
-    console.log("데이터 저장 완료");
-    t.commit();
-    res.send({result:true, msg:"suc"});
-    return true;
-  }).catch(function(err){
-    res.send({result:false, msg:"fail"});
-    return true;
   });
 });
 
