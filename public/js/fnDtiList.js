@@ -149,7 +149,7 @@ function fnListView(data, supbuyType){
 				'className': 'dt-body-center',
 				'width': '15%',
 				'render': function (data, type, full, meta){
-						data = data.substring(0,3) + '-' + data.substring(3,5) + '-' + data.substring(5,10)
+						data = data.substring(0,3) + '-' + data.substring(3,5) + '-' + data.substring(5,10);
 						return data;
 				}
 			},

@@ -1,7 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const models = require("../models");
-const crypto = require("crypto");
+const request = require('request')
+
+function API_Call(func, body) {
+  var OPTIONS = {
+      headers: {'Content-Type': 'application/json'},
+      url: null,
+      body: null
+  };
+  const PORT = '80';
+  const BASE_PATH = '/api/auth';
+  var HOST = 'http://localhost';
+  OPTIONS.url = HOST + ':' + PORT + BASE_PATH + '/' + func;
+  OPTIONS.body = body;
+  request.post(OPTIONS, function (err, res, result) {
+    switch (res.statusCode) {
+      case 200:
+        res.redirect("/");
+        break;
+      default:
+        res.render("user/register");
+        break;
+    }
+    console.log(result);
+  });
+}
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -18,31 +42,7 @@ router.get('/register', function(req, res, next){
 
 router.post("/register", function(req, res, next){
   let body = req.body;
-
-  crypto.randomBytes(64, function(err, buf) {
-    let salt = buf.toString('base64');
-    crypto.pbkdf2(body.password, salt, 100000, 64, 'sha512', function(err, key){
-      models.user.create({
-        com_regno: body.comRegno,
-        bizCode: body.bizCode,
-        user_name: body.userName,
-        email: body.userEmail,
-        tel_num: body.telNum,
-        password: key.toString('base64'),
-        salt: salt,
-        dept_name: body.dept,
-        sbid: body.SBID,
-        sbpass: body.SBPass,
-        token: body.token
-      }).then( result => {
-        console.log("register success");
-        res.redirect("/user/login");
-      }).catch( err => {
-        console.log(err);
-        res.redirect("/user/register");
-      })
-    });
-  });
+  API_Call("signup", JSON.stringify(body));
 });
 
 router.get('/login', function(req, res, next) {
@@ -81,18 +81,18 @@ router.post("/login", function(req,res,next){
         if(dbPassword === key.toString('base64')){
           console.log("비밀번호 일치");
           req.session.email = result.dataValues.email;
-          req.session.username = result.dataValues.user_name;
+          req.session.username = result.dataValues.username;
           req.session.token = result.dataValues.token;
-          req.session.deptname = result.dataValues.dept_name;
-          req.session.telNum = result.dataValues.tel_num;
+          req.session.deptname = result.dataValues.deptname;
+          req.session.telNum = result.dataValues.telnum;
           req.session.sbid = result.dataValues.sbid;
-          comRegno = result.dataValues.com_regno;
-          bizCode = result.dataValues.bizplace_code;
+          comRegno = result.dataValues.comregno;
+          bizCode = result.dataValues.bizcode;
           if(null == bizCode){
             bizCode = '';
           }
           models.company.find({
-            where: {com_regno : comRegno, bizplace_code : bizCode}
+            where: {comregno : comRegno, bizplace_code : bizCode}
           }).then( result => {
             req.session.comRegno = result.dataValues.com_regno;
             req.session.bizCode = result.dataValues.bizplace_code;

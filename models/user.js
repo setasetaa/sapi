@@ -1,21 +1,21 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var user = sequelize.define('user', {
-    com_regno: {
+    comregno: {
       type: DataTypes.CHAR(13),
       allowNull: false,
       primaryKey: true
     },
-    bizCode: {
+    bizcode: {
       type: DataTypes.CHAR(4),
       primaryKey: true
     },
-    user_name: DataTypes.STRING,
+    name: DataTypes.STRING,
+    username: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    salt: DataTypes.STRING,
-    dept_name: DataTypes.STRING,
-    tel_num: DataTypes.STRING,
+    deptname: DataTypes.STRING,
+    telnum: DataTypes.STRING,
     sbid: DataTypes.STRING,
     sbpass: DataTypes.STRING,
     token: DataTypes.STRING,
