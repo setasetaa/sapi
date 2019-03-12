@@ -20,7 +20,8 @@ function API_Call(func, body) {
     
     console.log(result);
     if('signin' == func){
-
+      storage.setItem('accessToken', JSON.parse(result).accessToken);
+      storage.setItem('tokenType', JSON.parse(result).tokenType);
     }else{
       storage.setItem('success', JSON.parse(result).success);
       storage.setItem('message', JSON.parse(result).message);
@@ -70,12 +71,12 @@ router.get('/login', function(req, res, next) {
 router.post("/login", function(req,res,next){
     let body = req.body;
     API_Call("signin", JSON.stringify(body));
-  });
+});
 
-  router.get("/logout", function(req,res,next){
-      req.session.destroy();
-      res.clearCookie('sid');
-      res.redirect("/");
-  });
+router.get("/logout", function(req,res,next){
+    req.session.destroy();
+    res.clearCookie('sid');
+    res.redirect("/");
+});
 
 module.exports = router;
