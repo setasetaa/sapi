@@ -11,7 +11,7 @@ module.exports = {
         type: Sequelize.CHAR(4),
         primaryKey: true
       },
-      username: {
+      name: {
         type: Sequelize.STRING
       },
       username: {
