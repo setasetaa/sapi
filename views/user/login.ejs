@@ -75,6 +75,8 @@
     $.post( url, data )
     .done(function( data ) {
     }).fail(function(jqXHR, textStatus){
+      console.log(jqXHR);
+      console.log(textStatus);
       switch(jqXHR.status){
         case 401:
         alert('비밀번호를 확인하세요');
@@ -84,7 +86,8 @@
         break;
       }
     }).always(function(){
-      location.reload();
+      alert(sessionStorage.getItem('accessToken'));
+      //location.reload();
     });
   });
 </script>

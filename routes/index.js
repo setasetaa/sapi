@@ -1,10 +1,13 @@
 const express = require('express');
 const models = require('../models');
 const router = express.Router();
+const storage = require('sessionstorage');
+
 
 router.get('/', function(req, res, next) {
-  if(req.session.jwt != null){
-    res.render("index", {session : req.session});
+  console.log(storage.getItem('accessToken'));
+  if(storage.getItem('accessToken') != null){
+    res.render("index");
   }else{
     res.render("user/login");
   }

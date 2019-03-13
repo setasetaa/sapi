@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const models = require("../models");
 const request = require('request');
-const localStorage = require('node-localstorage').LocalStorage;
-const storage = new localStorage('./scratch');
+const storage = require('sessionstorage');
 
 function API_Call(func, data) {
   const PORT = '80';
@@ -16,7 +15,6 @@ function API_Call(func, data) {
   };
 
   request.post(OPTIONS, function (err, res, result) {
-    
     if('signin' == func){
       storage.setItem('accessToken', JSON.parse(result).accessToken);
       storage.setItem('tokenType', JSON.parse(result).tokenType);
@@ -24,8 +22,9 @@ function API_Call(func, data) {
       storage.setItem('success', JSON.parse(result).success);
       storage.setItem('message', JSON.parse(result).message);
     }
-    console.log(storage.getItem('accessToken'));
+    //console.log(storage.getItem('accessToken'));
   });
+  
 }
 
 /* GET users listing. */
@@ -61,8 +60,12 @@ router.get('/login', function(req, res, next) {
 
 router.post("/login", function(req, res, next){
   let body = req.body;
+  let result;
+  
   API_Call("signin", JSON.stringify(body));
-  res.redirect("/");
+  //console.log(storage.getItem('accessToken'));
+  //console.log(result);
+  res.status(404).send(message);
 });
 
 router.get("/logout", function(req,res,next){

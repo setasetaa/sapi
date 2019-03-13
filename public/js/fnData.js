@@ -1,5 +1,3 @@
-document.write('<script src="/js/fnCryptoJS.js" type="text/javascript"></script>');
-
 
 function nowDate() {
 	var today = new Date();
