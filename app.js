@@ -45,7 +45,12 @@ app.use('/dti/form', dtiFormRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  if(storage.getItem('accessToken') != null){
+    res.render("index");
+  }else{
+    res.render("user/login");
+  }
+  next();
 });
 
 // error handler
