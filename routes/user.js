@@ -4,7 +4,7 @@ const models = require("../models");
 const request = require('request');
 const storage = require('sessionstorage');
 
-function API_Call(func, data) {
+API_Call = function(func, data, callback) {
   const PORT = '80';
   const BASE_PATH = '/api/auth';
   var HOST = 'http://localhost';
@@ -13,8 +13,9 @@ function API_Call(func, data) {
       url: HOST + ':' + PORT + BASE_PATH + '/' + func,
       body: data
   };
-
+  var res;
   request.post(OPTIONS, function (err, res, result) {
+    
     if('signin' == func){
       storage.setItem('accessToken', JSON.parse(result).accessToken);
       storage.setItem('tokenType', JSON.parse(result).tokenType);
@@ -22,7 +23,9 @@ function API_Call(func, data) {
       storage.setItem('success', JSON.parse(result).success);
       storage.setItem('message', JSON.parse(result).message);
     }
-    //console.log(storage.getItem('accessToken'));
+    res = result;
+    //console.log(res);
+    callback(res);
   });
   
 }
@@ -42,16 +45,16 @@ router.get('/register', function(req, res, next){
 
 router.post("/register", function(req, res, next){
   let body = req.body;
-  API_Call("signup", JSON.stringify(body));
-  let result = storage.getItem('success');
-  let message = storage.getItem('message');
-  if(result){
-    res.redirect("/");
-  }else{
-    res.status(404).send(message);
-  }
-  storage.removeItem('success');
-  storage.removeItem('message');
+  API_Call("signup", JSON.stringify(body), function(response){
+    //console.log(response);
+    let result = storage.getItem('success');
+    let message = storage.getItem('message');
+    if(result){
+      res.redirect("/");
+    }else{
+      res.status(401).send();
+    }
+  });
 });
 
 router.get('/login', function(req, res, next) {
@@ -60,12 +63,17 @@ router.get('/login', function(req, res, next) {
 
 router.post("/login", function(req, res, next){
   let body = req.body;
-  let result;
   
-  API_Call("signin", JSON.stringify(body));
-  //console.log(storage.getItem('accessToken'));
-  //console.log(result);
-  res.status(404).send(message);
+  API_Call("signin", JSON.stringify(body), function(response){
+    //console.log(response);
+    let result = JSON.parse(response).accessToken;
+    if(result != null){
+      res.status(200).send();
+    }else{
+      res.status(401).send();
+    }
+  });
+  
 });
 
 router.get("/logout", function(req,res,next){

@@ -75,19 +75,13 @@
     $.post( url, data )
     .done(function( data ) {
     }).fail(function(jqXHR, textStatus){
-      console.log(jqXHR);
-      console.log(textStatus);
       switch(jqXHR.status){
         case 401:
-        alert('비밀번호를 확인하세요');
-        break;
-        case 402:
-        alert('메일정보를 확인하세요');
+        alert('로그인 정보를 확인하세요');
         break;
       }
     }).always(function(){
-      alert(sessionStorage.getItem('accessToken'));
-      //location.reload();
+      location.reload();
     });
   });
 </script>

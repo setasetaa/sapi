@@ -5,7 +5,7 @@ const storage = require('sessionstorage');
 
 
 router.get('/', function(req, res, next) {
-  console.log(storage.getItem('accessToken'));
+  //console.log(storage.getItem('accessToken'));
   if(storage.getItem('accessToken') != null){
     res.render("index");
   }else{
