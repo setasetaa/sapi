@@ -74,6 +74,7 @@
   
     $.post( url, data )
     .done(function( data ) {
+      location.reload();
     }).fail(function(jqXHR, textStatus){
       switch(jqXHR.status){
         case 401:
@@ -81,7 +82,6 @@
         break;
       }
     }).always(function(){
-      location.reload();
     });
   });
 </script>
