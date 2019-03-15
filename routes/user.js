@@ -4,7 +4,7 @@ const models = require("../models");
 const request = require('request');
 const storage = require('sessionstorage');
 
-API_Call = function(func, data, callback) {
+API_Call_Confirm = function(func, data, callback) {
   const PORT = '80';
   const BASE_PATH = '/api/auth';
   var HOST = 'http://localhost';
@@ -13,19 +13,8 @@ API_Call = function(func, data, callback) {
       url: HOST + ':' + PORT + BASE_PATH + '/' + func,
       body: data
   };
-  var res;
   request.post(OPTIONS, function (err, res, result) {
-    
-    if('signin' == func){
-      storage.setItem('accessToken', JSON.parse(result).accessToken);
-      storage.setItem('tokenType', JSON.parse(result).tokenType);
-    }else{
-      storage.setItem('success', JSON.parse(result).success);
-      storage.setItem('message', JSON.parse(result).message);
-    }
-    res = result;
-    //console.log(res);
-    callback(res);
+    callback(result);
   });
   
 }
@@ -45,14 +34,14 @@ router.get('/register', function(req, res, next){
 
 router.post("/register", function(req, res, next){
   let body = req.body;
-  API_Call("signup", JSON.stringify(body), function(response){
+  API_Call_Confirm("signup", JSON.stringify(body), function(response){
     //console.log(response);
     let result = storage.getItem('success');
     let message = storage.getItem('message');
     if(result){
       res.redirect("/");
     }else{
-      res.status(401).send();
+      res.status(401).send(message);
     }
   });
 });
@@ -64,10 +53,12 @@ router.get('/login', function(req, res, next) {
 router.post("/login", function(req, res, next){
   let body = req.body;
   
-  API_Call("signin", JSON.stringify(body), function(response){
+  API_Call_Confirm("signin", JSON.stringify(body), function(response){
     //console.log(response);
-    let result = JSON.parse(response).accessToken;
+    let result = response;
     if(result != null){
+      storage.setItem('accessToken', JSON.parse(result).accessToken);
+      storage.setItem('tokenType', JSON.parse(result).tokenType);
       res.status(200).send();
     }else{
       res.status(401).send();

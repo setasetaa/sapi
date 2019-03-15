@@ -48,22 +48,22 @@
     </li> -->
     
     <li class="nav-item dropdown no-arrow mx-1">
-      <a class="navbar-brand mr-1" href="" value="">test / data</a>
-      <input type="hidden" id="userName" value="">
-      <input type="hidden" id="userEmail" value="">
-      <input type="hidden" id="token" value="">
-      <input type="hidden" id="sbid" value="">
-      <input type="hidden" id="deptName" value="">
-      <input type="hidden" id="telNum" value="">
+      <a class="navbar-brand mr-1" href="" value=""><%-session.comregno%> / <%-session.username%></a>
+      <input type="hidden" id="userName" value="<%- session.username %>">
+      <input type="hidden" id="userEmail" value="<%- session.email %>">
+      <input type="hidden" id="token" value="<%- session.token %>">
+      <input type="hidden" id="sbid" value="<%- session.sbid %>">
+      <input type="hidden" id="deptName" value="<%- session.deptname %>">
+      <input type="hidden" id="telNum" value="<%- session.telNum %>">
 
-      <input type="hidden" id="comRegno" value="">
-      <input type="hidden" id="bizCode" value="">
-      <input type="hidden" id="comName" value="">
-      <input type="hidden" id="repName" value="">
-      <input type="hidden" id="comAddr" value="">
-      <input type="hidden" id="comType" value="">
-      <input type="hidden" id="comClassify" value="">
-      <input type="hidden" id="code" value="">
+      <input type="hidden" id="comRegno" value="<%- session.comregno %>">
+      <input type="hidden" id="bizCode" value="<%- session.bizcode %>">
+      <input type="hidden" id="comName" value="<%- session.comName %>">
+      <input type="hidden" id="repName" value="<%- session.repName %>">
+      <input type="hidden" id="comAddr" value="<%- session.comAddr %>">
+      <input type="hidden" id="comType" value="<%- session.comType %>">
+      <input type="hidden" id="comClassify" value="<%- session.comClassify %>">
+      <input type="hidden" id="code" value="<%- session.code %>">
     </li>
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
