@@ -4,6 +4,19 @@ const router = express.Router();
 const fs = require('fs');
 const crypto = require('crypto');
 
+API_Call_Data = function(type, token, callback) {
+  const PORT = '80';
+  const BASE_PATH = '/api/dti/list';
+  var HOST = 'http://localhost';
+  var OPTIONS = {
+      headers: {'Authorization': type + ' ' + token},
+      url: HOST + ':' + PORT + BASE_PATH
+  };
+  request.get(OPTIONS, function (err, res, result) {
+    callback(result);
+  });
+};
+
 router.get('/ARlist', function(req, res, next){
   res.render('dti/list/ARlist', {session : req.session});
 });

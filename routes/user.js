@@ -69,6 +69,7 @@ router.post("/login", function(req, res, next){
 
 router.get("/logout", function(req,res,next){
   storage.clear();
+  req.session.destroy();
   res.redirect("/");
 });
 
