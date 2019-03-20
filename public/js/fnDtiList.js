@@ -16,7 +16,7 @@ function search(supbuyType) {
 	searchData.userEmail = $('#userEmail').val();
 	searchData.userComRegno = $('#comRegno').val();
 	var request = JSON.stringify(searchData);
-
+	//alert(request);
 	$.support.cors = true;
 	$.ajax({
 		type: "POST",
