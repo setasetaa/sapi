@@ -28,7 +28,7 @@
     <div class="card card-register mx-auto mt-5">
       <div class="card-header font-weight-bold">Register an Account</div>
       <div class="card-body">
-        <form action="/user/register" method="post">
+        <form action="/user/register" method="post" id="registerForm">
           <div class="form-group">
             <div class="form-row">
               <div class="col-md-6">
@@ -143,5 +143,25 @@
   <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 </body>
-
+<script>
+   $('#registerForm').submit(function(event){
+    event.preventDefault();
+    var url = $(this).attr('action');
+    var data = $(this).serialize();
+  
+    $.post( url, data )
+    .done(function( data ) {
+      alert('등록 성공');
+      location.load = "/";
+    }).fail(function(jqXHR, textStatus){
+      switch(jqXHR.status){
+        case 401:
+        //console.log(jqXHR);
+        alert(jqXHR.responseText);
+        break;
+      }
+    }).always(function(){
+    });
+  });
+</script>
 </html>

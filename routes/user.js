@@ -35,10 +35,11 @@ router.get('/register', function(req, res, next){
 router.post("/register", function(req, res, next){
   let body = req.body;
   API_Call_Confirm("signup", JSON.stringify(body), function(response){
+    let result = response;
     //console.log(response);
-    let result = storage.getItem('success');
-    let message = storage.getItem('message');
-    if(result){
+    let t = JSON.parse(result).success;
+    let message = JSON.parse(result).message;
+    if(t){
       res.redirect("/");
     }else{
       res.status(401).send(message);
@@ -54,7 +55,7 @@ router.post("/login", function(req, res, next){
   let body = req.body;
   
   API_Call_Confirm("signin", JSON.stringify(body), function(response){
-    //console.log(response);
+    console.log(response);
     let result = response;
     if(result != null){
       storage.setItem('accessToken', JSON.parse(result).accessToken);
