@@ -1,20 +1,23 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var dti_main = sequelize.define('dti_main', {
-    conversation_id: {
-      type: DataTypes.CHAR(35),
+    id: {
+      type: DataTypes.BIGINT(),
       allowNull: false,
-      primaryKey: true
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    conversation_id: {
+      type: DataTypes.CHAR,
+      allowNull: false
     },
     supbuy_type: {
-      type: DataTypes.CHAR(2),
-      allowNull: false,
-      primaryKey: true
+      type: DataTypes.CHAR,
+      allowNull: false
     },
     direction: {
-      type: DataTypes.CHAR(1),
-      allowNull: false,
-      primaryKey: true
+      type: DataTypes.CHAR,
+      allowNull: false
     },
     dti_wdate: {
       type: DataTypes.DATE,
@@ -155,10 +158,10 @@ module.exports = (sequelize, DataTypes) => {
   {
     freezeTableName : true,
   });
-  dti_main.associate = function(models) {
-     dti_main.hasOne(models.dti_status, {foreignKey : 'conversation_id'});
-     dti_main.hasMany(models.dti_item, {foreignKey : 'conversation_id'});
+  // dti_main.associate = function(models) {
+  //    dti_main.hasOne(models.dti_status, {foreignKey : 'conversation_id'});
+  //    dti_main.hasMany(models.dti_item, {foreignKey : 'conversation_id'});
 
-  };
+  // };
   return dti_main;
 };

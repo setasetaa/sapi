@@ -1,22 +1,27 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('dti_main', {
-
+    return queryInterface.createTable('xxsb_dti_main', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.BIGINT(20)
+      },
       conversation_id: {
         type: Sequelize.CHAR(35),
         allowNull: false,
-        primaryKey: true,
+        unique: 'main_unique'
       },
       supbuy_type: {
         type: Sequelize.CHAR(2),
         allowNull: false,
-        primaryKey: true,
+        unique: 'main_unique'
       },
       direction: {
         type: Sequelize.CHAR(1),
         allowNull: false,
-        primaryKey: true,
+        unique: 'main_unique'
       },
       dti_wdate: {
         type: Sequelize.DATE,
@@ -218,16 +223,21 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      uniqueKeys: {
+        main_unique: {
+            fields: ['conversation_id', 'supbuy_type', 'direction']
+        }
       }
     });
-    queryInterface.addConstraint('dti_main', ['conversation_id', 'supbuy_type', 'direction'], {
-      type: 'primaryKey',
-      name: 'dti_main_pk'
-    });
+    // queryInterface.addConstraint('xxsb_dti_main', ['conversation_id', 'supbuy_type', 'direction'], {
+    //   type: 'primaryKey',
+    //   name: 'dti_main_pk'
+    // });
     // dti_main.hasOne(models.dti_status, {foreignKey: 'fk_status', targetKey: 'conversation_id'});
     // dti_main.hasMany(models.dti_item, {foreignKey: 'fk_item', targetKey: 'conversation_id'});
   },
   down: function (queryInterface, Sequelize) {
-    return queryInterface.dropTable('dti_main');
+    return queryInterface.dropTable('xxsb_dti_main');
   }
 };

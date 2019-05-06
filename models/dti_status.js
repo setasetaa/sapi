@@ -1,23 +1,29 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var dti_status = sequelize.define('dti_status', {
+    id: {
+      type: DataTypes.BIGINT(),
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     conversation_id: {
-      type: DataTypes.CHAR(35),
+      type: DataTypes.CHAR,
       allowNull: false,
       primaryKey: true
     },
     supbuy_type: {
-      type: DataTypes.CHAR(2),
+      type: DataTypes.CHAR,
       allowNull: false,
       primaryKey: true
     },
     direction: {
-      type: DataTypes.CHAR(1),
+      type: DataTypes.CHAR,
       allowNull: false,
       primaryKey: true
     },
     dti_status: {
-      type: DataTypes.CHAR(1),
+      type: DataTypes.CHAR,
       allowNull: false
     },
     return_code: DataTypes.CHAR,
@@ -34,11 +40,11 @@ module.exports = (sequelize, DataTypes) => {
   {
     freezeTableName : true
   });
-  dti_status.associate = function(models) {
-    dti_status.belongsTo(models.dti_main, {
-      foreignKey : 'conversation_id',
-      targetKey : 'conversation_id'
-    });
-  };
+  // dti_status.associate = function(models) {
+  //   dti_status.belongsTo(models.dti_main, {
+  //     foreignKey : 'conversation_id',
+  //     targetKey : 'conversation_id'
+  //   });
+  // };
   return dti_status;
 };

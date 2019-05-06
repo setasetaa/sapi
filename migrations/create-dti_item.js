@@ -1,21 +1,27 @@
 'use strict';
 module.exports = {
   up: function (queryInterface, Sequelize)  {
-    return queryInterface.createTable('dti_item', {
+    return queryInterface.createTable('xxsb_dti_item', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.BIGINT(20)
+      },
       conversation_id: {
         type: Sequelize.CHAR(35),
-        primaryKey: true,
         allowNull: false,
+        unique: 'item_unique'
       },
       supbuy_type: {
         type: Sequelize.CHAR(2),
-        primaryKey: true,
         allowNull: false,
+        unique: 'item_unique'
       },
       direction: {
         type: Sequelize.CHAR(1),
-        primaryKey: true,
         allowNull: false,
+        unique: 'item_unique'
       },
       dti_line_num: {
         type: Sequelize.INTEGER,
@@ -73,13 +79,18 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+      },
+      uniqueKeys: {
+        item_unique: {
+            fields: ['conversation_id', 'supbuy_type', 'direction']
+        }
       }
     });
 
-    queryInterface.addConstraint('dti_item', ['conversation_id', 'supbuy_type', 'direction', 'dti_line_num'], {
-      type: 'primaryKey',
-      name: 'dti_item_pk'
-    });
+    // queryInterface.addConstraint('xxsb_dti_item', ['conversation_id', 'supbuy_type', 'direction', 'dti_line_num'], {
+    //   type: 'primaryKey',
+    //   name: 'dti_item_pk'
+    // });
 
     //return queryInterface.sequelize.query("ALTER TABLE dti_item ADD CONSTRAINT FK_dti_item FOREIGN KEY(conversation_id, supbuy_type, direction)
     //REFERENCES dti_main (conversation_id, supbuy_type, direction);");
@@ -89,7 +100,7 @@ module.exports = {
     // });
   },
   down: function (queryInterface, Sequelize){
-    return queryInterface.dropTable('dti_item');
+    return queryInterface.dropTable('xxsb_dti_item');
     return queryInterface.sequelize.query("ALTER TABLE dti_item DROP CONSTRAINT FK_dti_item;");
   }
 };
